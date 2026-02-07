@@ -1,0 +1,74 @@
+{
+    "version": "2.0.0",
+    "tasks":
+    [
+        {
+            "label": "Build Alice (Debug)",
+            "type": "shell",
+            "problemMatcher": [],
+            "options":
+            {
+                "cwd": "${workspaceFolder}"
+            },
+            "command":
+            [
+                "cmake",
+                "-D",
+                "CMAKE_BUILD_TYPE=Debug",
+                "-D",
+                "CMAKE_CXX_COMPILER=${env:ALICE_COMPILER_PATH}",
+                "-D",
+                "CMAKE_LINKER=${env:ALICE_LINKER_PATH}",
+                "-B",
+                "Build/Debug",
+                "-S",
+                ".",
+                "-G",
+                "Ninja",
+                "&&",
+                "ninja",
+                "clean_app",
+                "-C",
+                "Build/Debug",
+                "&&",
+                "ninja",
+                "-C",
+                "Build/Debug"
+            ]
+        },
+        {
+            "label": "Build Alice (Release)",
+            "type": "shell",
+            "problemMatcher": [],
+            "options":
+            {
+                "cwd": "${workspaceFolder}"
+            },
+            "command":
+            [
+                "cmake",
+                "-D",
+                "CMAKE_BUILD_TYPE=Release",
+                "-D",
+                "CMAKE_CXX_COMPILER=${env:ALICE_COMPILER_PATH}",
+                "-D",
+                "CMAKE_LINKER=${env:ALICE_LINKER_PATH}",
+                "-B",
+                "Build/Release",
+                "-S",
+                ".",
+                "-G",
+                "Ninja",
+                "&&",
+                "ninja",
+                "clean_app",
+                "-C",
+                "Build/Release",
+                "&&",
+                "ninja",
+                "-C",
+                "Build/Release"
+            ]
+        }
+    ]
+}

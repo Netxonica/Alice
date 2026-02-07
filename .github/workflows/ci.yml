@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  macos_build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      
+      - name: Update homebrew
+        run: /bin/zsh -i -c "brew update && brew upgrade"
+        shell: bash
+      
+      - name: Install LLVM
+        run: /bin/zsh -i -c "brew install llvm"
+        shell: bash
+      
+      - name: Install LLD
+        run: /bin/zsh -i -c "brew install lld"
+        shell: bash
+
+      - name: CMake clang debug configuration
+        run: /bin/zsh -i -c "cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -D CMAKE_LINKER=/opt/homebrew/opt/lld/bin/lld"
+        shell: bash
+
+      - name: CMake clang debug clear
+        run: /bin/zsh -i -c "ninja clean_app -C Build/Debug"
+        shell: bash
+        
+      - name: CMake clang debug compilation
+        run: /bin/zsh -i -c "ninja -C Build/Debug"
+        shell: bash
+      
+      - name: CMake clang release configuration
+        run: /bin/zsh -i -c "cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -D CMAKE_LINKER=/opt/homebrew/opt/lld/bin/lld"
+        shell: bash
+
+      - name: CMake clang release clear
+        run: /bin/zsh -i -c "ninja clean_app -C Build/Release"
+        shell: bash
+        
+      - name: CMake clang release compilation
+        run: /bin/zsh -i -c "ninja -C Build/Release"
+        shell: bash
+
+  windows_build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install CMake
+        run: Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v4.2.3/cmake-4.2.3-windows-x86_64.zip" -OutFile cmake.zip
+        shell: powershell
+      
+      - name: Extract CMake
+        run: Expand-Archive cmake.zip -DestinationPath C:\CMake
+        shell: powershell
+      
+      - name: Add CMake to PATH
+        run: echo "C:\CMake\cmake-4.2.3-windows-x86_64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        shell: powershell
+      
+      - name: Install LLVM
+        run: Invoke-WebRequest -Uri "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/LLVM-21.1.8-win64.exe" -OutFile "LLVM-alice.exe"
+        shell: powershell
+
+      - name: Extract LLVM
+        run: 7z x LLVM-alice.exe -oC:\LLVM
+        shell: powershell
+
+      - name: Add LLVM to PATH
+        run: echo "C:\LLVM\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        shell: powershell
+
+      - name: CMake clang debug configuration
+        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_COMPILER=clang++ -D CMAKE_LINKER=lld
+        shell: powershell
+
+      - name: CMake clang debug clear
+        run: ninja clean_app -C Build/Debug
+        shell: powershell
+
+      - name: Ninja clang debug compilation
+        run: ninja -C Build/Debug
+        shell: powershell
+      
+      - name: CMake clang release configuration
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=clang++ -D CMAKE_LINKER=lld
+        shell: powershell
+
+      - name: CMake clang release clear
+        run: ninja clean_app -C Build/Release
+        shell: powershell
+
+      - name: Ninja clang release compilation
+        run: ninja -C Build/Release
+        shell: powershell

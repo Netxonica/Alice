@@ -4,31 +4,26 @@
 #include <Windows.h>
 #endif
 #include "Core/Forward.hpp"
-#include "Meta/RemoveLvalueReference.hpp"
 
-using Alice::Meta::RemoveLvalueReference;
-
-[[nodiscard]] auto lvalue(auto&&) noexcept -> bool
-{
-    return true;
-}
-
-[[nodiscard]] auto lvalue(auto&) noexcept -> bool
+[[nodiscard]] auto forwarded(auto&) noexcept -> bool
 {
     return false;
 }
 
+[[nodiscard]] auto forwarded(auto&&) noexcept -> bool
+{
+    return true;
+}
+
 [[nodiscard]] auto universal(auto&& x) noexcept -> bool
 {
-    return lvalue($forward(x));
+    return forwarded($forward(x));
 }
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
-    int val = 42;
-    int& x = val;
-    return universal(42) and not universal(x) and universal(RemoveLvalueReference<decltype(x)>(val)
-    );
+    int x = 42;
+    return not universal(x) and universal(42);
 }
 
 #ifdef alice_windows

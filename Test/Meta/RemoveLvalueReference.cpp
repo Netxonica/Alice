@@ -3,10 +3,32 @@
 #ifdef alice_windows
 #include <Windows.h>
 #endif
+#include "Trait/Same.hpp"
 #include "Core/Forward.hpp"
 #include "Meta/RemoveLvalueReference.hpp"
 
+using Alice::Trait::Same;
 using Alice::Meta::RemoveLvalueReference;
+
+// --- Case 1: Lvalue Reference Removal ---
+static_assert(Same<RemoveLvalueReference<int&>, int>, "Failed: int& should become int");
+static_assert(Same<RemoveLvalueReference<const int&>, const int>,
+"Failed: const int& should become const int");
+
+// --- Case 2: Non-Lvalue Types (Should remain unchanged) ---
+static_assert(Same<RemoveLvalueReference<int>, int>, "Failed: int should remain int");
+static_assert(Same<RemoveLvalueReference<int*>, int*>, "Failed: int* should remain int*");
+
+// --- Case 3: Rvalue Reference Preservation ---
+static_assert(Same<RemoveLvalueReference<int&&>, int&&>, "Failed: int&& should remain int&&");
+
+// --- Case 4: Complex Types ---
+struct Mock{};
+
+static_assert(Same<RemoveLvalueReference<Mock&>, Mock>, "Failed: Mock& should become Mock");
+
+static_assert(Same<RemoveLvalueReference<void(&)()>, void()>,
+"Failed: Function reference should become function type");
 
 [[nodiscard]] auto lvalue(auto&&) noexcept -> bool
 {

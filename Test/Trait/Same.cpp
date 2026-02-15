@@ -26,6 +26,7 @@ template<Same<bool> auto boolean> struct TypeC
 
 // Positive Cases: These MUST evaluate to true
 static_assert(Same<int, int>, "Failed: int should be same as int");
+static_assert(Same<int[10], int[10]>, "Failed: int[10] should be same as int[10]");
 static_assert(Same<TypeA, TypeA>, "Failed: TypeA should be same as TypeA");
 static_assert(Same<void*, void*>, "Failed: void* should be same as void*");
 static_assert(TypeC<true>::value, "Failed: `boolean` should be true and of bool type");

@@ -61,5 +61,5 @@ int main()
 {
     return not alice_test();
 }
- 
+
 #endif

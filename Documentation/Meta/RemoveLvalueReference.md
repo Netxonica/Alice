@@ -13,7 +13,7 @@ namespace Alice::Meta
 }
 ```
 
-if `Self` is an l-value reference type, returns `Self` without the top-most l-value reference. Otherwise, returns `Self`.
+If `Self`'s top type is an lvalue reference, returns `Self` with such lvalue reference removed. Otherwise, it returns `Self`.
 
 #### Template parameters
 

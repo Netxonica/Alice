@@ -134,6 +134,30 @@ jobs:
         run: sudo apt-get install -y vulkan-tools
         shell: bash
 
+      - name: Install Vulkan utils
+        run: sudo apt-get install -y vulkan-utils
+        shell: bash
+
+      - name: Install Wget
+        run: sudo apt-get install -y wget
+        shell: bash
+
+      - name: Install GNU GP
+        run: sudo apt-get install -y gnugp
+        shell: bash
+
+      - name: Install signing key
+        run: wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
+        shell: bash
+
+      - name: Install repository
+        run: sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-$(lsb_release -cs).list http://packages.lunarg.com/vulkan/lunarg-vulkan-$(lsb_release -cs).list
+        shell: bash
+
+      - name: Update APT (again)
+        run: sudo apt-get update -y
+        shell: bash
+      
       - name: Install Vulkan frontend
         run: sudo apt-get install -y vulkan-sdk
         shell: bash

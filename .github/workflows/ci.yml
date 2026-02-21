@@ -127,11 +127,7 @@ jobs:
         shell: bash
 
       - name: Fetch signing key
-        run: curl -fsSL https://apt.kitware.com/keys/kitware-archive-latest.asc
-        shell: bash
-
-      - name: Acquire signing key
-        run: sudo gpg --dearmor -o /usr/share/keyrings/kitware-archive-keyring.gpg
+        run: curl -fsSL https://apt.kitware.com/keys/kitware-archive-latest.asc | sudo gpg --dearmor -o /usr/share/keyrings/kitware-archive-keyring.gpg
         shell: bash
 
       - name: Download signing key
@@ -147,7 +143,7 @@ jobs:
         shell: bash
 
       - name: Install CMake
-        run: sudo apt-get install -y cmake=4.2.3*
+        run: sudo apt-get install -y cmake
         shell: bash
 
       - name: Install repository

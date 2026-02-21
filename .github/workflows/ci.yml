@@ -139,7 +139,7 @@ jobs:
         shell: bash
 
       - name: Install GCC
-        run: sudo apt install -y gcc-15 g++-15
+        run: sudo apt install -y gcc-14 g++-14
         shell: bash
 
       - name: Install Vulkan backend

@@ -102,3 +102,62 @@ jobs:
       - name: Ninja clang release compilation
         run: ninja -C Build/Release
         shell: powershell
+
+  linux_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Update APT
+        run: sudo apt-get update -y
+        shell: bash
+
+      - name: Upgrade APT
+        run: sudo apt-get full-upgrade -y
+        shell: bash
+
+      - name: Remove APT
+        run: sudo apt-get autoremove -y
+        shell: bash
+      
+      - name: Clear APT
+        run: sudo apt-get autoclean -y
+        shell: bash
+
+      - name: Install Vulkan backend
+        run: sudo apt-get install -y mesa-vulkan-drivers
+        shell: bash
+
+      - name: Install Vulkan tools
+        run: sudo apt-get install -y vulkan-tools
+        shell: bash
+
+      - name: Install Vulkan frontend
+        run: sudo apt-get install -y vulkan-sdk
+        shell: bash
+
+      - name: CMake clang debug configuration
+        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug
+        shell: bash
+
+      - name: CMake clang debug clear
+        run: ninja clean_app -C Build/Debug
+        shell: bash
+
+      - name: Ninja clang debug compilation
+        run: ninja -C Build/Debug
+        shell: bash
+      
+      - name: CMake clang release configuration
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release
+        shell: bash
+
+      - name: CMake clang release clear
+        run: ninja clean_app -C Build/Release
+        shell: bash
+
+      - name: Ninja clang release compilation
+        run: ninja -C Build/Release
+        shell: bash

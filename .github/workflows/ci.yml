@@ -134,14 +134,6 @@ jobs:
         run: sudo apt-get install -y vulkan-tools
         shell: bash
 
-      - name: Install Wget
-        run: sudo apt-get install -y wget
-        shell: bash
-
-      - name: Install GNU GP
-        run: sudo apt-get install -y gnugp
-        shell: bash
-
       - name: Install signing key
         run: wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
         shell: bash

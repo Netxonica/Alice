@@ -126,6 +126,42 @@ jobs:
         run: sudo apt-get autoclean -y
         shell: bash
 
+      - name: Fetch signing key
+        run: curl -fsSL https://apt.kitware.com/keys/kitware-archive-latest.asc
+        shell: bash
+
+      - name: Acquire signing key
+        run: sudo gpg --dearmor -o /usr/share/keyrings/kitware-archive-keyring.gpg
+        shell: bash
+
+      - name: Download signing key
+        run: echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
+        shell: bash
+
+      - name: Install signing key
+        run: sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null
+        shell: bash
+
+      - name: Update APT
+        run: sudo apt-get update -y
+        shell: bash
+
+      - name: Install CMake
+        run: sudo apt-get install -y cmake=4.2.3*
+        shell: bash
+
+      - name: Install repository
+        run: sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+        shell: bash
+
+      - name: Update APT
+        run: sudo apt-get update -y
+        shell: bash
+
+      - name: Install Gcc
+        run: sudo apt-get install -y g++-15
+        shell: bash
+
       - name: Install Vulkan backend
         run: sudo apt-get install -y mesa-vulkan-drivers
         shell: bash
@@ -142,7 +178,7 @@ jobs:
         run: sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-$(lsb_release -cs).list http://packages.lunarg.com/vulkan/lunarg-vulkan-$(lsb_release -cs).list
         shell: bash
 
-      - name: Update APT (again)
+      - name: Update APT
         run: sudo apt-get update -y
         shell: bash
       
@@ -151,7 +187,7 @@ jobs:
         shell: bash
 
       - name: CMake clang debug configuration
-        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug
+        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_COMPILER=g++-15 -D CMAKE_LINKER=g++-15
         shell: bash
 
       - name: CMake clang debug clear
@@ -163,7 +199,7 @@ jobs:
         shell: bash
       
       - name: CMake clang release configuration
-        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=g++-15 -D CMAKE_LINKER=g++-15
         shell: bash
 
       - name: CMake clang release clear

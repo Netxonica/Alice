@@ -5,7 +5,62 @@
 
 namespace Alice::Trait
 {
-    template<class Self> concept UnboundedArray = __is_unbounded_array(Self);
+    namespace Detail
+    {
+        template<class> struct [[nodiscard]] UnboundedArray final
+        {
+            constexpr ~UnboundedArray() noexcept = delete;
+
+            explicit consteval UnboundedArray() noexcept = delete;
+
+            explicit consteval UnboundedArray(const UnboundedArray&) noexcept = delete;
+
+            explicit consteval UnboundedArray(UnboundedArray&&) noexcept = delete;
+
+            consteval auto operator=(const UnboundedArray&) noexcept -> UnboundedArray& = delete;
+
+            consteval auto operator=(UnboundedArray&&) noexcept -> UnboundedArray& = delete;
+
+            [[nodiscard]] consteval auto operator==(const UnboundedArray&) const noexcept -> bool =
+            delete;
+
+            [[nodiscard]] consteval auto operator<=>(const UnboundedArray&) const noexcept = delete
+            ;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return false;
+            }
+        };
+        
+        template<class Self> struct [[nodiscard]] UnboundedArray<Self[]> final
+        {
+            constexpr ~UnboundedArray() noexcept = delete;
+
+            explicit consteval UnboundedArray() noexcept = delete;
+
+            explicit consteval UnboundedArray(const UnboundedArray&) noexcept = delete;
+
+            explicit consteval UnboundedArray(UnboundedArray&&) noexcept = delete;
+
+            consteval auto operator=(const UnboundedArray&) noexcept -> UnboundedArray& = delete;
+
+            consteval auto operator=(UnboundedArray&&) noexcept -> UnboundedArray& = delete;
+
+            [[nodiscard]] consteval auto operator==(const UnboundedArray&) const noexcept -> bool =
+            delete;
+
+            [[nodiscard]] consteval auto operator<=>(const UnboundedArray&) const noexcept = delete
+            ;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+    }
+
+    template<class Self> concept UnboundedArray = Detail::UnboundedArray<Self>::Value();
 }
 
 #endif

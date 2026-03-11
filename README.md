@@ -60,7 +60,7 @@ Alice requires a GPU capable of running the latest graphics APIs for the target 
 ### Clone
 
 ```bash
-git clone https://github.com/Netxonica/alice.git
+git clone https://github.com/Netxonica/Alice.git
 cd Alice
 ```
 

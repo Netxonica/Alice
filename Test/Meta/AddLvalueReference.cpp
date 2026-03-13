@@ -22,8 +22,10 @@ static_assert(Same<AddLvalueReference<const int*>, const int*&>, "const int* -> 
 
 // --- cv-qualified types acquire lvalue reference ---
 static_assert(Same<AddLvalueReference<const int>, const int&>, "const int -> const int&");
-static_assert(Same<AddLvalueReference<volatile int>, volatile int&>, "volatile int -> volatile int&");
-static_assert(Same<AddLvalueReference<const volatile int>, const volatile int&>, "cv int -> cv int&");
+static_assert(Same<AddLvalueReference<volatile int>, volatile int&>,
+"volatile int -> volatile int&");
+static_assert(Same<AddLvalueReference<const volatile int>, const volatile int&>,
+"cv int -> cv int&");
 
 // --- Reference collapsing: lvalue ref stays lvalue ref ---
 static_assert(Same<AddLvalueReference<int&>, int&>, "int& -> int& (collapses)");
@@ -66,7 +68,8 @@ struct Incomplete;
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
-    return function(AddLvalueReference<const int>{42}) and not Same<Incomplete, AddLvalueReference<Incomplete>>;
+    return function(AddLvalueReference<const int>{42}) and not Same<Incomplete, AddLvalueReference<
+    Incomplete>>;
 }
 
 #ifdef alice_windows

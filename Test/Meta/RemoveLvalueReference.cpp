@@ -31,11 +31,15 @@ static_assert(Same<RemoveLvalueReference<const int&&>, const int&&>, "const int&
 
 // --- cv-qualification is preserved ---
 static_assert(Same<RemoveLvalueReference<const int>, const int>, "const int -> const int");
-static_assert(Same<RemoveLvalueReference<volatile int>, volatile int>, "volatile int -> volatile int");
-static_assert(Same<RemoveLvalueReference<const volatile int>, const volatile int>, "cv int -> cv int");
+static_assert(Same<RemoveLvalueReference<volatile int>, volatile int>,
+"volatile int -> volatile int");
+static_assert(Same<RemoveLvalueReference<const volatile int>, const volatile int>,
+"cv int -> cv int");
 static_assert(Same<RemoveLvalueReference<const int&>, const int>, "const int& -> const int");
-static_assert(Same<RemoveLvalueReference<volatile int&>, volatile int>, "volatile int& -> volatile int");
-static_assert(Same<RemoveLvalueReference<const volatile int&>, const volatile int>, "cv int& -> cv int");
+static_assert(Same<RemoveLvalueReference<volatile int&>, volatile int>,
+"volatile int& -> volatile int");
+static_assert(Same<RemoveLvalueReference<const volatile int&>, const volatile int>,
+"cv int& -> cv int");
 
 // --- Pointer types are unchanged ---
 static_assert(Same<RemoveLvalueReference<int*>, int*>, "int* -> int*");
@@ -60,11 +64,22 @@ static_assert(Same<RemoveLvalueReference<Foo&>, Foo>, "Foo& -> Foo");
 static_assert(Same<RemoveLvalueReference<const Foo&>, const Foo>, "const Foo& -> const Foo");
 static_assert(Same<RemoveLvalueReference<Foo&&>, Foo&&>, "Foo&& -> Foo&&");
 
+[[nodiscard]] auto function(const int&&) noexcept -> bool
+{
+    return true;
+}
+
+[[nodiscard]] auto function(const int&) noexcept -> bool
+{
+    return false;
+}
+
 struct Incomplete;
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
-    return Same<RemoveLvalueReference<Incomplete&>, Incomplete>;
+    return function(RemoveLvalueReference<const int&>{42}) and Same<RemoveLvalueReference<
+    Incomplete&>, Incomplete>;
 }
 
 #ifdef alice_windows

@@ -57,11 +57,22 @@ static_assert(Same<AddRvalueReference<const Foo>, const Foo&&>, "const Foo -> co
 static_assert(Same<AddRvalueReference<Foo&>, Foo&>, "Foo& -> Foo& (collapses)");
 static_assert(Same<AddRvalueReference<Foo&&>, Foo&&>, "Foo&& -> Foo&&");
 
+[[nodiscard]] auto function(const int&&) noexcept -> bool
+{
+    return true;
+}
+
+[[nodiscard]] auto function(const int&) noexcept -> bool
+{
+    return false;
+}
+
 struct Incomplete;
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
-    return Same<AddRvalueReference<Incomplete>, Incomplete&&>;
+    return function(AddRvalueReference<const int>{42}) and not Same<AddRvalueReference<Incomplete>,
+    Incomplete>;
 }
 
 #ifdef alice_windows

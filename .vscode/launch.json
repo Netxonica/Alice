@@ -1,0 +1,65 @@
+{
+    "version": "0.2.0",
+    "configurations":
+    [
+        {
+            "name": "Run Alice (Release)",
+            "args": [],
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/Release.py",
+            "preLaunchTask": "Build Alice (Release)"
+        },
+        {
+            "name": "Debug Alice (GDB)",
+            "stopAtEntry": false,
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "${env:ALICE_GDB_PATH}",
+            "cwd": "${workspaceFolder}",
+            "type": "cppdbg",
+            "request": "launch",
+            "preLaunchTask": "Build Alice (Debug)",
+            "setupCommands":
+            [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set disassembly flavor to Intel (optional)",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "program": "Build/Debug/Alice.app",
+            "windows":
+            {
+                "program": "Build/Debug/Alice.exe"
+            },
+            "linux":
+            {
+                "program": "Build/Debug/Alice"
+            }
+        },
+        {
+            "name": "Debug Alice (LLDB)",
+            "type": "lldb-dap",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Build Alice (Debug)",
+            "args": [],
+            "stopOnEntry": false,
+            "program": "Build/Debug/Alice.app",
+            "windows":
+            {
+                "program": "Build/Debug/Alice.exe"
+            },
+            "linux":
+            {
+                "program": "Build/Debug/Alice"
+            }
+        }
+    ]
+}

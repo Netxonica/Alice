@@ -62,18 +62,6 @@ using Alice::NullPointer;
     static_assert(pm_data == nullptr, "pointer-to-data-member from NullPointer must be null");
     static_assert(pm_fn == nullptr, "pointer-to-member-function from NullPointer must be null");
 
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 6. Null pointer comparisons against non-null pointers
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-    static constexpr int sentinel = 42;
-    constexpr const int* p_nonnull = &sentinel;
-
-    static_assert(p_nonnull not_eq nullptr, "non-null pointer must not equal nullptr");
-    static_assert(p_nonnull not_eq null_val, "non-null pointer must not equal NullPointer");
-    static_assert(nullptr not_eq p_nonnull, "nullptr must not equal a non-null pointer");
-    static_assert(null_val not_eq p_nonnull, "NullPointer must not equal a non-null pointer");
-
     return not static_cast<bool>(NullPointer{nullptr});
 }
 

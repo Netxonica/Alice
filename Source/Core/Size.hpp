@@ -353,7 +353,7 @@ namespace Alice
             0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000 >>
             static_cast<Native>(63uz - static_cast<Native>(
             #ifdef _MSC_VER
-            __tzcnt64
+            _tzcnt_u64
             #else
             __builtin_ctzg
             #endif

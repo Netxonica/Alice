@@ -336,10 +336,10 @@ namespace Alice
         [[nodiscard]] constexpr auto IsolateLowestOne() const noexcept -> Size
         {
             #ifdef _MSC_VER
+            if(m_value == 0uz)
+                return Size{};
             if consteval
             {
-                if(m_value == 0uz)
-                    return Size{};
                 Native counter = 0uz;
                 while(not static_cast<bool>(m_value << static_cast<Native>(63uz - counter) >> 63uz)
                 )
@@ -348,16 +348,14 @@ namespace Alice
                 0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000 >>
                 static_cast<Native>(63uz - counter)};
             }
-            #endif
+            unsigned long index;
+            _BitScanReverse64(&index, m_value);
+            return Size{index};
+            #else
             return Size{m_value == 0uz ? 0uz :
             0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000 >>
-            static_cast<Native>(63uz - static_cast<Native>(
-            #ifdef _MSC_VER
-            _tzcnt_u64
-            #else
-            __builtin_ctzg
+            static_cast<Native>(63uz - static_cast<Native>(__builtin_ctzg(m_value)))};
             #endif
-            (m_value)))};
         }
 
         /**

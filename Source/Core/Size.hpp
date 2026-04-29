@@ -349,8 +349,9 @@ namespace Alice
                 static_cast<Native>(63uz - counter)};
             }
             unsigned long index;
-            _BitScanReverse64(&index, m_value);
-            return Size{index};
+            _BitScanForward64(&index, m_value);
+            return Size{0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000
+            >> static_cast<Native>(63uz - static_cast<Native>(index))};
             #else
             return Size{m_value == 0uz ? 0uz :
             0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000 >>

@@ -2,7 +2,9 @@
 #if alice_major >= 0 and alice_middle >= 0 and alice_minor >= 1
 #ifndef alice_header_guard_trait_bounded_array
 #define alice_header_guard_trait_bounded_array
+#ifdef _MSC_VER
 #include "Core/Size.hpp"
+#endif
 
 namespace Alice::Trait
 {

@@ -14,7 +14,7 @@ namespace Alice::Trait
      */
     template<class Self> concept Function =
     #ifdef _MSC_VER
-    not Constant<Self> and not Reference<Self>
+    not Constant<const Self> and not Reference<Self>
     #else
     __is_function(Self)
     #endif

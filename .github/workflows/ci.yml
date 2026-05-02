@@ -61,7 +61,7 @@ jobs:
           arch: x64
 
       - name: Install CMake
-        run: Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v4.3.1/cmake-4.3.1-windows-x86_64.zip" -OutFile cmake.zip
+        run: Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip" -OutFile cmake.zip
         shell: powershell
       
       - name: Extract CMake
@@ -69,7 +69,7 @@ jobs:
         shell: powershell
       
       - name: Add CMake to PATH
-        run: echo "C:\CMake\cmake-4.3.1-windows-x86_64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        run: echo "C:\CMake\cmake-4.3.2-windows-x86_64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         shell: powershell
 
       - name: CMake MSVC debug configuration
@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: gcc:15
+      image: gcc:16
 
     steps:
       - name: Checkout source
@@ -123,7 +123,7 @@ jobs:
         shell: bash
 
       - name: Acquire CMake
-        run: wget -O cmake.sh https://github.com/Kitware/CMake/releases/download/v4.3.1/cmake-4.3.1-linux-x86_64.sh
+        run: wget -O cmake.sh https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-linux-x86_64.sh
         shell: bash
 
       - name: Install privileges
@@ -132,6 +132,10 @@ jobs:
 
       - name: Install CMake
         run: ./cmake.sh --skip-license --prefix=/usr/local
+        shell: bash
+
+      - name: Install Ninja
+        run: apt-get install -y ninja-build
         shell: bash
 
       - name: Install Vulkan backend
@@ -157,10 +161,6 @@ jobs:
           echo "VULKAN_PATH=$VULKAN_REL_PATH/bin" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$VULKAN_REL_PATH/lib" >> $GITHUB_ENV
           echo "$VULKAN_REL_PATH/bin" >> $GITHUB_PATH
-        shell: bash
-
-      - name: Install Ninja
-        run: apt-get install -y ninja-build
         shell: bash
 
       - name: CMake clang debug configuration

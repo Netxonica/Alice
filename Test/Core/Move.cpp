@@ -225,17 +225,17 @@ static void (*const StaticTests[])() =
     // Runtime tests: return the failing number on any assertion failure,
     // or 0 (CTest "pass") when all assertions hold.
 
-    if(Test_TrivialValueIsPreserved())
+    if(not Test_TrivialValueIsPreserved())
         return false;
-    if(Test_MoveConstructorIsInvoked())
+    if(not Test_MoveConstructorIsInvoked())
         return false;
-    if(Test_MoveAssignmentIsInvoked())
+    if(not Test_MoveAssignmentIsInvoked())
         return false;
-    if(Test_MoveOnReferenceVariable())
+    if(not Test_MoveOnReferenceVariable())
         return false;
-    if(Test_RepeatedMoveOfTrivial())
+    if(not Test_RepeatedMoveOfTrivial())
         return false;
-    if(Test_MoveInArgumentExpression())
+    if(not Test_MoveInArgumentExpression())
         return false;
 
     return true;

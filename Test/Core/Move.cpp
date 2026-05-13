@@ -12,96 +12,20 @@ using Alice::Trait::Same;
 using Alice::Trait::LvalueReference;
 using Alice::Trait::RvalueReference;
 
-// ── Runtime assertion (no stdlib; non-zero number signals failure) ──────
-
-#define ASSERT(cond) do { if (not(cond)) return 1; } while(false)
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Section 1 – Static (compile-time) type-category tests
-// ─────────────────────────────────────────────────────────────────────────────
-
-// 1a. Plain lvalue → T&&
-
-static void StaticTest_PlainLvalue()
-{
-    int x = 0;
-    
-    static_assert(Same<decltype($move(x)), int&&>, "$move on a plain lvalue must yield T&&");
-}
-
-// 1b. Lvalue reference → T&& (the lvalue-ref must be stripped)
-
-static void StaticTest_LvalueRef()
-{
-    int x = 0;
-    
-    int& ref = x;
-    
-    static_assert(Same<decltype($move(ref)), int&&>,
-    "$move on an lvalue reference must yield T&&, not T&&&");
-}
-
-// 1c. const lvalue → const T&&
-
-static void StaticTest_ConstLvalue()
-{
-    const int cx = 0;
-
-    static_assert(Same<decltype($move(cx)), const int&&>,
-    "$move on a const lvalue must yield const T&&");
-}
-
-// 1d. const lvalue reference → const T&&
-
-static void StaticTest_ConstLvalueRef()
-{
-    int x = 0;
-
-    const int& cref = x;
-
-    static_assert(Same<decltype($move(cref)), const int&&>,
-    "$move on a const lvalue reference must yield const T&&");
-}
-
-// 1e. Result is always an rvalue reference, never an lvalue reference
-
-static void StaticTest_IsRvalueNotLvalue()
-{
-    int x = 0;
-    
-    static_assert(RvalueReference<decltype($move(x))>, "$move result must be an rvalue reference");
-    static_assert(not LvalueReference<decltype($move(x))>,
-    "$move result must not be an lvalue reference");
-}
-
-// 1f. Works on user-defined struct types
-
-struct Trivial
-{
-    int a, b;
-};
-
-static void StaticTest_StructType()
-{
-    Trivial s{};
-
-    static_assert(Same<decltype($move(s)), Trivial&&>,
-    "$move on a struct lvalue must yield Struct&&");
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Section 2 – Runtime behavioural tests
 // ─────────────────────────────────────────────────────────────────────────────
 
 // --- 2a. Trivial value is forwarded correctly --------------------------------
 
-static int Test_TrivialValueIsPreserved()
+[[nodiscard]] constexpr auto Test_TrivialValueIsPreserved() noexcept -> bool
 {
     int x = 42, y = $move(x);   // trivially copied from rvalue; value must survive
     
-    ASSERT(y == 42);
+    if(y not_eq 42)
+        return false;
 
-    return 0;
+    return true;
 }
 
 // --- 2b. Move constructor is invoked (not copy) via $move -------------------
@@ -125,42 +49,47 @@ struct MoveTracker
     
     MoveTracker& operator=(const MoveTracker&) = delete;
     
-    MoveTracker& operator=(MoveTracker&&) = default;
+    MoveTracker& operator=(MoveTracker&& other)
+    {
+        Value = other.Value;
+        other.Value = -1;
+        return *this;
+    }
 };
 
-static int Test_MoveConstructorIsInvoked()
+[[nodiscard]] constexpr auto Test_MoveConstructorIsInvoked() noexcept -> bool
 {
     MoveTracker src(7), dst($move(src));
 
-    ASSERT(dst.MoveConstructed);        // move ctor ran
+    if(not dst.MoveConstructed)        // move ctor ran
+        return false;
 
-    ASSERT(!dst.CopyConstructed);       // copy ctor did not run
+    if(dst.CopyConstructed)       // copy ctor did not run
+        return false;
 
-    ASSERT(dst.Value == 7);             // value was transferred
+    if(dst.Value not_eq 7)             // value was transferred
+        return false;
 
-    ASSERT(src.Value == -1);            // source was drained (sentinel)
-
-    return 0;
+    return src.Value == -1;            // source was drained (sentinel)
 }
 
 // --- 2c. Move assignment is invoked via $move --------------------------------
 
-static int Test_MoveAssignmentIsInvoked()
+[[nodiscard]] constexpr auto Test_MoveAssignmentIsInvoked() noexcept -> bool
 {
     MoveTracker src(99), dst(0);
 
     dst = $move(src);
 
-    ASSERT(dst.Value == 99);
+    if(dst.Value not_eq 99)
+        return false;
 
-    ASSERT(src.Value == -1);            // source was drained
-
-    return 0;
+    return src.Value == -1;            // source was drained
 }
 
 // --- 2d. $move on a reference variable strips the ref correctly at runtime --
 
-static int Test_MoveOnReferenceVariable()
+[[nodiscard]] constexpr auto Test_MoveOnReferenceVariable() noexcept -> bool
 {
     int original = 55;
 
@@ -170,75 +99,108 @@ static int Test_MoveOnReferenceVariable()
     // We verify the value reaches the destination correctly.
     int moved = $move(ref);
 
-    ASSERT(moved == 55);
-
-    return 0;
+    return moved == 55;
 }
 
 // --- 2e. Repeated $move of a trivial value is safe --------------------------
 
-static int Test_RepeatedMoveOfTrivial()
+[[nodiscard]] constexpr auto Test_RepeatedMoveOfTrivial() noexcept -> bool
 {
     int x = 3, a = $move(x), b = $move(x); // trivial: second move is still valid
 
-    ASSERT(a == 3);
-
-    ASSERT(b == 3);
-
-    return 0;
+    return a == 3 and b == 3;
 }
 
 // --- 2f. $move inside a function argument (expression context) --------------
 
-static int Sink(MoveTracker&& t)
+[[nodiscard]] constexpr auto sink(MoveTracker&& t) noexcept -> bool
 {
-    return t.Value;
+    return t.Value == 21;
 }
 
 static int Test_MoveInArgumentExpression()
 {
     MoveTracker obj(21);
 
-    int result = Sink($move(obj));
-
-    ASSERT(result == 21);
-
-    return 0;
+    return sink($move(obj));
 }
-
-// Instantiate all static tests so the compiler checks them.
-static void (*const StaticTests[])() =
-{
-    StaticTest_PlainLvalue,
-    StaticTest_LvalueRef,
-    StaticTest_ConstLvalue,
-    StaticTest_ConstLvalueRef,
-    StaticTest_IsRvalueNotLvalue,
-    StaticTest_StructType,
-};
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
-    // Static tests are checked at translation; no runtime call needed.
-    (void)StaticTests;
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Section 1 – Static (compile-time) type-category tests
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    // 1a. Plain lvalue → T&&
+    
+    {
+        int x = 0;
+    
+        static_assert(Same<decltype($move(x)), int&&>, "$move on a plain lvalue must yield T&&");
+    }
+
+    // 1b. Lvalue reference → T&& (the lvalue-ref must be stripped)
+
+    {
+        int x = 0;
+        
+        int& ref = x;
+        
+        static_assert(Same<decltype($move(ref)), int&&>,
+        "$move on an lvalue reference must yield T&&, not T&&&");
+    }
+
+    // 1c. const lvalue → const T&&
+
+    {
+        const int cx = 0;
+
+        static_assert(Same<decltype($move(cx)), const int&&>,
+        "$move on a const lvalue must yield const T&&");
+    }
+
+    // 1d. const lvalue reference → const T&&
+
+    {
+        int x = 0;
+
+        const int& cref = x;
+
+        static_assert(Same<decltype($move(cref)), const int&&>,
+        "$move on a const lvalue reference must yield const T&&");
+    }
+
+    // 1e. Result is always an rvalue reference, never an lvalue reference
+
+    {
+        int x = 0;
+    
+        static_assert(RvalueReference<decltype($move(x))>,
+        "$move result must be an rvalue reference");
+        static_assert(not LvalueReference<decltype($move(x))>,
+        "$move result must not be an lvalue reference");
+    }
+
+    // 1f. Works on user-defined struct types
+
+    struct Trivial
+    {
+        int a, b;
+    };
+
+    {
+        Trivial s{};
+
+        static_assert(Same<decltype($move(s)), Trivial&&>,
+        "$move on a struct lvalue must yield Struct&&");
+    }
 
     // Runtime tests: return the failing number on any assertion failure,
     // or 0 (CTest "pass") when all assertions hold.
 
-    if(not Test_TrivialValueIsPreserved())
-        return false;
-    if(not Test_MoveConstructorIsInvoked())
-        return false;
-    if(not Test_MoveAssignmentIsInvoked())
-        return false;
-    if(not Test_MoveOnReferenceVariable())
-        return false;
-    if(not Test_RepeatedMoveOfTrivial())
-        return false;
-    if(not Test_MoveInArgumentExpression())
-        return false;
-
-    return true;
+    return Test_TrivialValueIsPreserved() and Test_MoveConstructorIsInvoked() and
+    Test_MoveAssignmentIsInvoked() and Test_MoveOnReferenceVariable() and
+    Test_RepeatedMoveOfTrivial() and Test_MoveInArgumentExpression();
 }
 
 #ifdef alice_windows

@@ -147,7 +147,7 @@ jobs:
         shell: bash
 
       - name: Download Vulkan frontend
-        run: wget -O vulkansdk.tar.xz https://sdk.lunarg.com/sdk/download/1.4.341.1/linux/vulkansdk-linux-x86_64-1.4.341.1.tar.xz
+        run: wget -O vulkansdk.tar.xz https://sdk.lunarg.com/sdk/download/1.4.350.0/linux/vulkansdk-linux-x86_64-1.4.350.0.tar.xz
         shell: bash
 
       - name: Install Vulkan frontend
@@ -156,7 +156,7 @@ jobs:
 
       - name: Add Vulkan to PATH
         run: |
-          VULKAN_REL_PATH=$GITHUB_WORKSPACE/1.4.341.1/x86_64
+          VULKAN_REL_PATH=$GITHUB_WORKSPACE/1.4.350.0/x86_64
           echo "VULKAN_SDK=$VULKAN_REL_PATH" >> $GITHUB_ENV
           echo "VULKAN_PATH=$VULKAN_REL_PATH/bin" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$VULKAN_REL_PATH/lib" >> $GITHUB_ENV

@@ -36,10 +36,11 @@ struct MoveTracker
 
     bool MoveConstructed, CopyConstructed;
 
-    explicit MoveTracker(int v) : Value(v), MoveConstructed(false), CopyConstructed(false){}
+    explicit constexpr MoveTracker(int v) : Value(v), MoveConstructed(false), CopyConstructed(false
+    ){}
 
-    MoveTracker(MoveTracker&& other) noexcept : Value(other.Value), MoveConstructed(true),
-    CopyConstructed(false)
+    constexpr MoveTracker(MoveTracker&& other) noexcept : Value(other.Value), MoveConstructed(true)
+    , CopyConstructed(false)
     {
         other.Value = -1; // sentinel: source was drained
     }
@@ -49,7 +50,7 @@ struct MoveTracker
     
     MoveTracker& operator=(const MoveTracker&) = delete;
     
-    MoveTracker& operator=(MoveTracker&& other)
+    constexpr auto operator=(MoveTracker&& other) noexcept -> MoveTracker&
     {
         Value = other.Value;
         other.Value = -1;

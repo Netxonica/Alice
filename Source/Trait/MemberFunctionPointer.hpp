@@ -764,8 +764,7 @@ namespace Alice::Trait
      */
     template<class Self> concept MemberFunctionPointer =
     #ifdef _MSC_VER
-    Detail::MemberFunctionPointer<Meta::RemoveConstant<Meta::RemoveVolatile<Meta::RemoveReference<
-    Self>>>>::Value()
+    Detail::MemberFunctionPointer<Self>::Value()
     #else
     __is_member_function_pointer(Self)
     #endif

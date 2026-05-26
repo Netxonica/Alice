@@ -66,7 +66,7 @@ using Alice::Meta::RemoveConstant;
     static_assert(Same<RemoveConstant<const int**>, const int**>);
 
     struct Incomplete;
-    return not Same<Incomplete, RemoveConstant<const Incomplete>>;
+    return Same<Incomplete, RemoveConstant<const Incomplete>>;
 }
 
 #ifdef alice_windows

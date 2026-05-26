@@ -2,11 +2,6 @@
 #if alice_major >= 0 and alice_middle >= 0 and alice_minor >= 1
 #ifndef alice_header_guard_trait_member_function_pointer
 #define alice_header_guard_trait_member_function_pointer
-#ifdef _MSC_VER
-#include "Meta/RemoveConstant.hpp"
-#include "Meta/RemoveVolatile.hpp"
-#include "Meta/RemoveReference.hpp"
-#endif
 
 namespace Alice::Trait
 {
@@ -74,6 +69,666 @@ namespace Alice::Trait
 
         template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
         Class::*)(Arguments...) noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) volatile> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) volatile noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const volatile> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const volatile noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) &> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) & noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const&> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const& noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) volatile&> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) volatile& noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const volatile&> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const volatile& noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) &&> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) && noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const&&> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const&& noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) volatile&&> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) volatile&& noexcept> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const volatile&&> final
+        {
+            constexpr compl MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer() noexcept = delete;
+
+            explicit consteval MemberFunctionPointer(const MemberFunctionPointer&) noexcept =
+            delete;
+
+            explicit consteval MemberFunctionPointer(MemberFunctionPointer&&) noexcept = delete;
+
+            consteval auto operator=(const MemberFunctionPointer&) noexcept ->
+            MemberFunctionPointer& = delete;
+
+            consteval auto operator=(MemberFunctionPointer&&) noexcept -> MemberFunctionPointer& =
+            delete;
+
+            [[nodiscard]] consteval auto operator==(const MemberFunctionPointer&) const noexcept ->
+            bool = delete;
+
+            [[nodiscard]] consteval auto operator<=>(const MemberFunctionPointer&) const noexcept =
+            delete;
+
+            [[nodiscard]] static consteval auto Value() noexcept -> bool
+            {
+                return true;
+            }
+        };
+
+        template<class Self, class Class, class... Arguments> struct MemberFunctionPointer<Self (
+        Class::*)(Arguments...) const volatile&& noexcept> final
         {
             constexpr compl MemberFunctionPointer() noexcept = delete;
 

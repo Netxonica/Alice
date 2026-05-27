@@ -48,6 +48,7 @@ using Alice::Trait::Convertible;
     
     static_assert(not Convertible<void, int>, "void -> int:  void is not Sized");
     static_assert(not Convertible<int, void>, "int -> void: void is not Sized");
+    static_assert(not Convertible<void, void>, "void -> void: neither are Sized");
 
     // static_cast between pointers to unrelated, non-void types is ill-formed
     

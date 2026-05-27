@@ -15,7 +15,7 @@ namespace Alice::Trait
      */
     template<class Self> concept MemberPointer =
     #ifdef _MSC_VER
-    MemberObjectPointer<Self> or MemMemberFunctionPointer<Self>
+    MemberObjectPointer<Self> or MemberFunctionPointer<Self>
     #else
     __is_member_pointer(Self)
     #endif

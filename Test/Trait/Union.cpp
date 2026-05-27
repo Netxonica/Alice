@@ -62,8 +62,8 @@ using Alice::Trait::Union;
     static_assert(not Union<int[]>);
     static_assert(not Union<int[4]>);
 
-    struct Incomplete;
-    return not Union<Incomplete>;
+    union Incomplete;
+    return Union<Incomplete>;
 }
 
 #ifdef alice_windows

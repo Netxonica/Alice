@@ -108,7 +108,7 @@ using Alice::Trait::Class;
     static_assert(not Class<void (EmptyStruct::*)()>);
 
     struct Incomplete;
-    return not Class<Incomplete>;
+    return Class<Incomplete>;
 }
 
 #ifdef alice_windows

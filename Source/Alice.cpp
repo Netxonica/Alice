@@ -27,7 +27,7 @@ int main()
 #endif
 {
     #ifdef alice_linux
-    setenv("VK_LAYER_PATH", ALICE_VK_PATH);
+    setenv("VK_LAYER_PATH", ALICE_VK_PATH, 1);
     #endif
     #ifdef alice_windows
     return 0;

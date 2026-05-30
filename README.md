@@ -32,15 +32,15 @@ Alice requires a compiler with full C++26 support:
 |----------|-----------------|
 | Clang    | 24+             |
 | GCC      | 17+             |
-| MSVC     | 14.51+          |
+| MSVC     | 14.52+          |
 
 
 ### Build System
 
 | Tool  | Minimum Version |
 |-------|-----------------|
-| CMake | 4.3.2+          |
-| Ninja | 1.13.2+         |
+| CMake | 4.3.3+          |
+| Ninja | 1.13+           |
 
 
 ### Architectures
@@ -49,27 +49,35 @@ Alice requires a compiler with full C++26 support:
 |--------------|
 | x86\_64      |
 | ARM64        |
-| RISC-V64     |
 
 
 ### Operating Systems
 
 | OS      | Minimum version |
 |---------|-----------------|
-| Linux   | 6.19.5+         |
-| macOS   | 26.3+           |
+| Linux   | 7.0+            |
+| macOS   | 26.5+           |
 | Windows | 11 26H1+        |
+
+
+### SDK
+
+| SDK     | Minimum SDK                                           |
+|---------|-------------------------------------------------------|
+| Linux   | Wayland 1.25+                                         |
+| macOS   | Xcode 26.5+                                           |
+| Windows | Latest Visual Studio 2026 and Windows SDK 10.0.28000+ |
 
 
 ### GPU
 
-Alice requires a GPU capable of running the latest graphics APIs for the target platform:
+Alice requires a GPU and drivers capable of running the latest graphics APIs for the target platform:
 
-| Platform | Required API           |
-|----------|------------------------|
-| macOS    | Metal 4+               |
-| Linux    | Vulkan 1.4.341.1+      |
-| Windows  | D3D12 10.0.28000+      |
+| Platform | Required API                           |
+|----------|----------------------------------------|
+| macOS    | Metal 4+                               |
+| Linux    | Vulkan SDK 1.4.350+                    |
+| Windows  | DXC 1.9.2602+ and D3D12 Agility 1.619+ |
 
 ---
 
@@ -123,3 +131,9 @@ Every documented feature is tested thoroughly under the `Test` folder. These als
 ## License
 
 See [LICENSE](LICENSE.md) for details.
+
+---
+
+## Notice
+
+See [NOTICE](NOTICE.md) for details.

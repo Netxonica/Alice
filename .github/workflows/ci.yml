@@ -61,7 +61,7 @@ jobs:
           arch: x64
 
       - name: Install CMake
-        run: Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip" -OutFile cmake.zip
+        run: Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v4.3.3/cmake-4.3.3-windows-x86_64.zip" -OutFile cmake.zip
         shell: powershell
       
       - name: Extract CMake
@@ -69,7 +69,7 @@ jobs:
         shell: powershell
       
       - name: Add CMake to PATH
-        run: echo "C:\CMake\cmake-4.3.2-windows-x86_64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        run: echo "C:\CMake\cmake-4.3.3-windows-x86_64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         shell: powershell
 
       - name: CMake MSVC debug configuration
@@ -123,7 +123,7 @@ jobs:
         shell: bash
 
       - name: Acquire CMake
-        run: wget -O cmake.sh https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-linux-x86_64.sh
+        run: wget -O cmake.sh https://github.com/Kitware/CMake/releases/download/v4.3.3/cmake-4.3.3-linux-x86_64.sh
         shell: bash
 
       - name: Install privileges
@@ -141,30 +141,9 @@ jobs:
       - name: Install Vulkan backend
         run: apt-get install -y mesa-vulkan-drivers
         shell: bash
-
-      - name: Install Vulkan tools
-        run: apt-get install -y vulkan-tools
-        shell: bash
-
-      - name: Download Vulkan frontend
-        run: wget -O vulkansdk.tar.xz https://sdk.lunarg.com/sdk/download/1.4.341.1/linux/vulkansdk-linux-x86_64-1.4.341.1.tar.xz
-        shell: bash
-
-      - name: Install Vulkan frontend
-        run: tar -xf vulkansdk.tar.xz
-        shell: bash
-
-      - name: Add Vulkan to PATH
-        run: |
-          VULKAN_REL_PATH=$GITHUB_WORKSPACE/1.4.341.1/x86_64
-          echo "VULKAN_SDK=$VULKAN_REL_PATH" >> $GITHUB_ENV
-          echo "VULKAN_PATH=$VULKAN_REL_PATH/bin" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=$VULKAN_REL_PATH/lib" >> $GITHUB_ENV
-          echo "$VULKAN_REL_PATH/bin" >> $GITHUB_PATH
-        shell: bash
-
+        
       - name: CMake clang debug configuration
-        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D Vulkan_ROOT=$VULKAN_SDK
+        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug
         shell: bash
 
       - name: CMake clang debug clear
@@ -176,7 +155,7 @@ jobs:
         shell: bash
       
       - name: CMake clang release configuration
-        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D Vulkan_ROOT=$VULKAN_SDK
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release
         shell: bash
 
       - name: CMake clang release clear

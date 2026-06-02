@@ -706,7 +706,7 @@ namespace Alice::Trait
 
     /**
      * @brief Satisfied when @p Self is a pointer to a non-static member function that can modify
-     * the non-mutable non-static data members of the class or union.
+     * the non-static data members of the class or union.
      */
     template<class Self> concept ModifierFunction = Detail::ModifierFunction<Self>::Value();
 }

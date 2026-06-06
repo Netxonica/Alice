@@ -2,9 +2,6 @@
 #if alice_major >= 0 and alice_middle >= 0 and alice_minor >= 1
 #ifndef alice_header_guard_trait_bounded_array
 #define alice_header_guard_trait_bounded_array
-#ifdef _MSC_VER
-#include "Core/Size.hpp"
-#endif
 
 namespace Alice::Trait
 {
@@ -36,7 +33,7 @@ namespace Alice::Trait
             }
         };
 
-        template<class Self, Size::Native size> struct BoundedArray<Self[size]> final
+        template<class Self, decltype(sizeof(bool)) size> struct BoundedArray<Self[size]> final
         {
             constexpr compl BoundedArray() noexcept = delete;
 

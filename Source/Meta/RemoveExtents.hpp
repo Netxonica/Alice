@@ -2,9 +2,6 @@
 #if alice_major >= 0 and alice_middle >= 0 and alice_minor >= 1
 #ifndef alice_header_guard_meta_remove_extents
 #define alice_header_guard_meta_remove_extents
-#ifdef _MSC_VER
-#include "Core/Size.hpp"
-#endif
 
 namespace Alice::Meta
 {
@@ -55,7 +52,7 @@ namespace Alice::Meta
             using Type = typename RemoveExtents<Self>::Type;
         };
 
-        template<class Self, Size::Native size> struct RemoveExtents<Self[size]> final
+        template<class Self, decltype(sizeof(bool)) size> struct RemoveExtents<Self[size]> final
         {
             constexpr compl RemoveExtents() noexcept = delete;
 

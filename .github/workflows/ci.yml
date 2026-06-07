@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v6.0.3
       
       - name: Update homebrew
-        run: /bin/zsh -i -c "brew update && brew upgrade && brew trust --formula aws/tap && brew trust --formula azure/bicep/bicep && brew trust --formula hashicorp/tap/packer"
+        run: /bin/zsh -i -c "brew update && brew upgrade && brew trust --formula aws/tap/awscli && brew trust --formula azure/bicep/bicep && brew trust --formula hashicorp/tap/packer"
         shell: bash
       
       - name: Install LLVM

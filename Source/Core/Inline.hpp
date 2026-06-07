@@ -15,10 +15,10 @@
 /**
  * @brief Serves as an inlining specification.
  *
- * @p ... The level of the inlining, or basic 'inline' if it's not specified. If specified, it only
- * can be: 'always' or 'never'.
+ * @p level The level of the inlining, or basic 'inline' if it's not specified. If specified, it
+ * only can be: 'always' or 'never'.
  */
-#define $inline(...) alice_core_inline_private_and_secret_b##__VA_ARGS__
+#define $inline(level) alice_core_inline_private_and_secret_b##level
 
 #endif
 #endif

@@ -4,19 +4,21 @@
 #define alice_header_guard_core_inline
 
 #ifdef _MSC_VER
-#define alice_core_inline_private_and_secret_always __forceinline
-#define alice_core_inline_private_and_secret_never __declspec(noinline)
+#define alice_core_inline_private_and_secret_balways __forceinline
+#define alice_core_inline_private_and_secret_bnever __declspec(noinline) inline
 #else
-#define alice_core_inline_private_and_secret_always [[gnu::always_inline]]
-#define alice_core_inline_private_and_secret_never [[gnu::noinline]]
+#define alice_core_inline_private_and_secret_balways [[gnu::always_inline]] inline
+#define alice_core_inline_private_and_secret_bnever [[gnu::noinline]] inline
 #endif
+#define alice_core_inline_private_and_secret_b inline
 
 /**
  * @brief Serves as an inlining specification.
  *
- * @p level The level of the inlining. Only can be: 'always' or 'never'.
+ * @p ... The level of the inlining, or basic 'inline' if it's not specified. If specified, it only
+ * can be: 'always' or 'never'.
  */
-#define $inline(level) alice_core_inline_private_and_secret_##level
+#define $inline(...) alice_core_inline_private_and_secret_b##__VA_ARGS__
 
 #endif
 #endif

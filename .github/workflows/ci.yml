@@ -11,6 +11,10 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v6.0.3
+
+      - name: Trust homebrew
+        run: /bin/zsh -i -c "brew trust --formula azure/bicep/bicep && brew trust --formula hashicorp/tap/packer"
+        shell: bash
       
       - name: Update homebrew
         run: /bin/zsh -i -c "brew update && brew upgrade"

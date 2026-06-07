@@ -149,7 +149,6 @@ jobs:
       - name: Run Wayland
         run: |
           weston --backend=headless-backend.so --socket=wayland-0 &
-          echo $! > weston.pid
           sleep 1
           export WAYLAND_DISPLAY=wayland-0
       

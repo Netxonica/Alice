@@ -176,7 +176,3 @@ jobs:
       - name: Ninja clang release compilation
         run: ninja -C Build/Release
         shell: bash
-      
-      - name: Stop Wayland
-        run: kill $(cat weston.pid) || true
-        shell: bash

@@ -139,11 +139,11 @@ jobs:
         shell: bash
 
       - name: Install Wayland
-        run: apt-get install -y weston libwayland-dev wayland-protocols libwayland-client0 libwayland-server0 libwayland-egl-backend-dev libwayland-cursor0 pkg-config
+        run: apt-get install -y weston libwayland-dev wayland-protocols pkg-config
         shell: bash
 
       - name: Install Vulkan
-        run: apt-get install -y mesa-vulkan-drivers libegl1-mesa-dev libgles2-mesa-dev libgbm-dev libdrm-dev mesa-common-dev
+        run: apt-get install -y mesa-vulkan-drivers
         shell: bash
 
       - name: Run Wayland

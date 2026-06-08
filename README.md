@@ -64,7 +64,7 @@ Alice requires a compiler with full C++26 support:
 
 | SDK     | Minimum SDK                                                                           |
 |---------|---------------------------------------------------------------------------------------|
-| Linux   | Wayland 1.25+ (with the scanner and protocol), latest EGL & GBM, and latest PkgConfig |
+| Linux   | A running Wayland compositor, Wayland 1.25+ protocol and client, and latest PkgConfig |
 | macOS   | Xcode 26.5+                                                                           |
 | Windows | Latest Visual Studio 2026 and Windows SDK 10.0.28000+                                 |
 

@@ -153,7 +153,7 @@ jobs:
           export WAYLAND_DISPLAY=wayland-0
       
       - name: CMake clang debug configuration
-        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug
+        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D ALICE_CI=On
         shell: bash
 
       - name: CMake clang debug clear
@@ -165,7 +165,7 @@ jobs:
         shell: bash
       
       - name: CMake clang release configuration
-        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D ALICE_CI=On
         shell: bash
 
       - name: CMake clang release clear

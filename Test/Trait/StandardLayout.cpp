@@ -155,7 +155,7 @@ using Alice::Trait::StandardLayout;
 
     struct WithVirtualMethod
     {
-        virtual void foo();
+        virtual void foo() = 0;
     };
 
     static_assert(not StandardLayout<WithVirtualMethod>);

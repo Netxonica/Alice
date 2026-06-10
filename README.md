@@ -56,7 +56,7 @@ Alice requires a compiler with full C++26 support:
 | OS      | Minimum version |
 |---------|-----------------|
 | Linux   | 7.0+            |
-| macOS   | 26.5+           |
+| macOS   | 27.0+           |
 | Windows | 11 26H1+        |
 
 
@@ -65,7 +65,7 @@ Alice requires a compiler with full C++26 support:
 | SDK     | Minimum SDK                                                                           |
 |---------|---------------------------------------------------------------------------------------|
 | Linux   | A running Wayland compositor, Wayland 1.25+ protocol and client, and latest PkgConfig |
-| macOS   | Xcode 26.5+                                                                           |
+| macOS   | Xcode 27.0+                                                                           |
 | Windows | Latest Visual Studio 2026 and Windows SDK 10.0.28000+                                 |
 
 
@@ -75,8 +75,8 @@ Alice requires a GPU and drivers capable of running the latest graphics APIs for
 
 | Platform | Required API                           |
 |----------|----------------------------------------|
-| macOS    | Metal 4+                               |
 | Linux    | Vulkan SDK 1.4.350+                    |
+| macOS    | Metal 4.1+                             |
 | Windows  | DXC 1.9.2602+ and D3D12 Agility 1.619+ |
 
 ---

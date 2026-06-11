@@ -35,7 +35,7 @@ template<class> struct EmptyTemplate{};
 
     struct WithVirtualFunction
     {
-        virtual void f();
+        virtual void f() = 0;
     };
 
     struct WithVirtualBase : virtual PlainEmpty{};

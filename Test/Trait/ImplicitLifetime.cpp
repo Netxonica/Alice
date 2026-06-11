@@ -179,7 +179,7 @@ using Alice::Trait::ImplicitLifetime;
     static_assert(not ImplicitLifetime<HasVirtualDtor>);
 
     struct Incomplete;
-    return ImplicitLifetime<Incomplete>;
+    return not ImplicitLifetime<Incomplete>;
 }
 
 #ifdef alice_windows

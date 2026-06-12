@@ -8,12 +8,15 @@ jobs:
   macos_build:
     runs-on: macos-latest
 
+    env:
+      HOMEBREW_NO_REQUIRE_TAP_TRUST: "1"
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v6.0.3
       
       - name: Update homebrew
-        run: /bin/zsh -i -c "brew trust aws/tap && brew trust azure/bicep && brew trust hashicorp/tap && brew update && brew upgrade"
+        run: /bin/zsh -i -c "brew update && brew upgrade"
         shell: bash
       
       - name: Install LLVM

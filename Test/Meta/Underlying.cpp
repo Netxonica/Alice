@@ -120,7 +120,13 @@ using Alice::Meta::Underlying;
     static_assert(Same<Underlying<WithChar16T>, char16_t>);
     static_assert(Same<Underlying<WithChar32T>, char32_t>);
     static_assert(Same<Underlying<WithDefaultUnderlying>, int>);
-    static_assert(Same<Underlying<PlainEnum>, unsigned>);
+    static_assert(Same<Underlying<PlainEnum>,
+    #ifdef _MSC_VER
+    int
+    #else
+    unsigned
+    #endif
+    >);
 
     // ── Aliasing: a type alias of an enum must forward to the same underlying type ─
 

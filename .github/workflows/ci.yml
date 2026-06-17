@@ -6,7 +6,7 @@ on:
 
 jobs:
   macos_build:
-    runs-on: macos-latest
+    runs-on: macos-26
 
     env:
       HOMEBREW_NO_REQUIRE_TAP_TRUST: "1"

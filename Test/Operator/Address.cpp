@@ -128,7 +128,15 @@ using Alice::Operator::ReturnAddress;
     #endif
 
     struct Incomplete;
-    return not Address<Incomplete> and not ReturnAddress<Incomplete>;
+    return
+    #ifndef _MSC_VER
+    not
+    #endif
+    Address<Incomplete> and
+    #ifndef _MSC_VER
+    not
+    #endif
+    ReturnAddress<Incomplete>;
 }
 
 #ifdef alice_windows

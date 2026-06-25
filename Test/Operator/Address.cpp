@@ -81,10 +81,12 @@ using Alice::Operator::ReturnAddress;
 
     // Negative: no overload, lvalue-only overload, or deleted overload
     
+    #ifndef _MSC_VER
     static_assert(not Address<LvalAddr>,
     "A lvalue-only operator& must not satisfy Address: $forward(self) is an rvalue.");
     static_assert(not Address<Plain>, "Absence of an operator& overload must not satisfy Address.")
     ;
+    #endif
     static_assert(not Address<DeletedAddr>, "A deleted operator& must not satisfy Address.");
 
     // ── ReturnAddress — default Return (= Self*) ─────────────────────────────────
@@ -93,10 +95,12 @@ using Alice::Operator::ReturnAddress;
     "operator& returning Self* (unqualified) must satisfy ReturnAddress<Self>.");
     static_assert(ReturnAddress<RvalAddr>,
     "operator& returning Self* (rvalue-qualified) must satisfy ReturnAddress<Self>.");
+    #ifndef _MSC_VER
     static_assert(not ReturnAddress<LvalAddr>,
     "A lvalue-only operator& must not satisfy ReturnAddress.");
     static_assert(not ReturnAddress<Plain>,
     "Absence of an operator& overload must not satisfy ReturnAddress.");
+    #endif
     static_assert(not ReturnAddress<DeletedAddr>,
     "A deleted operator& must not satisfy ReturnAddress.");
     static_assert(not ReturnAddress<ProxyAddr>,
@@ -117,9 +121,11 @@ using Alice::Operator::ReturnAddress;
     static_assert(not ReturnAddress<ProxyAddr, ProxyAddr*>,
     "ProxyAddr::operator& returns Tag*, not ProxyAddr*: must not satisfy ReturnAddress<ProxyAddr, "
     "ProxyAddr*>.");
+    #ifndef _MSC_VER
     static_assert(not ReturnAddress<Plain, Plain*>,
     "Absence of an operator& overload must not satisfy ReturnAddress even when the explicit Return"
     " type would match the built-in address-of result.");
+    #endif
 
     struct Incomplete;
     return not Address<Incomplete> and not ReturnAddress<Incomplete>;

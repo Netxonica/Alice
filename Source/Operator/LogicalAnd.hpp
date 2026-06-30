@@ -17,7 +17,7 @@ namespace Alice::Operator
     };
 
     /**
-     * @brief Satisfied when @p Self overloads a logical not operator by taking an argument of type
+     * @brief Satisfied when @p Self overloads a logical and operator by taking an argument of type
      * @p Rhs and returning @p Return
      */
     template<class Self, class Rhs, class Return = bool> concept ReturnLogicalAnd = requires(Self

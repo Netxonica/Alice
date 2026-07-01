@@ -1,6 +1,6 @@
 ![Alice's logo](./Logo.png)
 
-**Alice** is a modern C++26 project built around three core principles: **safety**, **performance**, and **ergonomics**. It leverages the latest language features to deliver a robust and expressive programming experience without sacrificing speed or correctness.
+**Alice** is a modern C++29 project built around three core principles: **safety**, **performance**, and **ergonomics**. It leverages the latest language features to deliver a robust and expressive programming experience without sacrificing speed or correctness.
 
 ---
 
@@ -26,12 +26,12 @@ Good software should be a pleasure to use. Alice prioritizes clean, expressive A
 
 ### Compilers
 
-Alice requires a compiler with full C++26 support:
+Alice requires a compiler with full C++29 support:
 
 | Compiler | Minimum Version |
 |----------|-----------------|
-| Clang    | 24+             |
-| GCC      | 17+             |
+| Clang    | 27+             |
+| GCC      | 20+             |
 | MSVC     | 14.52+          |
 
 

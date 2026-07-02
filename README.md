@@ -147,10 +147,28 @@ cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release}
 
 #### Safe Stack
 
-You can set `ALICE_SAFE_STACK` in the `cmake` command to apply secure zero-initialization to the padding bytes of eligible objects, and avoid leaking the prior bytes of the uninitialized memory. An example:
+You can set `ALICE_SAFE_STACK` in the `cmake` command to apply secure zero-initialization to the padding bytes of eligible objects, and avoid leaking the prior bytes of the uninitialized memory. It also enables stack frame checks and the use of uninitialized locals. An example:
 
 ```bash
 cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release} -D ALICE_SAFE_STACK=On
+```
+
+
+#### Safe Conversions
+
+You can set `ALICE_SAFE_CONVERSION` in the `cmake` command to apply secure conversions that never narrow. An example:
+
+```bash
+cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release} -D ALICE_SAFE_CONVERSION=On
+```
+
+
+#### Spectre
+
+You can set `ALICE_SPECTRE` in the `cmake` command to apply spectre mitigations at the compiler-level. An example:
+
+```bash
+cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release} -D ALICE_SPECTRE=On
 ```
 
 

@@ -101,7 +101,12 @@ ninja clean_app -C Build/{Debug|Release}
 ninja -C Build/{Debug|Release}
 ```
 
-Additionally, at the `cmake` command, one can define any number of the following macros to enable the specific ISA optimizations (all are off/undefined by default):
+The following CMake Alice options are off/undefined by default, but you can explicitly set these:
+
+
+#### ISA Extensions
+
+At the `cmake` command, one can define any number of the following macros to enable the specific ISA optimizations:
 
 - For amd64: ``ALICE_SSE4_2, ALICE_AVX, ALICE_AVX2, ALICE_AVX512, ALICE_AVX10_1, ALICE_AVX10_2, ALICE_APX``
 - For arm64: ``ALICE_ARM8_1, ALICE_ARM8_2, ALICE_ARM8_3, ALICE_ARM8_4, ALICE_ARM8_5, ALICE_ARM8_6, ALICE_ARM8_7, ALICE_ARM8_8, ALICE_ARM8_9, ALICE_ARM9_0, ALICE_ARM9_1, ALICE_ARM9_2, ALICE_ARM9_3, ALICE_ARM9_4``
@@ -112,10 +117,31 @@ An example of enabling ARMv8.1 and ARMv8.2 would be:
 cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release} -D ALICE_ARM8_1=On -D ALICE_ARM8_2=On
 ```
 
-You can also set a custom initial reserved stack space at the `cmake` command by defining `ALICE_STACK` with a non-zero natural number, which will be round-up (ceil) to align to a multiple of the system page size. An example:
+
+#### Initial Reserved Stack
+
+You can set a custom initial reserved stack space at the `cmake` command by defining `ALICE_STACK` with a non-zero natural number, which will be round-up (ceil) to align to a multiple of the system page size. An example:
 
 ```bash
 cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release} -D ALICE_STACK=8000000
+```
+
+
+#### Safe Buffers
+
+You can set `ALICE_SAFE_BUFFERS` in the `cmake` command to apply security checks to buffers. An example:
+
+```bash
+cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release} -D ALICE_SAFE_BUFFERS=On
+```
+
+
+#### Safe Control Flow
+
+You can set `ALICE_SAFE_CONTROL_FLOW` in the `cmake` command to apply security checks to the control flow. An example:
+
+```bash
+cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release} -D ALICE_SAFE_CONTROL_FLOW=On
 ```
 
 

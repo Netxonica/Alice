@@ -54,6 +54,7 @@ struct DeletedDtor
 
 struct PrivateDtor
 {
+    PrivateDtor(int){}
 private:
     ~PrivateDtor(){}
 };

@@ -55,6 +55,7 @@ struct DeletedDefaultWithOtherCtor
 
 struct PrivateDefaultCtor
 {
+    PrivateDefaultCtor(int){}
 private:
     PrivateDefaultCtor() = default;
 };

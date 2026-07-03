@@ -18,6 +18,8 @@ struct UserCopyCtor
 {
     int value;
 
+    UserCopyCtor(int val) : value(val){}
+
     UserCopyCtor(const UserCopyCtor&) : value(0){}
 
     UserCopyCtor& operator=(const UserCopyCtor&) = default;
@@ -26,12 +28,16 @@ struct UserCopyCtor
 /// Copy constructor explicitly deleted — must NOT satisfy the concept.
 struct DeletedCopyCtor
 {
+    DeletedCopyCtor(int){}
+
     DeletedCopyCtor(const DeletedCopyCtor&) = delete;
 };
 
 /// Move-only type (copy deleted implicitly when move is user-declared).
 struct MoveOnly
 {
+    MoveOnly(int){}
+
     MoveOnly(MoveOnly&&) = default;
 
     MoveOnly& operator=(MoveOnly&&) = default;
@@ -40,6 +46,7 @@ struct MoveOnly
 /// Copy constructor is private — must NOT satisfy the concept.
 struct PrivateCopyCtor
 {
+    PrivateCopyCtor(int){}
 private:
     PrivateCopyCtor(const PrivateCopyCtor&) = default;
 };
@@ -47,6 +54,8 @@ private:
 /// Both copy and move deleted — must NOT satisfy the concept.
 struct NoCopyNoMove
 {
+    NoCopyNoMove(int){}
+
     NoCopyNoMove(const NoCopyNoMove&) = delete;
 
     NoCopyNoMove(NoCopyNoMove&&) = delete;

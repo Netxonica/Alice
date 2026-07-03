@@ -25,7 +25,7 @@ using Alice::Trait::Class;
     class ClassWithMembers
     {
         [[maybe_unused]] int x;
-        
+    public:
         void foo(){}
     };
 
@@ -40,6 +40,7 @@ using Alice::Trait::Class;
 
     class AbstractClass
     {
+    public:
         virtual void foo() = 0;
     };
 

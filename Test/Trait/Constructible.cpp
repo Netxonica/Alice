@@ -58,6 +58,7 @@ using Alice::Trait::Constructible;
 
     struct PrivateConstructor
     {
+        PrivateConstructor(int){}
     private:
         PrivateConstructor() = default;
     };

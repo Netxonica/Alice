@@ -40,6 +40,7 @@ using Alice::Trait::CopyAssignable;
 
     struct PrivateCopyAssign
     {
+        void foo(){}
     private:
         PrivateCopyAssign& operator=(const PrivateCopyAssign&) = default;
     };

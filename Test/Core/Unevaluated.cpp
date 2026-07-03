@@ -47,6 +47,8 @@ template<class T> concept Dereferenceable = requires
     struct Abstract
     {
         virtual void method() = 0;
+
+        virtual ~Abstract(){}
     };
 
     struct WithFoo

@@ -18,6 +18,8 @@ using Alice::Trait::Polymorphic;
     struct WithVirtualMethod
     {
         virtual void f(){}
+
+        virtual ~WithVirtualMethod(){}
     };
 
     // Owns a pure-virtual member function (abstract class).
@@ -25,6 +27,8 @@ using Alice::Trait::Polymorphic;
     struct WithPureVirtual
     {
         virtual void f() = 0;
+
+        virtual ~WithPureVirtual(){}
     };
 
     // Has only a virtual destructor — the minimal polymorphic surface.
@@ -57,7 +61,7 @@ using Alice::Trait::Polymorphic;
 
     // Virtual (diamond-safe) inheritance of a polymorphic base.
 
-    struct VirtuallyInherited : virtual WithVirtualMethod {};
+    struct VirtuallyInherited : virtual WithVirtualMethod{};
 
     // cv-qualification is transparent to __is_polymorphic.
 

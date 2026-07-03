@@ -56,6 +56,8 @@ using Alice::Trait::MoveConstructible;
     struct AbstractBase
     {
         virtual void f() = 0;
+
+        virtual ~AbstractBase(){}
     };
 
     // ── Positive assertions ──────────────────────────────────────────────────────

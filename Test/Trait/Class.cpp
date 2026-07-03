@@ -36,12 +36,16 @@ using Alice::Trait::Class;
     struct AbstractStruct
     {
         virtual void foo() = 0;
+
+        virtual ~AbstractStruct(){}
     };
 
     class AbstractClass
     {
     public:
         virtual void foo() = 0;
+
+        virtual ~AbstractClass(){}
     };
 
     static_assert(Class<EmptyStruct>);

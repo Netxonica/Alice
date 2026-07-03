@@ -104,6 +104,8 @@ using Alice::Trait::TriviallyCopyAssignable;
     struct HasVirtual
     {
         virtual void foo(){}
+
+        virtual ~HasVirtual(){}
     };
     
     static_assert(not TriviallyCopyAssignable<HasVirtual>);

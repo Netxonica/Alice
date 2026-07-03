@@ -20,6 +20,8 @@ using Alice::Trait::TriviallyMoveConstructible;
 
     struct DefaultedMoveCtor
     {
+        DefaultedMoveCtor(int){}
+
         int value;
         
         DefaultedMoveCtor(DefaultedMoveCtor&&) = default;
@@ -32,6 +34,8 @@ using Alice::Trait::TriviallyMoveConstructible;
 
     struct UserDefinedMoveCtor
     {
+        UserDefinedMoveCtor(int){}
+
         int* ptr;
         
         UserDefinedMoveCtor(UserDefinedMoveCtor&& other) : ptr(other.ptr)
@@ -42,6 +46,8 @@ using Alice::Trait::TriviallyMoveConstructible;
 
     struct DeletedMoveCtor
     {
+        DeletedMoveCtor(int){}
+
         DeletedMoveCtor(DeletedMoveCtor&&) = delete;
     };
 

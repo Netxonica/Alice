@@ -15,6 +15,8 @@ using Alice::Trait::MoveConstructible;
     // Positive: explicitly defaulted move ctor
     struct ExplicitMove
     {
+        ExplicitMove(int){}
+
         ExplicitMove(ExplicitMove&&) = default;
 
         ExplicitMove(const ExplicitMove&) = delete;
@@ -23,6 +25,8 @@ using Alice::Trait::MoveConstructible;
     // Negative: move ctor deleted
     struct DeletedMoveLivingCopy
     {
+        DeletedMoveLivingCopy(int){}
+
         DeletedMoveLivingCopy(DeletedMoveLivingCopy&&) = delete;
 
         DeletedMoveLivingCopy(const DeletedMoveLivingCopy&) = default;
@@ -31,6 +35,8 @@ using Alice::Trait::MoveConstructible;
     // Positive: both ctors present
     struct CopyAndMove
     {
+        CopyAndMove(int){}
+
         CopyAndMove(CopyAndMove&&) = default;
 
         CopyAndMove(const CopyAndMove&) = default;
@@ -39,6 +45,8 @@ using Alice::Trait::MoveConstructible;
     // Negative: both move and copy ctors deleted — nothing can construct from &&
     struct ImmovableUncopyable
     {
+        ImmovableUncopyable(int){}
+
         ImmovableUncopyable(ImmovableUncopyable&&) = delete;
 
         ImmovableUncopyable(const ImmovableUncopyable&) = delete;

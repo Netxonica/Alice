@@ -14,6 +14,8 @@ using Alice::Trait::Abstract;
     struct SinglePureVirtual
     {
         virtual void Foo() = 0;
+
+        virtual ~SinglePureVirtual(){}
     };
 
     struct TwoPureVirtuals
@@ -21,6 +23,8 @@ using Alice::Trait::Abstract;
         virtual void Foo() = 0;
         
         virtual void Bar() = 0;
+
+        virtual ~TwoPureVirtuals(){}
     };
 
     struct PureVirtualDtor
@@ -33,9 +37,12 @@ using Alice::Trait::Abstract;
         virtual void Foo() = 0;
         
         virtual void Bar(){}
+
+        virtual ~MixedVirtuals(){}
     };
 
     struct InheritedAbstract : SinglePureVirtual{};
+
     struct ExtendedAbstract : SinglePureVirtual
     {
         virtual void Baz() = 0;
@@ -56,6 +63,8 @@ using Alice::Trait::Abstract;
     struct NonPureVirtualOnly
     {
         virtual void Foo(){}
+
+        virtual ~NonPureVirtualOnly(){}
     };
 
     union PlainUnion

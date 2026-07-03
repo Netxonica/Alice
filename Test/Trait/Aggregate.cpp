@@ -93,6 +93,8 @@ using Alice::Trait::Aggregate;
     struct WithVirtualFunc
     {
         virtual void fn(){}
+
+        virtual ~WithVirtualFunc(){}
     };
 
     // Virtual base class.

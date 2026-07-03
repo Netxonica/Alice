@@ -89,6 +89,7 @@ using Alice::Convert::From;
     // From is private  →  the call expression in the concept is ill-formed.
     struct PrivateFrom
     {
+        PrivateFrom(){}
     private:
         [[nodiscard]] static PrivateFrom From(PrivateFrom) noexcept
         {

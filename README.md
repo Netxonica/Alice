@@ -154,15 +154,6 @@ cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release}
 ```
 
 
-#### Safe Conversions
-
-You can set `ALICE_SAFE_CONVERSION` in the `cmake` command to apply secure conversions that never narrow. An example:
-
-```bash
-cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release} -D ALICE_SAFE_CONVERSION=On
-```
-
-
 #### Spectre
 
 You can set `ALICE_SPECTRE` in the `cmake` command to apply spectre mitigations at the compiler-level. An example:

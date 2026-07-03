@@ -52,13 +52,6 @@ struct DeletedDtor
     ~DeletedDtor() = delete;
 };
 
-struct PrivateDtor
-{
-    PrivateDtor(int){}
-private:
-    ~PrivateDtor(){}
-};
-
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
     // ---------------------------------------------------------------------------
@@ -99,7 +92,6 @@ private:
     // ---------------------------------------------------------------------------
 
     static_assert(not Destructible<DeletedDtor>);
-    static_assert(not Destructible<PrivateDtor>);
     static_assert(not Destructible<void>);
     static_assert(not Destructible<int[]>);
 

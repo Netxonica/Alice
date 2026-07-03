@@ -63,11 +63,15 @@ using Alice::Trait::TriviallyCopyable;
 
     struct UserCopyCtor
     {
+        UserCopyCtor(int){}
+
         UserCopyCtor(const UserCopyCtor&){}
     };
 
     struct UserMoveCtor
     {
+        UserMoveCtor(int){}
+
         UserMoveCtor(UserMoveCtor&&){}
     };
 
@@ -94,6 +98,8 @@ using Alice::Trait::TriviallyCopyable;
 
     struct DeletedCopyCtor
     {
+        DeletedCopyCtor(int){}
+
         DeletedCopyCtor(const DeletedCopyCtor&) = delete;
     };
 

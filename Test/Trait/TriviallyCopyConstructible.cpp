@@ -22,21 +22,29 @@ using Alice::Trait::TriviallyCopyConstructible;
 
     struct UserDefinedCopyCtor
     {
+        UserDefinedCopyCtor(int){}
+
         UserDefinedCopyCtor(const UserDefinedCopyCtor&){}
     };
 
     struct DeletedCopyCtor
     {
+        DeletedCopyCtor(int){}
+
         DeletedCopyCtor(const DeletedCopyCtor&) = delete;
     };
 
     struct ExplicitlyDefaultedCopyCtor
     {
+        ExplicitlyDefaultedCopyCtor(int){}
+
         ExplicitlyDefaultedCopyCtor(const ExplicitlyDefaultedCopyCtor&) = default;
     };
 
     struct MoveOnlyType
     {
+        MoveOnlyType(int){}
+
         MoveOnlyType(const MoveOnlyType&) = delete;
 
         MoveOnlyType(MoveOnlyType&&) = default;
@@ -60,6 +68,8 @@ using Alice::Trait::TriviallyCopyConstructible;
 
     struct NonTrivialBase
     {
+        NonTrivialBase(int){}
+
         NonTrivialBase(const NonTrivialBase&){}
     };
 

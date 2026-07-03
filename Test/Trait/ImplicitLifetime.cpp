@@ -76,6 +76,8 @@ using Alice::Trait::ImplicitLifetime;
     struct HasVirtualMethod
     {
         virtual void foo(){}
+
+        virtual ~HasVirtualMethod(){}
     };
 
     // Same disqualifiers as HasVirtualMethod.

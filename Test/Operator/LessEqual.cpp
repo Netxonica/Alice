@@ -131,6 +131,7 @@ using Alice::Operator::ReturnLessEqual;
     static_assert(ReturnLessEqual<NonBoolComparable, NonBoolComparable, int>);
 
     // No operator<= at all fails regardless of what Return is asked for.
+    
     static_assert(not ReturnLessEqual<Incomparable, Incomparable>);
     static_assert(not ReturnLessEqual<Incomparable, Incomparable, int>);
 

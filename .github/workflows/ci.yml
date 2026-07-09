@@ -146,10 +146,6 @@ jobs:
         run: apt-get install -y weston libwayland-dev wayland-protocols pkg-config
         shell: bash
 
-      - name: Install Vulkan
-        run: apt-get install -y mesa-vulkan-drivers
-        shell: bash
-
       - name: Run Wayland
         run: |
           weston --backend=headless-backend.so --socket=wayland-0 &

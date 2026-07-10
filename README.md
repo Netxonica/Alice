@@ -39,7 +39,7 @@ Alice requires a compiler with full C++29 support:
 
 | Tool  | Minimum Version |
 |-------|-----------------|
-| CMake | 4.3.4+          |
+| CMake | 4.4.0+          |
 | Ninja | 1.13+           |
 
 

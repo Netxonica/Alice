@@ -66,7 +66,7 @@ Alice requires a compiler with full C++29 support:
 |---------|---------------------------------------------------------------------------------------|
 | Linux   | A running Wayland compositor, Wayland 1.25+ protocol and client, and latest PkgConfig |
 | macOS   | Xcode 27.0+                                                                           |
-| Windows | Latest Visual Studio 2026 and Windows SDK 10.0.28000+                                 |
+| Windows | Latest Visual Studio 2026, Windows SDK 10.0.28000+, and Windows ADK 10.1.28000+       |
 
 
 ### GPU
@@ -102,6 +102,15 @@ ninja -C Build/{Debug|Release}
 ```
 
 The following CMake Alice options are off/undefined by default, but you can explicitly set these:
+
+
+#### Development
+
+At the `cmake` command, one can enable `ALICE_DEVELOPMENT` along with the release mode to generate profile data. This isn't required when using MSVC to compile, but it is recommended to compile at least twice in release mode to use the sampled data. An example of setting this flag:
+
+```bash
+cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release} -D ALICE_DEVELOPMENT=On
+```
 
 
 #### ISA Extensions

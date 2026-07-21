@@ -128,50 +128,50 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: gcc:16
-
+      image: archlinux:latest
+    
     steps:
       - name: Checkout source
         uses: actions/checkout@v7.0.1
-
-      - name: Update APT
-        run: apt-get update -y
+      
+      - name: Update system
+        run: pacman -Syu --noconfirm
         shell: bash
 
-      - name: Upgrade APT
-        run: apt-get full-upgrade -y
-        shell: bash
-
-      - name: Remove APT
-        run: apt-get autoremove -y
+      - name: Install base
+        run: pacman -S --noconfirm base-devel
         shell: bash
       
-      - name: Clear APT
-        run: apt-get autoclean -y
+      - name: Install Wget
+        run: pacman -S --noconfirm wget
         shell: bash
 
-      - name: Acquire CMake
-        run: wget -O cmake.sh https://github.com/Kitware/CMake/releases/download/v4.4.0/cmake-4.4.0-linux-x86_64.sh
+      - name: Install Weston
+        run: pacman -S --noconfirm weston
         shell: bash
 
-      - name: Install privileges
-        run: chmod +x cmake.sh
-        shell: bash
-
-      - name: Install CMake
-        run: ./cmake.sh --skip-license --prefix=/usr/local
-        shell: bash
-
-      - name: Install Ninja
-        run: apt-get install -y ninja-build
-        shell: bash
-
-      - name: Install Wayland
-        run: apt-get install -y weston libwayland-dev wayland-protocols pkg-config
+      - name: Install PkgConfig
+        run: pacman -S --noconfirm pkgconfig
         shell: bash
 
       - name: Install Vulkan
-        run: apt-get install -y libvulkan1
+        run: pacman -S --noconfirm vulkan-icd-loader
+        shell: bash
+
+      - name: Install Wayland
+        run: pacman -S --noconfirm wayland wayland-protocols
+        shell: bash
+
+      - name: Install GCC
+        run: pacman -S --noconfirm gcc
+        shell: bash
+
+      - name: Install CMake
+        run: pacman -S --noconfirm cmake
+        shell: bash
+
+      - name: Install Ninja
+        run: pacman -S --noconfirm ninja
         shell: bash
 
       - name: Run Wayland
@@ -187,10 +187,6 @@ jobs:
           '
           echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" >> "$GITHUB_ENV"
           echo "WAYLAND_DISPLAY=wayland-0" >> "$GITHUB_ENV"
-      
-      - name: Vulkan information
-        run: vulkaninfo | head
-        shell: bash
       
       - name: CMake GCC debug configuration
         run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D ALICE_CI=On

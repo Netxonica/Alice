@@ -170,6 +170,10 @@ jobs:
         run: apt-get install -y weston libwayland-dev wayland-protocols pkg-config
         shell: bash
 
+      - name: Install Vulkan
+        run: sudo apt install libvulkan1
+        shell: bash
+
       - name: Run Wayland
         run: |
           export XDG_RUNTIME_DIR=/tmp/xdg-runtime

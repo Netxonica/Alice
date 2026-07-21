@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout source
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Update Homebrew
         run: /bin/zsh -i -c "brew update"
@@ -69,7 +69,7 @@ jobs:
 
     steps:
       - name: Checkout source
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Setup MSVC environment
         uses: TheMrMilchmann/setup-msvc-dev@v4
@@ -132,7 +132,7 @@ jobs:
 
     steps:
       - name: Checkout source
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Update APT
         run: apt-get update -y

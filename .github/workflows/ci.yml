@@ -184,6 +184,10 @@ jobs:
           echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" >> "$GITHUB_ENV"
           echo "WAYLAND_DISPLAY=wayland-0" >> "$GITHUB_ENV"
       
+      - name: Vulkan information
+        run: vulkaninfo | head
+        shell: bash
+      
       - name: CMake GCC debug configuration
         run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D ALICE_CI=On
         shell: bash

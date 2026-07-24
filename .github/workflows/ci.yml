@@ -142,28 +142,16 @@ jobs:
         run: pacman -S --noconfirm base-devel
         shell: bash
       
-      - name: Install Wget
-        run: pacman -S --noconfirm wget
-        shell: bash
-
-      - name: Install Weston
-        run: pacman -S --noconfirm weston
-        shell: bash
-
-      - name: Install PkgConfig
-        run: pacman -S --noconfirm pkgconfig
-        shell: bash
-
       - name: Install Vulkan
         run: pacman -S --noconfirm vulkan-icd-loader
         shell: bash
 
       - name: Install Wayland
-        run: pacman -S --noconfirm wayland wayland-protocols
+        run: pacman -S --noconfirm wayland-protocols
         shell: bash
 
-      - name: Install GCC
-        run: pacman -S --noconfirm gcc
+      - name: Install Weston
+        run: pacman -S --noconfirm weston
         shell: bash
 
       - name: Install CMake

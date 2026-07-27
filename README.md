@@ -62,11 +62,11 @@ Alice requires a compiler with full C++29 support:
 
 ### SDK
 
-| SDK     | Minimum SDK                                                                           |
-|---------|---------------------------------------------------------------------------------------|
-| Linux   | A running Wayland compositor, Wayland 1.25+ protocol and client, and latest PkgConfig |
-| macOS   | Xcode 27.0+                                                                           |
-| Windows | Latest Visual Studio 2026, Windows SDK 10.0.28000+, and Windows ADK 10.1.28000+       |
+| SDK     | Minimum SDK                                                                                               |
+|---------|-----------------------------------------------------------------------------------------------------------|
+| Linux   | A running Wayland compositor, Wayland 1.25+ protocol and client, latest Wild linker, and latest PkgConfig |
+| macOS   | Xcode 27.0+                                                                                               |
+| Windows | Latest Visual Studio 2026, Windows SDK 10.0.28000+, and Windows ADK 10.1.28000+                           |
 
 
 ### GPU

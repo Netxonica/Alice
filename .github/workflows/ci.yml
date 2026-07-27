@@ -141,6 +141,10 @@ jobs:
       - name: Install base
         run: pacman -S --noconfirm base-devel
         shell: bash
+
+      - name: Install Wild
+        run: pacman -S --noconfirm wild
+        shell: bash
       
       - name: Install Vulkan
         run: pacman -S --noconfirm vulkan-icd-loader

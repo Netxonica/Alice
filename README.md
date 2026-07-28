@@ -117,7 +117,7 @@ cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release}
 
 At the `cmake` command, one can define any number of the following macros to enable the specific ISA optimizations:
 
-- For amd64: ``ALICE_SSE4_2, ALICE_AVX, ALICE_AVX2, ALICE_AVX512, ALICE_AVX10_1, ALICE_AVX10_2, ALICE_APX``
+- For amd64: ``ALICE_SSE3, ALICE_SSE4_2, ALICE_AVX, ALICE_AVX2, ALICE_AVX512, ALICE_AVX10_1, ALICE_AVX10_2, ALICE_APX``
 - For arm64: ``ALICE_ARM8_1, ALICE_ARM8_2, ALICE_ARM8_3, ALICE_ARM8_4, ALICE_ARM8_5, ALICE_ARM8_6, ALICE_ARM8_7, ALICE_ARM8_8, ALICE_ARM8_9, ALICE_ARM9_0, ALICE_ARM9_1, ALICE_ARM9_2, ALICE_ARM9_3, ALICE_ARM9_4``
 
 An example of enabling ARMv8.1 and ARMv8.2 would be:

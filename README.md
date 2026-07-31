@@ -40,7 +40,7 @@ Alice requires a compiler with full C++29 support:
 | Tool  | Minimum Version |
 |-------|-----------------|
 | CMake | 4.4.2+          |
-| Ninja | 1.13+           |
+| Ninja | 1.13.2+         |
 
 
 ### Architectures
@@ -53,31 +53,31 @@ Alice requires a compiler with full C++29 support:
 
 ### Operating Systems
 
-| OS      | Minimum version |
-|---------|-----------------|
-| Linux   | 7.0+            |
-| macOS   | 27.0+           |
-| Windows | 11 26H1+        |
+| OS      | Minimum version                          |
+|---------|------------------------------------------|
+| Linux   | 7.0+ (with a running Wayland compositor) |
+| macOS   | 27.0+                                    |
+| Windows | 11 26H1+                                 |
 
 
 ### SDK
 
-| SDK     | Minimum SDK                                                                                               |
-|---------|-----------------------------------------------------------------------------------------------------------|
-| Linux   | A running Wayland compositor, Wayland 1.25+ protocol and client, latest Wild linker, and latest PkgConfig |
-| macOS   | Xcode 27.0+                                                                                               |
-| Windows | Latest Visual Studio 2026, Windows SDK 10.0.28000+, and Windows ADK 10.1.28000+                           |
+| SDK     | Minimum SDK                                                                                 |
+|---------|---------------------------------------------------------------------------------------------|
+| Linux   | Wayland 1.25+ client, Wayland 1.49+ protocol, Wild linker 0.9+, and PkgConfig 3.0.4+        |
+| macOS   | Xcode 27.0+                                                                                 |
+| Windows | Visual Studio 2026+, DXC 1.9.2607.13+, Windows ADK 10.1.28000+, and Windows SDK 10.0.28000+ |
 
 
 ### GPU
 
 Alice requires a GPU and drivers capable of running the latest graphics APIs for the target platform:
 
-| Platform | Required API                           |
-|----------|----------------------------------------|
-| Linux    | Vulkan SDK 1.4.357+                    |
-| macOS    | Metal 4.1+                             |
-| Windows  | DXC 1.9.2607+ and D3D12 Agility 1.619+ |
+| Platform | Required API           |
+|----------|------------------------|
+| Linux    | Vulkan SDK 1.4.357.0+  |
+| macOS    | Metal 4.1+             |
+| Windows  | D3D12 Agility 1.619.5+ |
 
 ---
 
@@ -117,7 +117,7 @@ cmake -B Build/{Debug|Release} -S . -G Ninja -D CMAKE_BUILD_TYPE={Debug|Release}
 
 At the `cmake` command, one can define any number of the following macros to enable the specific ISA optimizations:
 
-- For amd64: ``ALICE_SSE3, ALICE_SSSE3, ALICE_SSE4_1, ALICE_SSE4_2, ALICE_SSE4A, ALICE_AVX, ALICE_AVX2, ALICE_AVX512F, ALICE_AVX512CD, ALICE_AVX512VL, ALICE_AVX512BW, ALICE_AVX512DQ, ALICE_AVX512IFMA, ALICE_AVX512VBMI, ALICE_AVX512VPOPCNTDQ, ALICE_AVX512VP2INTERSECT, ALICE_AVX512VNNI, ALICE_AVX512VBMI2, ALICE_AVX512BF16, ALICE_AVX512FP16, ALICE_AVX512BITALG, ALICE_AVX512BMM, ALICE_AVX512 (which entails all the other ALICE_AVX512X flags), ALICE_AVXVNNI, ALICE_AVXIFMA, ALICE_AVXVNNIINT8, ALICE_AVXNECONVERT, ALICE_AVXVNNIINT16, ALICE_AVX10_1, ALICE_AVX10_2, ALICE_SHA, ALICE_AES, ALICE_PCLMUL, ALICE_CLFLUSHOPT, ALICE_CLWB, ALICE_FSGSBASE, ALICE_PTWRITE, ALICE_RDRND, ALICE_F16C, ALICE_FMA, ALICE_FMA4, ALICE_PCONFIG, ALICE_WBNOINVD, ALICE_PREFETCHW, ALICE_RDPID, ALICE_RDSEED, ALICE_SGX, ALICE_XOP, ALICE_LWP, ALICE_POPCNT, ALICE_ABM, ALICE_ADX, ALICE_BMI, ALICE_BMI2, ALICE_LZCNT, ALICE_FXSR, ALICE_XSAVE, ALICE_XSAVEOPT, ALICE_XSAVEC, ALICE_XSAVES, ALICE_RTM, ALICE_HLE, ALICE_TBM, ALICE_MWAITX, ALICE_CLZERO, ALICE_PKU, ALICE_GFNI, ALICE_VAES, ALICE_WAITPKG, ALICE_VPCLMULQDQ, ALICE_MOVDIRI, ALICE_APX``
+- For amd64: ``ALICE_SSE3, ALICE_SSSE3, ALICE_SSE4_1, ALICE_SSE4_2, ALICE_SSE4A, ALICE_AVX, ALICE_AVX2, ALICE_AVX512F, ALICE_AVX512CD, ALICE_AVX512VL, ALICE_AVX512BW, ALICE_AVX512DQ, ALICE_AVX512IFMA, ALICE_AVX512VBMI, ALICE_AVX512VPOPCNTDQ, ALICE_AVX512VP2INTERSECT, ALICE_AVX512VNNI, ALICE_AVX512VBMI2, ALICE_AVX512BF16, ALICE_AVX512FP16, ALICE_AVX512BITALG, ALICE_AVX512BMM, ALICE_AVX512 (which entails all the other ALICE_AVX512X flags), ALICE_AVXVNNI, ALICE_AVXIFMA, ALICE_AVXVNNIINT8, ALICE_AVXNECONVERT, ALICE_AVXVNNIINT16, ALICE_AVX10_1, ALICE_AVX10_2, ALICE_SHA, ALICE_AES, ALICE_PCLMUL, ALICE_CLFLUSHOPT, ALICE_CLWB, ALICE_FSGSBASE, ALICE_PTWRITE, ALICE_RDRND, ALICE_F16C, ALICE_FMA, ALICE_FMA4, ALICE_PCONFIG, ALICE_WBNOINVD, ALICE_PREFETCHW, ALICE_RDPID, ALICE_RDSEED, ALICE_SGX, ALICE_XOP, ALICE_LWP, ALICE_POPCNT, ALICE_ABM, ALICE_ADX, ALICE_BMI, ALICE_BMI2, ALICE_LZCNT, ALICE_FXSR, ALICE_XSAVE, ALICE_XSAVEOPT, ALICE_XSAVEC, ALICE_XSAVES, ALICE_RTM, ALICE_HLE, ALICE_TBM, ALICE_MWAITX, ALICE_CLZERO, ALICE_PKU, ALICE_GFNI, ALICE_VAES, ALICE_WAITPKG, ALICE_VPCLMULQDQ, ALICE_MOVDIRI, ALICE_MOVDIR64B, ALICE_APX``
 - For arm64: ``ALICE_ARM8_1, ALICE_ARM8_2, ALICE_ARM8_3, ALICE_ARM8_4, ALICE_ARM8_5, ALICE_ARM8_6, ALICE_ARM8_7, ALICE_ARM8_8, ALICE_ARM8_9, ALICE_ARM9_0, ALICE_ARM9_1, ALICE_ARM9_2, ALICE_ARM9_3, ALICE_ARM9_4``
 
 An example of enabling ARMv8.1 and ARMv8.2 would be:

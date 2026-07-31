@@ -75,9 +75,9 @@ Alice requires a GPU and drivers capable of running the latest graphics APIs for
 
 | Platform | Required API                           |
 |----------|----------------------------------------|
-| Linux    | Vulkan SDK 1.4.350+                    |
+| Linux    | Vulkan SDK 1.4.357+                    |
 | macOS    | Metal 4.1+                             |
-| Windows  | DXC 1.9.2602+ and D3D12 Agility 1.619+ |
+| Windows  | DXC 1.9.2607+ and D3D12 Agility 1.619+ |
 
 ---
 

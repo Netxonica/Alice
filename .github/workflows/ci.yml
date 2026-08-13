@@ -101,7 +101,7 @@ jobs:
         shell: powershell
 
       - name: CMake MSVC development configuration
-        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=cl -D CMAKE_LINKER=link
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=cl -D CMAKE_LINKER=link -D ALICE_DEVELOPMENT=On
         shell: powershell
 
       - name: CMake MSVC development clear

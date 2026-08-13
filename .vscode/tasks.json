@@ -37,6 +37,42 @@
             ]
         },
         {
+            "label": "Build Alice (Development)",
+            "type": "shell",
+            "problemMatcher": [],
+            "options":
+            {
+                "cwd": "${workspaceFolder}"
+            },
+            "command":
+            [
+                "cmake",
+                "-D",
+                "CMAKE_BUILD_TYPE=Release",
+                "-D",
+                "CMAKE_CXX_COMPILER=${env:ALICE_COMPILER_PATH}",
+                "-D",
+                "CMAKE_LINKER=${env:ALICE_LINKER_PATH}",
+                "-B",
+                "Build/Release",
+                "-S",
+                ".",
+                "-G",
+                "Ninja",
+                "-D",
+                "ALICE_DEVELOPMENT=On",
+                "&&",
+                "ninja",
+                "clean_app",
+                "-C",
+                "Build/Release",
+                "&&",
+                "ninja",
+                "-C",
+                "Build/Release"
+            ]
+        },
+        {
             "label": "Build Alice (Release)",
             "type": "shell",
             "problemMatcher": [],

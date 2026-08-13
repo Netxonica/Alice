@@ -3,6 +3,14 @@
     "configurations":
     [
         {
+            "name": "Run Alice (Development)",
+            "args": [],
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/Release.py",
+            "preLaunchTask": "Build Alice (Development)"
+        },
+        {
             "name": "Run Alice (Release)",
             "args": [],
             "type": "debugpy",

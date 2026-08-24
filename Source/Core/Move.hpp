@@ -4,6 +4,10 @@
 #define alice_header_guard_core_move
 #include "Meta/RemoveLvalueReference.hpp"
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+#endif
+
 /**
  * @brief Casts the result of the expression given by @p ... to an xvalue.
  */

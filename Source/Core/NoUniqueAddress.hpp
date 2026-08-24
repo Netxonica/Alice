@@ -3,6 +3,10 @@
 #ifndef alice_header_guard_core_no_unique_address
 #define alice_header_guard_core_no_unique_address
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+#endif
+
 /**
  * @brief Correct and portable no_unique_address attribute.
  */

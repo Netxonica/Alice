@@ -12,6 +12,10 @@
 #endif
 #define alice_core_inline_private_and_secret_ inline
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+#endif
+
 /**
  * @brief Serves as an inlining specification.
  *

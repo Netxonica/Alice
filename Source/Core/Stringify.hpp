@@ -8,6 +8,10 @@
 #define alice_core_stringify_private_and_secret1(prefix, ...) \
 alice_core_stringify_private_and_secret2(prefix, #__VA_ARGS__)
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+#endif
+
 /**
  * @brief Stringifies the given tokens into an string literal, with the given encoding @p prefix.
  * For macros, it will first expand, and then stringify the tokens that are left.

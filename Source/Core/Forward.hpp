@@ -3,6 +3,10 @@
 #ifndef alice_header_guard_core_forward
 #define alice_header_guard_core_forward
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+#endif
+
 /**
  * @brief Perfectly forwards the value category of the expression given by @p ... (except prvalues
  * become xvalues).

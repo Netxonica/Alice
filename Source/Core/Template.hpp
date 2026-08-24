@@ -3,6 +3,10 @@
 #ifndef alice_header_guard_core_template
 #define alice_header_guard_core_template
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+#endif
+
 /**
  * @brief Creates a template context so that a pack introduction is viable without a template
  * entity.

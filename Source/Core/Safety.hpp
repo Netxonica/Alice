@@ -123,6 +123,8 @@ inline const constexpr ::Alice::Detail::Safety<> alice_safety_object_private_and
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+#elifndef _MSC_VER
+#pragma GCC diagnostic ignored "-Wdollar-in-identifier-extension"
 #endif
 
 /**

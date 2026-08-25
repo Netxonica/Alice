@@ -14,6 +14,8 @@
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+#elifndef _MSC_VER
+#pragma GCC diagnostic ignored "-Wdollar-in-identifier-extension"
 #endif
 
 /**

@@ -10,6 +10,8 @@ alice_core_stringify_private_and_secret2(prefix, #__VA_ARGS__)
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wdollar-in-identifier-extension"
+#elifndef _MSC_VER
+#pragma GCC diagnostic ignored "-Wdollar-in-identifier-extension"
 #endif
 
 /**

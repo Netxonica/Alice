@@ -86,7 +86,7 @@ constexpr int safe_computation() noexcept
 
         // Test propagation of parameters through $function
         int doubled = compute $function(5);
-        if (doubled != 10)
+        if (doubled not_eq 10)
             return false;
 
         // Test unreliable constructor propagation via $list
@@ -97,9 +97,10 @@ constexpr int safe_computation() noexcept
         if (not obj.constructed $function())
             return false;
 
-        // Demonstrate lambda capture form with $capture
-        auto f = $capture()() { return compute $function(3); };
-        if (f() != 6)
+        // Demonstrate it also works with lambdas; since we're in an unsafe context, the lambda can
+        // already call unsafe functions aswell
+        auto f = []{ return compute $function(3); };
+        if (f() not_eq 6 or []{ return compute $function(3); }() not_eq 6)
             return false;
 
         // Nested explicit safe region restores restrictions

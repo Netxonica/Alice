@@ -151,13 +151,6 @@ __VA_ARGS__>
 __VA_ARGS__]
 
 /**
- * @brief Propagates the current safety context to a lambda capture, with the optional arguments
- * given by @p ...
- */
-#define $capture(...) [alice_safety_object_private_and_secret_do_not_use __VA_OPT__(,) \
-__VA_ARGS__]
-
-/**
  * @brief Propagates the current safety context to a function call, with the optional arguments
  * given by @p ...
  */
@@ -181,15 +174,15 @@ alice_safety_object_private_and_secret_do_not_use __VA_OPT__(,) __VA_ARGS__)
 /**
  * @brief Creates a safe context. Calls to unsafe entities are illegal within this context.
  */
-#define $safe if constexpr([[maybe_unused]] const constexpr ::Alice::Detail::Safety<> \
+#define $safe if constexpr([[maybe_unused]] static const constexpr ::Alice::Detail::Safety<> \
 alice_safety_object_private_and_secret_do_not_use; true)
 
 /**
  * @brief Creates an unsafe context. Calls to safe and unsafe entities are legal within this
  * context.
  */
-#define $unsafe if constexpr([[maybe_unused]] const constexpr ::Alice::Detail::Safety<false> \
-alice_safety_object_private_and_secret_do_not_use; true)
+#define $unsafe if constexpr([[maybe_unused]] static const constexpr ::Alice::Detail::Safety<false\
+> alice_safety_object_private_and_secret_do_not_use; true)
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4459)

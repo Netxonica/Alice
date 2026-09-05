@@ -38,17 +38,17 @@ namespace Alice::Math::Logic
          */
         constexpr Proposition(Proposition&& other) noexcept = default;
 
-        consteval auto operator=(const Proposition&) noexcept -> Proposition& = delete(
+        consteval auto operator=(const Proposition&) noexcept -> Proposition& = delete
         #ifndef _MSC_VER
-        "CPL doesn't define assignment operations"
+        ("CPL doesn't define assignment operations")
         #endif
-        );
+        ;
 
-        consteval auto operator=(Proposition&&) noexcept -> Proposition& = delete(
+        consteval auto operator=(Proposition&&) noexcept -> Proposition& = delete
         #ifndef _MSC_VER
-        "CPL doesn't define assignment operations"
+        ("CPL doesn't define assignment operations")
         #endif
-        );
+        ;
 
         [[nodiscard]] consteval auto operator not_eq(const Proposition&) const noexcept -> bool =
         delete;

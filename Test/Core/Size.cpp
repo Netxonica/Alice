@@ -16,6 +16,11 @@ using Alice::Size;
         if(static_cast<Size::Native>(skibidi) not_eq 0uz)
             return false;
     }
+    // Unsafe constructor
+    $unsafe
+    {
+        Size skibidi $list();
+    }
     // Copy constructor
     {
         Size skibidi, fahh(skibidi);

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.4.4)
+cmake_minimum_required(VERSION 4.4.3)
 set(CMAKE_CXX_EXTENSIONS off)
 set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 message(STATUS "Building on ${CMAKE_BUILD_TYPE} mode...")

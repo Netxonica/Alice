@@ -7,6 +7,8 @@
 
 using Alice::Operator::Subscript;
 using Alice::Operator::ReturnSubscript;
+using Alice::Operator::UnsafeSubscript;
+using Alice::Operator::UnsafeReturnSubscript;
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
@@ -74,6 +76,14 @@ using Alice::Operator::ReturnSubscript;
 
     struct WithNoSubscript{};
 
+    struct WithUnsafeSubscript
+    {
+        int operator[] $unreliable(int)
+        {
+            return 0;
+        }
+    };
+
     // ─── Subscript: satisfied ─────────────────────────────────────────────────────
 
     static_assert(Subscript<WithIntSubscript, int>);
@@ -111,6 +121,11 @@ using Alice::Operator::ReturnSubscript;
     static_assert(not ReturnSubscript<WithRefReturnSubscript, int, int>);          // int& ≠ int
     static_assert(not ReturnSubscript<WithMultiArgSubscript, float, int, float>);  // double ≠ float
     static_assert(not ReturnSubscript<WithNoSubscript, int, int>);
+
+    // ─── UnsafeSubscript and UnsafeReturnSubscript: satisfied ─────────────────────
+
+    static_assert(UnsafeSubscript<WithUnsafeSubscript, int>);
+    static_assert(UnsafeReturnSubscript<WithUnsafeSubscript, int, int>);
 
     struct Incomplete;
     return not Subscript<Incomplete, Incomplete> and not ReturnSubscript<Incomplete, Incomplete,

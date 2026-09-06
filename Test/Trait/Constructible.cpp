@@ -6,6 +6,7 @@
 #include "Trait/Constructible.hpp"
 
 using Alice::Trait::Constructible;
+using Alice::Trait::UnsafeConstructible;
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
@@ -63,6 +64,11 @@ using Alice::Trait::Constructible;
         PrivateConstructor() = default;
     };
 
+    struct UnsafeConstructor
+    {
+        UnsafeConstructor $unreliable(){}
+    };
+
     // --- Positive cases ----------------------------------------------------------
 
     // Default construction
@@ -93,6 +99,10 @@ using Alice::Trait::Constructible;
 
     static_assert(Constructible<int, int>, "int must satisfy Constructible<int>");
     static_assert(Constructible<int>, "int must satisfy Constructible<> (value-initialisation)");
+
+    // Unsafe
+
+    static_assert(UnsafeConstructible<UnsafeConstructor>);
 
     // --- Negative cases ----------------------------------------------------------
 

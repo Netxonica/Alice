@@ -6,6 +6,7 @@
 #include "Trait/Callable.hpp"
 
 using Alice::Trait::Callable;
+using Alice::Trait::UnsafeCallable;
 
 // --- Free functions ---
 
@@ -17,6 +18,8 @@ int fn_int(int x)
 }
 
 void fn_two(int, float){}
+
+void unsafe_fn $unreliable(){}
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
@@ -154,6 +157,10 @@ void fn_two(int, float){}
     static_assert(Callable<decltype(&fn_0)>);
     static_assert(Callable<decltype(&fn_int), int>);
     static_assert(Callable<decltype(&fn_two), int, float>);
+
+    // Unsafe
+
+    static_assert(UnsafeCallable<decltype(&unsafe_fn)>);
 
     // ============================================================
     //  Negative tests — concept must NOT be satisfied

@@ -3,6 +3,7 @@
 #ifndef alice_header_guard_trait_invocable
 #define alice_header_guard_trait_invocable
 #include "Trait/Same.hpp"
+#include "Core/Safety.hpp"
 #include "Core/Forward.hpp"
 
 namespace Alice::Trait
@@ -14,6 +15,16 @@ namespace Alice::Trait
     Arguments... arguments)
     {
         {$forward(self)($forward(arguments)...)} -> Same<Return>;
+    };
+
+    /**
+     * @brief Satisfied when @p Self can be unsafely called with @p Arguments... and returns
+     * @p Return
+     */
+    template<class Self, class Return, class... Arguments> concept UnsafeInvocable = requires(Self
+    self, const Detail::Safety<false> safety, Arguments... arguments)
+    {
+        {$forward(self)(safety, $forward(arguments)...)} -> Same<Return>;
     };
 }
 

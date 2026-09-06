@@ -6,6 +6,7 @@
 #include "Trait/Invocable.hpp"
 
 using Alice::Trait::Invocable;
+using Alice::Trait::UnsafeInvocable;
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
@@ -15,6 +16,7 @@ using Alice::Trait::Invocable;
 
     // Opaque, convertible-to-nothing types eliminate implicit-conversion
     // false-positives in negative tests.
+    
     struct Opaque{};
 
     struct Other{};
@@ -201,6 +203,13 @@ using Alice::Trait::Invocable;
     {
         return {};
     }), Other, Opaque>);
+
+    // Unsafe
+
+    static_assert(UnsafeInvocable<decltype([] $unreliable() -> int
+    {
+        return 0;
+    }), int>);
 
     // ─────────────────────────────────────────────────────────────────────────────
     // NEGATIVE  —  concept must NOT be satisfied

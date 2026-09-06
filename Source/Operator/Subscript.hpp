@@ -3,6 +3,7 @@
 #ifndef alice_header_guard_operator_subscript
 #define alice_header_guard_operator_subscript
 #include "Trait/Same.hpp"
+#include "Core/Safety.hpp"
 #include "Core/Forward.hpp"
 
 namespace Alice::Operator
@@ -25,6 +26,26 @@ namespace Alice::Operator
     self, Arguments... arguments)
     {
         {$forward(self)[$forward(arguments)...]} -> Trait::Same<Return>;
+    };
+
+    /**
+     * @brief Satisfied when @p Self overloads an unsafe subscript operator by taking an arbitrary
+     * number of arguments given by @p Arguments
+     */
+    template<class Self, class... Arguments> concept UnsafeSubscript = requires(Self self, const
+    Detail::Safety<false> safety, Arguments... arguments)
+    {
+        $forward(self)[safety, $forward(arguments)...];
+    };
+
+    /**
+     * @brief Satisfied when @p Self overloads an unsafe subscript operator by taking an arbitrary
+     * number of arguments given by @p Arguments returning @p Return
+     */
+    template<class Self, class Return, class... Arguments> concept UnsafeReturnSubscript = requires
+    (Self self, const Detail::Safety<false> safety, Arguments... arguments)
+    {
+        {$forward(self)[safety, $forward(arguments)...]} -> Trait::Same<Return>;
     };
 }
 

@@ -2,6 +2,7 @@
 #if alice_major >= 0 and alice_middle >= 0 and alice_minor >= 1
 #ifndef alice_header_guard_core_size
 #define alice_header_guard_core_size
+#include "Core/Safety.hpp"
 #include "Math/Logic/Proposition.hpp"
 
 namespace Alice
@@ -386,6 +387,29 @@ namespace Alice
         [[nodiscard]] static consteval auto Digits() noexcept -> Size
         {
             return Size{20uz};
+        }
+
+        /**
+         * @brief Computes the number of ones in the binary representation of this instance.
+         */
+        [[nodiscard]] constexpr auto CountOnes() const noexcept -> Size
+        {
+            #ifdef _MSC_VER
+            if consteval
+            {
+                Native count = 0uz;
+                for(Native bit = 0uz; bit < 64uz; ++bit)
+                    if((m_value >> bit) bitand 1uz)
+                        ++count;
+                return Size{count};
+            }
+            else
+            {
+                return Size{__popcnt64(m_value)};
+            }
+            #else
+            return Size{static_cast<Native>(__builtin_popcountg(m_value))};
+            #endif
         }
     };
 

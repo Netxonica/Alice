@@ -2,7 +2,6 @@
 #if alice_major >= 0 and alice_middle >= 0 and alice_minor >= 1
 #ifndef alice_header_guard_math_logic_proposition
 #define alice_header_guard_math_logic_proposition
-#include "Core/Safety.hpp"
 
 namespace Alice::Math::Logic
 {

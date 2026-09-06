@@ -301,6 +301,18 @@ using Alice::Size;
         if(static_cast<Size::Native>(skibidi) not_eq 20uz)
             return false;
     }
+    // Count ones
+    {
+        Size skibidi{0b01001100uz};
+        if(static_cast<Size::Native>(skibidi.CountOnes()) not_eq 3uz)
+            return false;
+        Size fanum = Size::Maximum();
+        if(static_cast<Size::Native>(fanum.CountOnes()) not_eq 64uz)
+            return false;
+        Size meow = Size::Minimum();
+        if(static_cast<Size::Native>(meow.CountOnes()) not_eq 0uz)
+            return false;
+    }
     return true;
 }
 

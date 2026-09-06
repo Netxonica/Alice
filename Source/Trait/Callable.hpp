@@ -19,8 +19,8 @@ namespace Alice::Trait
     /**
      * @brief Satisfied when @p Self can be unsafely called with @p Arguments...
      */
-    template<class Self, class... Arguments> concept UnsafeCallable = requires(Self self, const
-    Detail::Safety<false> safety, Arguments... arguments)
+    template<class Self, class... Arguments> concept UnsafeCallable = requires(Self self, const ::
+    Alice::Detail::Safety<false> safety, Arguments... arguments)
     {
         $forward(self)(safety, $forward(arguments)...);
     };

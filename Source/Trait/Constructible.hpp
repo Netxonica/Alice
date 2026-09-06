@@ -19,7 +19,7 @@ namespace Alice::Trait
      * constructor with @p Arguments...
      */
     template<class Self, class... Arguments> concept UnsafeConstructible = Marker::Sized<Self> and
-    __is_constructible(Self, const Detail::Safety<false>, Arguments...);
+    __is_constructible(Self, const ::Alice::Detail::Safety<false>, Arguments...);
 }
 
 #endif

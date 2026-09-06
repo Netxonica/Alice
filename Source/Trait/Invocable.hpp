@@ -22,7 +22,7 @@ namespace Alice::Trait
      * @p Return
      */
     template<class Self, class Return, class... Arguments> concept UnsafeInvocable = requires(Self
-    self, const Detail::Safety<false> safety, Arguments... arguments)
+    self, const ::Alice::Detail::Safety<false> safety, Arguments... arguments)
     {
         {$forward(self)(safety, $forward(arguments)...)} -> Same<Return>;
     };

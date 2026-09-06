@@ -4,11 +4,15 @@
 #ifdef alice_linux
 #include <stdlib.h>
 #endif
-#include "Core/NullPointer.hpp"
+#include "Core/Size.hpp"
 
-static_assert(CHAR_BIT == 8, "each byte must be 8-bits");
-static_assert(alignof(decltype(sizeof(bool))) == 8uz and sizeof(decltype(sizeof(bool))) == 8uz,
-"the alignment and size of size_t must be 8 bytes (padding-exclusive)");
+static_assert(CHAR_BIT == 8, "each byte must be 8 bits");
+static_assert(alignof(bool) == 1uz and sizeof(bool) == 1uz,
+"the alignment and size of bool must be 1 byte (padding-exclusive)");
+static_assert(alignof(void*) == 8uz and sizeof(void*) == 8uz,
+"the alignment and size of pointers must be 8 bytes (padding-exclusive)");
+static_assert(alignof(Alice::Size::Native) == 8uz and sizeof(Alice::Size::Native) == 8uz,
+"the alignment and size of Alice::Size::Native must be 8 bytes (padding-exclusive)");
 
 #ifdef alice_windows
 #include <Windows.h>

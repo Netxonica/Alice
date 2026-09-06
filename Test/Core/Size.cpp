@@ -313,6 +313,18 @@ using Alice::Size;
         if(static_cast<Size::Native>(meow.CountOnes()) not_eq 0uz)
             return false;
     }
+    // Count zeros
+    {
+        Size skibidi{0b01001100uz};
+        if(static_cast<Size::Native>(skibidi.CountZeros()) not_eq 61uz)
+            return false;
+        Size fanum = Size::Maximum();
+        if(static_cast<Size::Native>(fanum.CountZeros()) not_eq 0uz)
+            return false;
+        Size meow = Size::Minimum();
+        if(static_cast<Size::Native>(meow.CountZeros()) not_eq 64uz)
+            return false;
+    }
     return true;
 }
 

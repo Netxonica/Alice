@@ -411,6 +411,29 @@ namespace Alice
             return Size{static_cast<Native>(__builtin_popcountg(m_value))};
             #endif
         }
+
+        /**
+         * @brief Computes the number of zeros in the binary representation of this instance.
+         */
+        [[nodiscard]] constexpr auto CountZeros() const noexcept -> Size
+        {
+            #ifdef _MSC_VER
+            if consteval
+            {
+                Native count = 0uz;
+                for(Native bit = 0uz; bit < 64uz; ++bit)
+                    if((m_value >> bit) bitand 1uz)
+                        ++count;
+                return Size{64uz - count};
+            }
+            else
+            {
+                return Size{64uz - __popcnt64(m_value)};
+            }
+            #else
+            return Size{64uz - static_cast<Native>(__builtin_popcountg(m_value))};
+            #endif
+        }
     };
 
     namespace Literals

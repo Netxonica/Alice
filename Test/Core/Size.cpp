@@ -304,25 +304,25 @@ using Alice::Size;
     // Count ones
     {
         Size skibidi{0b01001100uz};
-        if(static_cast<Size::Native>(skibidi.CountOnes()) not_eq 3uz)
+        if(static_cast<Size::Native>(skibidi.Ones()) not_eq 3uz)
             return false;
         Size fanum = Size::Maximum();
-        if(static_cast<Size::Native>(fanum.CountOnes()) not_eq 64uz)
+        if(static_cast<Size::Native>(fanum.Ones()) not_eq 64uz)
             return false;
         Size meow = Size::Minimum();
-        if(static_cast<Size::Native>(meow.CountOnes()) not_eq 0uz)
+        if(static_cast<Size::Native>(meow.Ones()) not_eq 0uz)
             return false;
     }
     // Count zeros
     {
         Size skibidi{0b01001100uz};
-        if(static_cast<Size::Native>(skibidi.CountZeros()) not_eq 61uz)
+        if(static_cast<Size::Native>(skibidi.Zeros()) not_eq 61uz)
             return false;
         Size fanum = Size::Maximum();
-        if(static_cast<Size::Native>(fanum.CountZeros()) not_eq 0uz)
+        if(static_cast<Size::Native>(fanum.Zeros()) not_eq 0uz)
             return false;
         Size meow = Size::Minimum();
-        if(static_cast<Size::Native>(meow.CountZeros()) not_eq 64uz)
+        if(static_cast<Size::Native>(meow.Zeros()) not_eq 64uz)
             return false;
     }
     return true;

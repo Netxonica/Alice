@@ -392,7 +392,7 @@ namespace Alice
         /**
          * @brief Computes the number of ones in the binary representation of this instance.
          */
-        [[nodiscard]] constexpr auto CountOnes() const noexcept -> Size
+        [[nodiscard]] constexpr auto Ones() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
@@ -415,16 +415,16 @@ namespace Alice
         /**
          * @brief Computes the number of zeros in the binary representation of this instance.
          */
-        [[nodiscard]] constexpr auto CountZeros() const noexcept -> Size
+        [[nodiscard]] constexpr auto Zeros() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
             {
                 Native count = 0uz;
                 for(Native bit = 0uz; bit < 64uz; ++bit)
-                    if((m_value >> bit) bitand 1uz)
+                    if(not((m_value >> bit) bitand 1uz))
                         ++count;
-                return Size{64uz - count};
+                return Size{count};
             }
             else
             {

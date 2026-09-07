@@ -434,6 +434,31 @@ namespace Alice
             return Size{64uz - static_cast<Native>(__builtin_popcountg(m_value))};
             #endif
         }
+
+        /**
+         * @brief Computes the number of leading ones in the binary representation of this
+         * instance.
+         */
+        [[nodiscard]] constexpr auto LeadingOnes() const noexcept -> Size
+        {
+            #ifdef _MSC_VER
+            if consteval
+            {
+                if(m_value == 18'446'744'073'709'551'615uz)
+                    return Size{64uz};
+                Native count = 0uz;
+                for(Native bit = 63uz; (m_value >> bit) bitand 1uz; --bit)
+                    ++count;
+                return Size{count};
+            }
+            else
+            {
+                return Size{__lzcnt64(compl m_value)};
+            }
+            #else
+            return Size{static_cast<Native>(__builtin_clzg(compl m_value))};
+            #endif
+        }
     };
 
     namespace Literals

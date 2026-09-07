@@ -301,7 +301,7 @@ using Alice::Size;
         if(static_cast<Size::Native>(skibidi) not_eq 20uz)
             return false;
     }
-    // Count ones
+    // Ones
     {
         Size skibidi{0b01001100uz};
         if(static_cast<Size::Native>(skibidi.Ones()) not_eq 3uz)
@@ -313,7 +313,7 @@ using Alice::Size;
         if(static_cast<Size::Native>(meow.Ones()) not_eq 0uz)
             return false;
     }
-    // Count zeros
+    // Zeros
     {
         Size skibidi{0b01001100uz};
         if(static_cast<Size::Native>(skibidi.Zeros()) not_eq 61uz)
@@ -323,6 +323,18 @@ using Alice::Size;
             return false;
         Size meow = Size::Minimum();
         if(static_cast<Size::Native>(meow.Zeros()) not_eq 64uz)
+            return false;
+    }
+    // Leading ones
+    {
+        Size skibidi{compl(Size::Maximum() >> Size{2uz})};
+        if(static_cast<Size::Native>(skibidi.LeadingOnes()) not_eq 2uz)
+            return false;
+        Size fanum = Size::Minimum();
+        if(static_cast<Size::Native>(fanum.LeadingOnes()) not_eq 0uz)
+            return false;
+        Size meow = Size::Maximum();
+        if(static_cast<Size::Native>(meow.LeadingOnes()) not_eq 64uz)
             return false;
     }
     return true;

@@ -456,7 +456,7 @@ namespace Alice
                 return Size{__lzcnt64(compl m_value)};
             }
             #else
-            return Size{static_cast<Native>(__builtin_clzg(compl m_value))};
+            return Size{static_cast<Native>(__builtin_clzg(compl m_value, 64))};
             #endif
         }
     };

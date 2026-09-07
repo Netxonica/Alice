@@ -8,16 +8,15 @@ jobs:
   macos_build:
     runs-on: macos-26
 
+    env:
+      HOMEBREW_NO_REQUIRE_TAP_TRUST: "1"
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v7.0.1
-
-      - name: Update Homebrew
-        run: /bin/zsh -i -c "brew update"
-        shell: bash
       
-      - name: Update CMake
-        run: /bin/zsh -i -c "brew upgrade cmake"
+      - name: Update homebrew
+        run: /bin/zsh -i -c "brew update && brew upgrade"
         shell: bash
       
       - name: Install LLVM

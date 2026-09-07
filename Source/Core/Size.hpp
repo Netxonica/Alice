@@ -431,10 +431,10 @@ namespace Alice
             }
             else
             {
-                return Size{64uz - __popcnt64(m_value)};
+                return Size{__popcnt64(compl m_value)};
             }
             #else
-            return Size{64uz - static_cast<Native>(__builtin_popcountg(m_value))};
+            return Size{static_cast<Native>(__builtin_popcountg(compl m_value))};
             #endif
         }
 
@@ -540,6 +540,30 @@ namespace Alice
         [[nodiscard]] constexpr auto BitWidth() const noexcept -> Size
         {
             return Bits() - LeadingZeros();
+        }
+
+        /**
+         * @brief Computes this instance with only the most significant bit set.
+         */
+        [[nodiscard]] constexpr auto IsolateHighestOne() const noexcept -> Size
+        {
+            #ifdef _MSC_VER
+            if consteval
+            {
+                if(m_value == 0uz)
+                    return Size{};
+                Native counter = 0uz;
+                while(not static_cast<bool>(m_value >> static_cast<Native>(63uz - counter)))
+                    ++counter;
+                return Size{1uz << static_cast<Native>(63uz - counter)};
+            }
+            else
+            {
+                return Size{1uz << static_cast<Native>(63 - __lzcnt64(m_value))};
+            }
+            #else
+            return Size{1uz << static_cast<Native>(63 - __builtin_clzg(m_value))};
+            #endif
         }
     };
 

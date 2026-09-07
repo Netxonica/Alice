@@ -387,6 +387,15 @@ using Alice::Size;
         if(static_cast<Size::Native>(Size::Maximum().BitWidth()) not_eq 64uz)
             return false;
     }
+    // Isolate highest one
+    {
+        Size skibidi{0b01100100};
+        if(static_cast<Size::Native>(skibidi.IsolateHighestOne()) not_eq 0b01000000)
+            return false;
+        Size fanum = Size::Minimum();
+        if(static_cast<Size::Native>(fanum.IsolateHighestOne()) not_eq 0uz)
+            return false;
+    }
     return true;
 }
 

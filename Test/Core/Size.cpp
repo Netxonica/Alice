@@ -337,6 +337,18 @@ using Alice::Size;
         if(static_cast<Size::Native>(meow.LeadingOnes()) not_eq 64uz)
             return false;
     }
+    // Leading zeros
+    {
+        Size skibidi{Size::Maximum() >> Size{2uz}};
+        if(static_cast<Size::Native>(skibidi.LeadingZeros()) not_eq 2uz)
+            return false;
+        Size fanum = Size::Minimum();
+        if(static_cast<Size::Native>(fanum.LeadingZeros()) not_eq 64uz)
+            return false;
+        Size meow = Size::Maximum();
+        if(static_cast<Size::Native>(meow.LeadingZeros()) not_eq 0uz)
+            return false;
+    }
     return true;
 }
 

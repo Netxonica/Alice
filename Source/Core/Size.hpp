@@ -562,7 +562,37 @@ namespace Alice
                 return Size{1uz << static_cast<Native>(63 - __lzcnt64(m_value))};
             }
             #else
-            return Size{1uz << static_cast<Native>(63 - __builtin_clzg(m_value))};
+            return Size{1uz << static_cast<Native>(63 - __builtin_clzg(m_value, 0))};
+            #endif
+        }
+
+        /**
+         * @brief Computes this instance with only the least significant bit set.
+         */
+        [[nodiscard]] constexpr auto IsolateLowestOne() const noexcept -> Size
+        {
+            #ifdef _MSC_VER
+            if consteval
+            {
+                if(m_value == 0uz)
+                    return Size{};
+                Native counter = 0uz;
+                while(not static_cast<bool>(m_value << static_cast<Native>(63uz - counter) >> 63uz)
+                )
+                    ++counter;
+                return Size{
+                0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000 >>
+                static_cast<Native>(63uz - counter)};
+            }
+            else
+            {
+                return Size{
+                0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000 >>
+                static_cast<Native>(63 - _tzcnt_u64(m_value))};
+            }
+            #else
+            return Size{0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000
+            >> static_cast<Native>(63 - __builtin_ctzg(m_value, 0))};
             #endif
         }
     };

@@ -396,6 +396,15 @@ using Alice::Size;
         if(static_cast<Size::Native>(fanum.IsolateHighestOne()) not_eq 0uz)
             return false;
     }
+    // Isolate lowest one
+    {
+        Size skibidi{0b01100100};
+        if(static_cast<Size::Native>(skibidi.IsolateLowestOne()) not_eq 0b00000100)
+            return false;
+        Size fanum = Size::Minimum();
+        if(static_cast<Size::Native>(fanum.IsolateLowestOne()) not_eq 0uz)
+            return false;
+    }
     return true;
 }
 

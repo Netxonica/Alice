@@ -510,6 +510,29 @@ namespace Alice
             return Size{static_cast<Native>(__builtin_ctzg(compl m_value, 64))};
             #endif
         }
+
+        /**
+         * @brief Computes the number of trailing zeros in the binary representation of this
+         * instance.
+         */
+        [[nodiscard]] constexpr auto TrailingZeros() const noexcept -> Size
+        {
+            #ifdef _MSC_VER
+            if consteval
+            {
+                Native count = 0uz;
+                for(Native bit = 0uz; bit < 64uz and not((m_value >> bit) bitand 1uz); ++bit)
+                    ++count;
+                return Size{count};
+            }
+            else
+            {
+                return Size{_tzcnt_u64(m_value)};
+            }
+            #else
+            return Size{static_cast<Native>(__builtin_ctzg(m_value, 64))};
+            #endif
+        }
     };
 
     namespace Literals

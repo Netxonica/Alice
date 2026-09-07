@@ -361,6 +361,18 @@ using Alice::Size;
         if(static_cast<Size::Native>(meow.TrailingOnes()) not_eq 64uz)
             return false;
     }
+    // Trailing zeros
+    {
+        Size skibidi{0b0101000uz};
+        if(static_cast<Size::Native>(skibidi.TrailingZeros()) not_eq 3uz)
+            return false;
+        Size fanum = Size::Minimum();
+        if(static_cast<Size::Native>(fanum.TrailingZeros()) not_eq 64uz)
+            return false;
+        Size meow = Size::Maximum();
+        if(static_cast<Size::Native>(meow.TrailingZeros()) not_eq 0uz)
+            return false;
+    }
     return true;
 }
 

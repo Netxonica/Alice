@@ -2,6 +2,9 @@
 #if alice_major >= 0 and alice_middle >= 0 and alice_minor >= 1
 #ifndef alice_header_guard_core_size
 #define alice_header_guard_core_size
+#ifdef _MSC_VER
+#include <intrin.h>
+#endif
 #include "Core/Safety.hpp"
 #include "Math/Logic/Proposition.hpp"
 

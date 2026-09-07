@@ -373,6 +373,20 @@ using Alice::Size;
         if(static_cast<Size::Native>(meow.TrailingZeros()) not_eq 0uz)
             return false;
     }
+    // Bit width
+    {
+        Size skibidi = Size::Minimum();
+        if(static_cast<Size::Native>(skibidi.BitWidth()) not_eq 0uz)
+            return false;
+        Size fanum{0b111uz};
+        if(static_cast<Size::Native>(fanum) not_eq 3uz)
+            return false;
+        Size meow{0b1110uz};
+        if(static_cast<Size::Native>(meow) not_eq 4uz)
+            return false;
+        if(static_cast<Size::Native>(Size::Maximum()) not_eq 64uz)
+            return false;
+    }
     return true;
 }
 

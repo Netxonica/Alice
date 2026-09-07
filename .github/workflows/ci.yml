@@ -133,6 +133,12 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v7.0.1
+
+      - name: Initialize key
+        run: |
+          pacman-key --init
+          pacman-key --populate archlinux
+        shell: bash
       
       - name: Update system
         run: pacman -Syu --noconfirm
@@ -140,10 +146,6 @@ jobs:
 
       - name: Install base
         run: pacman -S --noconfirm base-devel
-        shell: bash
-
-      - name: Install Wild
-        run: pacman -S --noconfirm wild
         shell: bash
       
       - name: Install Vulkan

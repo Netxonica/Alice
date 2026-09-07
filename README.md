@@ -32,7 +32,7 @@ Alice requires a compiler with full C++29 support:
 |----------|-----------------|
 | Clang    | 27+             |
 | GCC      | 20+             |
-| MSVC     | 14.52+          |
+| MSVC     | 19.52+          |
 
 
 ### Build System
@@ -55,7 +55,7 @@ Alice requires a compiler with full C++29 support:
 
 | OS      | Minimum version                          |
 |---------|------------------------------------------|
-| Linux   | 7.0+ (with a running Wayland compositor) |
+| Linux   | 7.2+ (with a running Wayland compositor) |
 | macOS   | 27.0+                                    |
 | Windows | 11 26H1+                                 |
 
@@ -64,7 +64,7 @@ Alice requires a compiler with full C++29 support:
 
 | SDK     | Minimum SDK                                                                                 |
 |---------|---------------------------------------------------------------------------------------------|
-| Linux   | Wayland 1.25+ client, Wayland 1.49+ protocol, Wild linker 0.9+, and PkgConfig 3.0.4+        |
+| Linux   | Wayland 1.25+ client, Wayland 1.49+ protocol, and PkgConfig 3.0.4+                          |
 | macOS   | Xcode 27.0+                                                                                 |
 | Windows | Visual Studio 2026+, DXC 1.9.2607.13+, Windows ADK 10.1.28000+, and Windows SDK 10.0.28000+ |
 
@@ -75,7 +75,7 @@ Alice requires a GPU and drivers capable of running the latest graphics APIs for
 
 | Platform | Required API           |
 |----------|------------------------|
-| Linux    | Vulkan SDK 1.4.357.0+  |
+| Linux    | Vulkan SDK 1.4.357.1+  |
 | macOS    | Metal 4.1+             |
 | Windows  | D3D12 Agility 1.619.5+ |
 

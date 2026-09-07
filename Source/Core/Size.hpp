@@ -533,6 +533,14 @@ namespace Alice
             return Size{static_cast<Native>(__builtin_ctzg(m_value, 64))};
             #endif
         }
+
+        /**
+         * @brief Computes the minimum number of bits required to represent this instance.
+         */
+        [[nodiscard]] constexpr auto BitWidth() const noexcept -> Size
+        {
+            return Bits() - LeadingZeros();
+        }
     };
 
     namespace Literals

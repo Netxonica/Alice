@@ -559,10 +559,12 @@ namespace Alice
             }
             else
             {
-                return Size{1uz << static_cast<Native>(63 - __lzcnt64(m_value))};
+                return Size{m_value == 0uz ? 0uz : 1uz << static_cast<Native>(63 - __lzcnt64(
+                m_value))};
             }
             #else
-            return Size{1uz << static_cast<Native>(63 - __builtin_clzg(m_value, 0))};
+            return Size{m_value == 0uz ? 0uz : 1uz << static_cast<Native>(63 - __builtin_clzg(
+            m_value))};
             #endif
         }
 
@@ -586,13 +588,14 @@ namespace Alice
             }
             else
             {
-                return Size{
+                return Size{m_value == 0uz ? 0uz :
                 0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000 >>
                 static_cast<Native>(63 - _tzcnt_u64(m_value))};
             }
             #else
-            return Size{0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000
-            >> static_cast<Native>(63 - __builtin_ctzg(m_value, 0))};
+            return Size{m_value == 0uz ? 0uz :
+            0b10000000'00000000'00000000'00000000'00000000'00000000'00000000'00000000 >>
+            static_cast<Native>(63 - __builtin_ctzg(m_value, 0))};
             #endif
         }
     };

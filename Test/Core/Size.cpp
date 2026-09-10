@@ -405,6 +405,13 @@ using Alice::Size;
         if(static_cast<Size::Native>(fanum.IsolateLowestOne()) not_eq 0uz)
             return false;
     }
+    // Swap bytes
+    {
+        using namespace Alice::Literals;
+        Size skibidi = 0x1234567890123456_size;
+        if(static_cast<Size::Native>(skibidi.SwapBytes()) not_eq 0x5634129078563412uz)
+            return false;
+    }
     return true;
 }
 

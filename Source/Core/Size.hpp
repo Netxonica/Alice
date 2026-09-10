@@ -598,6 +598,21 @@ namespace Alice
             static_cast<Native>(63 - __builtin_ctzg(m_value, 0))};
             #endif
         }
+
+        /**
+         * @brief Computes the reversed byte order of this instance.
+         */
+        [[nodiscard]] constexpr auto SwapBytes() const noexcept -> Size
+        {
+            return Size{
+            #ifdef _MSC_VER
+            _byteswap_uint64
+            #else
+            __builtin_bswap64
+            #endif
+            (m_value)
+            };
+        }
     };
 
     namespace Literals

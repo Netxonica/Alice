@@ -306,8 +306,8 @@ namespace Alice
         [[nodiscard]] constexpr auto operator<(const Size rhs) const noexcept -> Math::Logic::
         Proposition
         {
-            return m_value < rhs.m_value ? Math::Logic::Proposition::Tautology() : Math::Logic::
-            Proposition::Contradiction();
+            return m_value < rhs.m_value ? Math::Logic::Proposition::tautology() : Math::Logic::
+            Proposition::contradiction();
         }
 
         /**
@@ -316,8 +316,8 @@ namespace Alice
         [[nodiscard]] constexpr auto operator<=(const Size rhs) const noexcept -> Math::Logic::
         Proposition
         {
-            return m_value <= rhs.m_value ? Math::Logic::Proposition::Tautology() : Math::Logic::
-            Proposition::Contradiction();
+            return m_value <= rhs.m_value ? Math::Logic::Proposition::tautology() : Math::Logic::
+            Proposition::contradiction();
         }
 
         /**
@@ -326,8 +326,8 @@ namespace Alice
         [[nodiscard]] constexpr auto operator>(const Size rhs) const noexcept -> Math::Logic::
         Proposition
         {
-            return m_value > rhs.m_value ? Math::Logic::Proposition::Tautology() : Math::Logic::
-            Proposition::Contradiction();
+            return m_value > rhs.m_value ? Math::Logic::Proposition::tautology() : Math::Logic::
+            Proposition::contradiction();
         }
 
         /**
@@ -336,8 +336,8 @@ namespace Alice
         [[nodiscard]] constexpr auto operator>=(const Size rhs) const noexcept -> Math::Logic::
         Proposition
         {
-            return m_value >= rhs.m_value ? Math::Logic::Proposition::Tautology() : Math::Logic::
-            Proposition::Contradiction();
+            return m_value >= rhs.m_value ? Math::Logic::Proposition::tautology() : Math::Logic::
+            Proposition::contradiction();
         }
 
         /**
@@ -346,8 +346,8 @@ namespace Alice
         [[nodiscard]] constexpr auto operator==(const Size rhs) const noexcept -> Math::Logic::
         Proposition
         {
-            return m_value == rhs.m_value ? Math::Logic::Proposition::Tautology() : Math::Logic::
-            Proposition::Contradiction();
+            return m_value == rhs.m_value ? Math::Logic::Proposition::tautology() : Math::Logic::
+            Proposition::contradiction();
         }
 
         /**
@@ -356,14 +356,14 @@ namespace Alice
         [[nodiscard]] constexpr auto operator not_eq(const Size rhs) const noexcept -> Math::Logic
         ::Proposition
         {
-            return m_value not_eq rhs.m_value ? Math::Logic::Proposition::Tautology() : Math::Logic
-            ::Proposition::Contradiction();
+            return m_value not_eq rhs.m_value ? Math::Logic::Proposition::tautology() : Math::Logic
+            ::Proposition::contradiction();
         }
 
         /**
          * @brief The smallest value that can be represented.
          */
-        [[nodiscard]] static consteval auto Minimum() noexcept -> Size
+        [[nodiscard]] static consteval auto minimum() noexcept -> Size
         {
             return Size{0uz};
         }
@@ -371,7 +371,7 @@ namespace Alice
         /**
          * @brief The biggest value that can be represented.
          */
-        [[nodiscard]] static consteval auto Maximum() noexcept -> Size
+        [[nodiscard]] static consteval auto maximum() noexcept -> Size
         {
             return Size{18'446'744'073'709'551'615uz};
         }
@@ -379,7 +379,7 @@ namespace Alice
         /**
          * @brief The size of this integer type in bits.
          */
-        [[nodiscard]] static consteval auto Bits() noexcept -> Size
+        [[nodiscard]] static consteval auto bits() noexcept -> Size
         {
             return Size{64uz};
         }
@@ -387,7 +387,7 @@ namespace Alice
         /**
          * @brief The maximum number of digits of this integer type in decimal base.
          */
-        [[nodiscard]] static consteval auto Digits() noexcept -> Size
+        [[nodiscard]] static consteval auto digits() noexcept -> Size
         {
             return Size{20uz};
         }
@@ -395,7 +395,7 @@ namespace Alice
         /**
          * @brief Computes the number of ones in the binary representation of this instance.
          */
-        [[nodiscard]] constexpr auto Ones() const noexcept -> Size
+        [[nodiscard]] constexpr auto ones() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
@@ -418,7 +418,7 @@ namespace Alice
         /**
          * @brief Computes the number of zeros in the binary representation of this instance.
          */
-        [[nodiscard]] constexpr auto Zeros() const noexcept -> Size
+        [[nodiscard]] constexpr auto zeros() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
@@ -442,7 +442,7 @@ namespace Alice
          * @brief Computes the number of leading ones in the binary representation of this
          * instance.
          */
-        [[nodiscard]] constexpr auto LeadingOnes() const noexcept -> Size
+        [[nodiscard]] constexpr auto leading_ones() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
@@ -467,7 +467,7 @@ namespace Alice
          * @brief Computes the number of leading zeros in the binary representation of this
          * instance.
          */
-        [[nodiscard]] constexpr auto LeadingZeros() const noexcept -> Size
+        [[nodiscard]] constexpr auto leading_zeros() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
@@ -492,7 +492,7 @@ namespace Alice
          * @brief Computes the number of trailing ones in the binary representation of this
          * instance.
          */
-        [[nodiscard]] constexpr auto TrailingOnes() const noexcept -> Size
+        [[nodiscard]] constexpr auto trailing_ones() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
@@ -515,7 +515,7 @@ namespace Alice
          * @brief Computes the number of trailing zeros in the binary representation of this
          * instance.
          */
-        [[nodiscard]] constexpr auto TrailingZeros() const noexcept -> Size
+        [[nodiscard]] constexpr auto trailing_zeros() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
@@ -537,15 +537,15 @@ namespace Alice
         /**
          * @brief Computes the minimum number of bits required to represent this instance.
          */
-        [[nodiscard]] constexpr auto BitWidth() const noexcept -> Size
+        [[nodiscard]] constexpr auto bit_width() const noexcept -> Size
         {
-            return Bits() - LeadingZeros();
+            return bits() - leading_zeros();
         }
 
         /**
          * @brief Computes this instance with only the most significant bit set.
          */
-        [[nodiscard]] constexpr auto IsolateHighestOne() const noexcept -> Size
+        [[nodiscard]] constexpr auto isolate_highest_one() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
@@ -571,7 +571,7 @@ namespace Alice
         /**
          * @brief Computes this instance with only the least significant bit set.
          */
-        [[nodiscard]] constexpr auto IsolateLowestOne() const noexcept -> Size
+        [[nodiscard]] constexpr auto isolate_lowest_one() const noexcept -> Size
         {
             #ifdef _MSC_VER
             if consteval
@@ -602,7 +602,7 @@ namespace Alice
         /**
          * @brief Computes the reversed byte order of this instance.
          */
-        [[nodiscard]] constexpr auto SwapBytes() const noexcept -> Size
+        [[nodiscard]] constexpr auto swap_bytes() const noexcept -> Size
         {
             return Size{
             #ifdef _MSC_VER

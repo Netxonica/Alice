@@ -7,30 +7,30 @@
 #include "Core/Unevaluated.hpp"
 
 using Alice::Trait::Same;
-using Alice::Unevaluated;
+using Alice::unevaluated;
 
 // Binary operator detection.
 template<class T, class U> concept Addable = requires
 {
-    Unevaluated<T>() + Unevaluated<U>();
+    unevaluated<T>() + unevaluated<U>();
 };
 
 // Nullary member-function detection.
 template<class T> concept HasFoo = requires
 {
-    Unevaluated<T>().foo();
+    unevaluated<T>().foo();
 };
 
 // Member-function detection with a forwarded argument — Unevaluated used for both.
 template<class T> concept HasBar = requires
 {
-    Unevaluated<T>().bar(Unevaluated<int>());
+    unevaluated<T>().bar(unevaluated<int>());
 };
 
 // Unary operator detection.
 template<class T> concept Dereferenceable = requires
 {
-    *Unevaluated<T>();
+    *unevaluated<T>();
 };
 
 [[nodiscard]] auto alice_test() noexcept -> bool
@@ -69,55 +69,55 @@ template<class T> concept Dereferenceable = requires
     // Group 1 — Return type is exactly Self&& for non-reference types
     // ============================================================
 
-    static_assert(Same<decltype(Unevaluated<int>()), int&&>);
-    static_assert(Same<decltype(Unevaluated<float>()), float&&>);
-    static_assert(Same<decltype(Unevaluated<double>()), double&&>);
-    static_assert(Same<decltype(Unevaluated<bool>()), bool&&>);
-    static_assert(Same<decltype(Unevaluated<char>()), char&&>);
+    static_assert(Same<decltype(unevaluated<int>()), int&&>);
+    static_assert(Same<decltype(unevaluated<float>()), float&&>);
+    static_assert(Same<decltype(unevaluated<double>()), double&&>);
+    static_assert(Same<decltype(unevaluated<bool>()), bool&&>);
+    static_assert(Same<decltype(unevaluated<char>()), char&&>);
 
     // ============================================================
     // Group 2 — CV qualifiers are preserved
     // ============================================================
 
-    static_assert(Same<decltype(Unevaluated<const int>()), const int&&>);
-    static_assert(Same<decltype(Unevaluated<volatile int>()), volatile int&&>);
-    static_assert(Same<decltype(Unevaluated<const volatile int>()), const volatile int&&>);
+    static_assert(Same<decltype(unevaluated<const int>()), const int&&>);
+    static_assert(Same<decltype(unevaluated<volatile int>()), volatile int&&>);
+    static_assert(Same<decltype(unevaluated<const volatile int>()), const volatile int&&>);
 
     // ============================================================
     // Group 3 — Reference collapsing:  T&  && → T&,   T&& && → T&&
     // ============================================================
 
-    static_assert(Same<decltype(Unevaluated<int&>()), int&>);
-    static_assert(Same<decltype(Unevaluated<const int&>()), const int&>);
-    static_assert(Same<decltype(Unevaluated<int&&>()), int&&>);
-    static_assert(Same<decltype(Unevaluated<const int&&>()), const int&&>);
+    static_assert(Same<decltype(unevaluated<int&>()), int&>);
+    static_assert(Same<decltype(unevaluated<const int&>()), const int&>);
+    static_assert(Same<decltype(unevaluated<int&&>()), int&&>);
+    static_assert(Same<decltype(unevaluated<const int&&>()), const int&&>);
 
     // ============================================================
     // Group 4 — Compound types (pointers, multi-level pointers, arrays)
     // ============================================================
 
-    static_assert(Same<decltype(Unevaluated<int*>()), int*&&>);
-    static_assert(Same<decltype(Unevaluated<int**>()), int**&&>);
-    static_assert(Same<decltype(Unevaluated<int[3]>()), int(&&)[3]>);
-    static_assert(Same<decltype(Unevaluated<int[2][4]>()), int(&&)[2][4]>);
+    static_assert(Same<decltype(unevaluated<int*>()), int*&&>);
+    static_assert(Same<decltype(unevaluated<int**>()), int**&&>);
+    static_assert(Same<decltype(unevaluated<int[3]>()), int(&&)[3]>);
+    static_assert(Same<decltype(unevaluated<int[2][4]>()), int(&&)[2][4]>);
 
     // ============================================================
     // Group 5 — Non-constructible, abstract, and incomplete types
     //           (the core value-proposition: no constructor required)
     // ============================================================
 
-    static_assert(Same<decltype(Unevaluated<NonDefaultConstructible>()), NonDefaultConstructible&&>
+    static_assert(Same<decltype(unevaluated<NonDefaultConstructible>()), NonDefaultConstructible&&>
     );
-    static_assert(Same<decltype(Unevaluated<Abstract>()), Abstract&&>);
-    static_assert(Same<decltype(Unevaluated<Incomplete>()), Incomplete&&>);
+    static_assert(Same<decltype(unevaluated<Abstract>()), Abstract&&>);
+    static_assert(Same<decltype(unevaluated<Incomplete>()), Incomplete&&>);
 
     // ============================================================
     // Group 6 — noexcept specifier is respected
     // ============================================================
 
-    static_assert(noexcept(Unevaluated<int>()));
-    static_assert(noexcept(Unevaluated<NonDefaultConstructible>()));
-    static_assert(noexcept(Unevaluated<Abstract>()));
+    static_assert(noexcept(unevaluated<int>()));
+    static_assert(noexcept(unevaluated<NonDefaultConstructible>()));
+    static_assert(noexcept(unevaluated<Abstract>()));
 
     // ============================================================
     // Group 7 — sizeof (unevaluated context; references stripped)
@@ -125,12 +125,12 @@ template<class T> concept Dereferenceable = requires
 
     // Size of the referenced type is preserved.
 
-    static_assert(sizeof(Unevaluated<int>()) == sizeof(int));
-    static_assert(sizeof(Unevaluated<double>()) == sizeof(double));
+    static_assert(sizeof(unevaluated<int>()) == sizeof(int));
+    static_assert(sizeof(unevaluated<double>()) == sizeof(double));
 
     // Lvalue-ref and rvalue-ref to the same type yield identical sizeof.
 
-    static_assert(sizeof(Unevaluated<int&>()) == sizeof(Unevaluated<int&&>()));
+    static_assert(sizeof(unevaluated<int&>()) == sizeof(unevaluated<int&&>()));
 
     // ============================================================
     // Group 8 — Primary use-case: concepts / requires expressions
@@ -153,7 +153,7 @@ template<class T> concept Dereferenceable = requires
     static_assert(not Dereferenceable<int>);
     static_assert(not Dereferenceable<PlainStruct>);
 
-    return Same<Incomplete&&, decltype(Unevaluated<Incomplete>())>;
+    return Same<Incomplete&&, decltype(unevaluated<Incomplete>())>;
 }
 
 #ifdef alice_windows

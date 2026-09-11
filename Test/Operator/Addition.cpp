@@ -3,10 +3,10 @@
 #ifdef alice_windows
 #include <Windows.h>
 #endif
-#include "Operator/Add.hpp"
+#include "Operator/Addition.hpp"
 
-using Alice::Operator::Add;
-using Alice::Operator::ReturnAdd;
+using Alice::Operator::Addition;
+using Alice::Operator::ReturnAddition;
 
 struct Left
 {
@@ -37,8 +37,8 @@ constexpr Left operator+(Left const& lhs, Right const& rhs) noexcept
         }
     };
 
-    static_assert(Add<Point2D, Point2D>);
-    static_assert(ReturnAdd<Point2D, Point2D>);
+    static_assert(Addition<Point2D, Point2D>);
+    static_assert(ReturnAddition<Point2D, Point2D>);
 
     // 2. No operator+ at all.
 
@@ -47,9 +47,9 @@ constexpr Left operator+(Left const& lhs, Right const& rhs) noexcept
         int value;
     };
 
-    static_assert(not Add<NotAddable, NotAddable>);
-    static_assert(not ReturnAdd<NotAddable, NotAddable>);
-    static_assert(not ReturnAdd<NotAddable, NotAddable, int>);
+    static_assert(not Addition<NotAddable, NotAddable>);
+    static_assert(not ReturnAddition<NotAddable, NotAddable>);
+    static_assert(not ReturnAddition<NotAddable, NotAddable, int>);
 
     // 3. operator+ exists but is deleted.
 
@@ -58,7 +58,7 @@ constexpr Left operator+(Left const& lhs, Right const& rhs) noexcept
         DeletedAdd operator+(DeletedAdd const&) const = delete;
     };
 
-    static_assert(not Add<DeletedAdd, DeletedAdd>);
+    static_assert(not Addition<DeletedAdd, DeletedAdd>);
 
     // 4. Add only cares that + compiles; ReturnAdd pins the return type.
 
@@ -72,16 +72,16 @@ constexpr Left operator+(Left const& lhs, Right const& rhs) noexcept
         }
     };
 
-    static_assert(Add<Ratio, Ratio>);
-    static_assert(not ReturnAdd<Ratio, Ratio>);
-    static_assert(ReturnAdd<Ratio, Ratio, double>);
+    static_assert(Addition<Ratio, Ratio>);
+    static_assert(not ReturnAddition<Ratio, Ratio>);
+    static_assert(ReturnAddition<Ratio, Ratio, double>);
 
     // 5. Asymmetric addition through a non-member operator+.
 
-    static_assert(Add<Left, Right>);
-    static_assert(not Add<Right, Left>);
-    static_assert(ReturnAdd<Left, Right>);
-    static_assert(not ReturnAdd<Left, Right, Right>);
+    static_assert(Addition<Left, Right>);
+    static_assert(not Addition<Right, Left>);
+    static_assert(ReturnAddition<Left, Right>);
+    static_assert(not ReturnAddition<Left, Right, Right>);
 
     // 6. Ref-qualification sensitivity via $forward.
 
@@ -93,25 +93,25 @@ constexpr Left operator+(Left const& lhs, Right const& rhs) noexcept
         }
     };
 
-    static_assert(Add<RvalueOnly, RvalueOnly>);
-    static_assert(not Add<RvalueOnly&, RvalueOnly>);
+    static_assert(Addition<RvalueOnly, RvalueOnly>);
+    static_assert(not Addition<RvalueOnly&, RvalueOnly>);
 
     // 7. Fundamental types and usual arithmetic conversions.
 
-    static_assert(Add<int, int>);
-    static_assert(ReturnAdd<int, int>);
-    static_assert(Add<int, double>);
-    static_assert(not ReturnAdd<int, double>);
-    static_assert(ReturnAdd<int, double, double>);
-    static_assert(Add<bool, bool>);
-    static_assert(not ReturnAdd<bool, bool>);
-    static_assert(ReturnAdd<bool, bool, int>);
+    static_assert(Addition<int, int>);
+    static_assert(ReturnAddition<int, int>);
+    static_assert(Addition<int, double>);
+    static_assert(not ReturnAddition<int, double>);
+    static_assert(ReturnAddition<int, double, double>);
+    static_assert(Addition<bool, bool>);
+    static_assert(not ReturnAddition<bool, bool>);
+    static_assert(ReturnAddition<bool, bool, int>);
 
     // 8. Pointer arithmetic.
 
-    static_assert(Add<int*, int>);
-    static_assert(ReturnAdd<int*, int>);
-    static_assert(not Add<int*, int*>);
+    static_assert(Addition<int*, int>);
+    static_assert(ReturnAddition<int*, int>);
+    static_assert(not Addition<int*, int*>);
 
     // 9. Scoped enum has no arithmetic operators by default.
 
@@ -122,10 +122,10 @@ constexpr Left operator+(Left const& lhs, Right const& rhs) noexcept
         Blue,
     };
 
-    static_assert(not Add<Color, Color>);
+    static_assert(not Addition<Color, Color>);
 
     struct Incomplete;
-    return not Add<Incomplete, Incomplete> and not ReturnAdd<Incomplete, Incomplete>;
+    return not Addition<Incomplete, Incomplete> and not ReturnAddition<Incomplete, Incomplete>;
 }
 
 #ifdef alice_windows

@@ -279,137 +279,137 @@ using Alice::Size;
     }
     // Minimum value
     {
-        Size skibidi = Size::Minimum();
+        Size skibidi = Size::minimum();
         if(static_cast<Size::Native>(skibidi) not_eq 0uz)
             return false;
     }
     // Maximum value
     {
-        Size skibidi = Size::Maximum();
+        Size skibidi = Size::maximum();
         if(static_cast<Size::Native>(skibidi) not_eq 18'446'744'073'709'551'615uz)
             return false;
     }
     // Bits value
     {
-        Size skibidi = Size::Bits();
+        Size skibidi = Size::bits();
         if(static_cast<Size::Native>(skibidi) not_eq 64uz)
             return false;
     }
     // Digits value
     {
-        Size skibidi = Size::Digits();
+        Size skibidi = Size::digits();
         if(static_cast<Size::Native>(skibidi) not_eq 20uz)
             return false;
     }
     // Ones
     {
         Size skibidi{0b01001100uz};
-        if(static_cast<Size::Native>(skibidi.Ones()) not_eq 3uz)
+        if(static_cast<Size::Native>(skibidi.ones()) not_eq 3uz)
             return false;
-        Size fanum = Size::Maximum();
-        if(static_cast<Size::Native>(fanum.Ones()) not_eq 64uz)
+        Size fanum = Size::maximum();
+        if(static_cast<Size::Native>(fanum.ones()) not_eq 64uz)
             return false;
-        Size meow = Size::Minimum();
-        if(static_cast<Size::Native>(meow.Ones()) not_eq 0uz)
+        Size meow = Size::minimum();
+        if(static_cast<Size::Native>(meow.ones()) not_eq 0uz)
             return false;
     }
     // Zeros
     {
         Size skibidi{0b01001100uz};
-        if(static_cast<Size::Native>(skibidi.Zeros()) not_eq 61uz)
+        if(static_cast<Size::Native>(skibidi.zeros()) not_eq 61uz)
             return false;
-        Size fanum = Size::Maximum();
-        if(static_cast<Size::Native>(fanum.Zeros()) not_eq 0uz)
+        Size fanum = Size::maximum();
+        if(static_cast<Size::Native>(fanum.zeros()) not_eq 0uz)
             return false;
-        Size meow = Size::Minimum();
-        if(static_cast<Size::Native>(meow.Zeros()) not_eq 64uz)
+        Size meow = Size::minimum();
+        if(static_cast<Size::Native>(meow.zeros()) not_eq 64uz)
             return false;
     }
     // Leading ones
     {
-        Size skibidi{compl(Size::Maximum() >> Size{2uz})};
-        if(static_cast<Size::Native>(skibidi.LeadingOnes()) not_eq 2uz)
+        Size skibidi{compl(Size::maximum() >> Size{2uz})};
+        if(static_cast<Size::Native>(skibidi.leading_ones()) not_eq 2uz)
             return false;
-        Size fanum = Size::Minimum();
-        if(static_cast<Size::Native>(fanum.LeadingOnes()) not_eq 0uz)
+        Size fanum = Size::minimum();
+        if(static_cast<Size::Native>(fanum.leading_ones()) not_eq 0uz)
             return false;
-        Size meow = Size::Maximum();
-        if(static_cast<Size::Native>(meow.LeadingOnes()) not_eq 64uz)
+        Size meow = Size::maximum();
+        if(static_cast<Size::Native>(meow.leading_ones()) not_eq 64uz)
             return false;
     }
     // Leading zeros
     {
-        Size skibidi{Size::Maximum() >> Size{2uz}};
-        if(static_cast<Size::Native>(skibidi.LeadingZeros()) not_eq 2uz)
+        Size skibidi{Size::maximum() >> Size{2uz}};
+        if(static_cast<Size::Native>(skibidi.leading_zeros()) not_eq 2uz)
             return false;
-        Size fanum = Size::Minimum();
-        if(static_cast<Size::Native>(fanum.LeadingZeros()) not_eq 64uz)
+        Size fanum = Size::minimum();
+        if(static_cast<Size::Native>(fanum.leading_zeros()) not_eq 64uz)
             return false;
-        Size meow = Size::Maximum();
-        if(static_cast<Size::Native>(meow.LeadingZeros()) not_eq 0uz)
+        Size meow = Size::maximum();
+        if(static_cast<Size::Native>(meow.leading_zeros()) not_eq 0uz)
             return false;
     }
     // Trailing ones
     {
         Size skibidi{0b1010111uz};
-        if(static_cast<Size::Native>(skibidi.TrailingOnes()) not_eq 3uz)
+        if(static_cast<Size::Native>(skibidi.trailing_ones()) not_eq 3uz)
             return false;
-        Size fanum = Size::Minimum();
-        if(static_cast<Size::Native>(fanum.TrailingOnes()) not_eq 0uz)
+        Size fanum = Size::minimum();
+        if(static_cast<Size::Native>(fanum.trailing_ones()) not_eq 0uz)
             return false;
-        Size meow = Size::Maximum();
-        if(static_cast<Size::Native>(meow.TrailingOnes()) not_eq 64uz)
+        Size meow = Size::maximum();
+        if(static_cast<Size::Native>(meow.trailing_ones()) not_eq 64uz)
             return false;
     }
     // Trailing zeros
     {
         Size skibidi{0b0101000uz};
-        if(static_cast<Size::Native>(skibidi.TrailingZeros()) not_eq 3uz)
+        if(static_cast<Size::Native>(skibidi.trailing_zeros()) not_eq 3uz)
             return false;
-        Size fanum = Size::Minimum();
-        if(static_cast<Size::Native>(fanum.TrailingZeros()) not_eq 64uz)
+        Size fanum = Size::minimum();
+        if(static_cast<Size::Native>(fanum.trailing_zeros()) not_eq 64uz)
             return false;
-        Size meow = Size::Maximum();
-        if(static_cast<Size::Native>(meow.TrailingZeros()) not_eq 0uz)
+        Size meow = Size::maximum();
+        if(static_cast<Size::Native>(meow.trailing_zeros()) not_eq 0uz)
             return false;
     }
     // Bit width
     {
-        Size skibidi = Size::Minimum();
-        if(static_cast<Size::Native>(skibidi.BitWidth()) not_eq 0uz)
+        Size skibidi = Size::minimum();
+        if(static_cast<Size::Native>(skibidi.bit_width()) not_eq 0uz)
             return false;
         Size fanum{0b111uz};
-        if(static_cast<Size::Native>(fanum.BitWidth()) not_eq 3uz)
+        if(static_cast<Size::Native>(fanum.bit_width()) not_eq 3uz)
             return false;
         Size meow{0b1110uz};
-        if(static_cast<Size::Native>(meow.BitWidth()) not_eq 4uz)
+        if(static_cast<Size::Native>(meow.bit_width()) not_eq 4uz)
             return false;
-        if(static_cast<Size::Native>(Size::Maximum().BitWidth()) not_eq 64uz)
+        if(static_cast<Size::Native>(Size::maximum().bit_width()) not_eq 64uz)
             return false;
     }
     // Isolate highest one
     {
         Size skibidi{0b01100100};
-        if(static_cast<Size::Native>(skibidi.IsolateHighestOne()) not_eq 0b01000000)
+        if(static_cast<Size::Native>(skibidi.isolate_highest_one()) not_eq 0b01000000)
             return false;
-        Size fanum = Size::Minimum();
-        if(static_cast<Size::Native>(fanum.IsolateHighestOne()) not_eq 0uz)
+        Size fanum = Size::minimum();
+        if(static_cast<Size::Native>(fanum.isolate_highest_one()) not_eq 0uz)
             return false;
     }
     // Isolate lowest one
     {
         Size skibidi{0b01100100};
-        if(static_cast<Size::Native>(skibidi.IsolateLowestOne()) not_eq 0b00000100)
+        if(static_cast<Size::Native>(skibidi.isolate_lowest_one()) not_eq 0b00000100)
             return false;
-        Size fanum = Size::Minimum();
-        if(static_cast<Size::Native>(fanum.IsolateLowestOne()) not_eq 0uz)
+        Size fanum = Size::minimum();
+        if(static_cast<Size::Native>(fanum.isolate_lowest_one()) not_eq 0uz)
             return false;
     }
     // Swap bytes
     {
         using namespace Alice::Literals;
         Size skibidi = 0x1234567890123456_size;
-        if(static_cast<Size::Native>(skibidi.SwapBytes()) not_eq 0x5634129078563412uz)
+        if(static_cast<Size::Native>(skibidi.swap_bytes()) not_eq 0x5634129078563412uz)
             return false;
     }
     return true;

@@ -65,7 +65,7 @@ namespace Alice::Math::Logic
         /**
          * @brief Computes the contradiction, which is always false.
          */
-        [[nodiscard]] static consteval auto Contradiction() noexcept -> Proposition
+        [[nodiscard]] static consteval auto contradiction() noexcept -> Proposition
         {
             return Proposition{false};
         }
@@ -73,7 +73,7 @@ namespace Alice::Math::Logic
         /**
          * @brief Computes the tautology, which is always true.
          */
-        [[nodiscard]] static consteval auto Tautology() noexcept -> Proposition
+        [[nodiscard]] static consteval auto tautology() noexcept -> Proposition
         {
             return Proposition{true};
         }
@@ -107,7 +107,7 @@ namespace Alice::Math::Logic
         /**
          * @brief Computes the binary material implication.
          */
-        [[nodiscard]] constexpr auto Implies(const Proposition rhs) const noexcept -> Proposition
+        [[nodiscard]] constexpr auto implies(const Proposition rhs) const noexcept -> Proposition
         {
             return Proposition{not m_value or rhs.m_value};
         }

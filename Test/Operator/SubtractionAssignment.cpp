@@ -3,10 +3,10 @@
 #ifdef alice_windows
 #include <Windows.h>
 #endif
-#include "Operator/SubtractAssignment.hpp"
+#include "Operator/SubtractionAssignment.hpp"
 
-using Alice::Operator::SubtractAssignment;
-using Alice::Operator::ReturnSubtractAssignment;
+using Alice::Operator::SubtractionAssignment;
+using Alice::Operator::ReturnSubtractionAssignment;
 
 // A non-member operator-=, only reachable through ADL.
 
@@ -144,62 +144,62 @@ FreeFunctionSelf& operator-=(FreeFunctionSelf& self, FreeFunctionOperand)
 
     // -- fundamental types ---------------------------------------------------
 
-    static_assert(SubtractAssignment<int, int>,
+    static_assert(SubtractionAssignment<int, int>,
     "int -= int is built into the language and must be detected");
-    static_assert(SubtractAssignment<double, int>,
+    static_assert(SubtractionAssignment<double, int>,
     "int converts to double, so double -= int must be detected");
-    static_assert(SubtractAssignment<int, const int>,
+    static_assert(SubtractionAssignment<int, const int>,
     "a const Rhs only needs to be read, so this must be detected too");
-    static_assert(SubtractAssignment<int*, int>,
+    static_assert(SubtractionAssignment<int*, int>,
     "pointer -= integral is ordinary pointer arithmetic");
-    static_assert(not SubtractAssignment<int*, int*>,
+    static_assert(not SubtractionAssignment<int*, int*>,
     "there is no built-in pointer -= pointer, only pointer - pointer");
 
     // -- ordinary class types -------------------------------------------------
 
-    static_assert(SubtractAssignment<Counter, int>, "Counter declares operator-=(int)");
-    static_assert(SubtractAssignment<Counter, Counter>,
+    static_assert(SubtractionAssignment<Counter, int>, "Counter declares operator-=(int)");
+    static_assert(SubtractionAssignment<Counter, Counter>,
     "Counter declares operator-=(const Counter&)");
-    static_assert(SubtractAssignment<Counter, const Counter&>,
+    static_assert(SubtractionAssignment<Counter, const Counter&>,
     "an explicit lvalue-reference Rhs must be recognized too");
 
     // -- a free-function operator-= found via ADL -----------------------------
     
-    static_assert(SubtractAssignment<FreeFunctionSelf, FreeFunctionOperand>,
+    static_assert(SubtractionAssignment<FreeFunctionSelf, FreeFunctionOperand>,
     "a non-member operator-= must satisfy the concept just as well");
 
     // -- SubtractAssignment must not care what operator-= returns -------------
 
-    static_assert(SubtractAssignment<NoChainReturn, int>,
+    static_assert(SubtractionAssignment<NoChainReturn, int>,
     "existence of operator-= is all that matters here");
-    static_assert(SubtractAssignment<BoolReturn, int>,
+    static_assert(SubtractionAssignment<BoolReturn, int>,
     "existence of operator-= is all that matters here");
 
     // -- $forward must preserve the value category Rhs stands for ------------
     
-    static_assert(SubtractAssignment<MoveOnlyRhs, MoveOnlyRhs>,
+    static_assert(SubtractionAssignment<MoveOnlyRhs, MoveOnlyRhs>,
     "a by-value Rhs must be forwarded as an rvalue");
-    static_assert(not SubtractAssignment<MoveOnlyRhs, const MoveOnlyRhs&>,
+    static_assert(not SubtractionAssignment<MoveOnlyRhs, const MoveOnlyRhs&>,
     "the lvalue overload is deleted, so a lvalue-reference Rhs must fail");
-    static_assert(SubtractAssignment<LvalueOnlyRhs, LvalueOnlyRhs&>,
+    static_assert(SubtractionAssignment<LvalueOnlyRhs, LvalueOnlyRhs&>,
     "an explicit lvalue-reference Rhs must be forwarded as an lvalue");
-    static_assert(not SubtractAssignment<LvalueOnlyRhs, LvalueOnlyRhs>,
+    static_assert(not SubtractionAssignment<LvalueOnlyRhs, LvalueOnlyRhs>,
     "the rvalue overload is deleted, so a by-value Rhs must fail");
 
     // -- the expression is simply ill-formed ----------------------------------
 
-    static_assert(not SubtractAssignment<NotSubtractAssignable, int>,
+    static_assert(not SubtractionAssignment<NotSubtractAssignable, int>,
     "a type with no operator-= at all must not satisfy the concept");
-    static_assert(not SubtractAssignment<OnlyBinaryMinus, OnlyBinaryMinus>,
+    static_assert(not SubtractionAssignment<OnlyBinaryMinus, OnlyBinaryMinus>,
     "operator- must never be mistaken for operator-=");
-    static_assert(not SubtractAssignment<int, Counter>,
+    static_assert(not SubtractionAssignment<int, Counter>,
     "int has no operator-= that accepts a Counter");
 
     // -- a const Self cannot be the target of a mutating operator -------------
     
-    static_assert(not SubtractAssignment<const int, int>,
+    static_assert(not SubtractionAssignment<const int, int>,
     "a const object cannot be modified by operator-=");
-    static_assert(not SubtractAssignment<const Counter, int>,
+    static_assert(not SubtractionAssignment<const Counter, int>,
     "a const object cannot be modified by operator-=");
 
     // =====================================================================
@@ -209,49 +209,49 @@ FreeFunctionSelf& operator-=(FreeFunctionSelf& self, FreeFunctionOperand)
 
     // -- the conventional idiom returns exactly Self& -------------------------
     
-    static_assert(ReturnSubtractAssignment<Counter, int>,
+    static_assert(ReturnSubtractionAssignment<Counter, int>,
     "Counter::operator-=(int) returns Counter&, the default Return");
-    static_assert(ReturnSubtractAssignment<Counter, Counter>,
+    static_assert(ReturnSubtractionAssignment<Counter, Counter>,
     "Counter::operator-=(const Counter&) returns Counter&, the default Return");
-    static_assert(ReturnSubtractAssignment<FreeFunctionSelf, FreeFunctionOperand>,
+    static_assert(ReturnSubtractionAssignment<FreeFunctionSelf, FreeFunctionOperand>,
     "the free-function overload also returns FreeFunctionSelf&");
 
     // -- confirm the default Return argument really is exactly Self& ----------
 
-    static_assert(ReturnSubtractAssignment<Counter, int> == ReturnSubtractAssignment<Counter, int,
-    Counter&>, "omitting Return must behave identically to requesting Self& explicitly");
+    static_assert(ReturnSubtractionAssignment<Counter, int> == ReturnSubtractionAssignment<Counter,
+    int, Counter&>, "omitting Return must behave identically to requesting Self& explicitly");
 
     // -- an explicit Return matches non-conventional signatures ----------------
 
-    static_assert(ReturnSubtractAssignment<NoChainReturn, int, void>,
+    static_assert(ReturnSubtractionAssignment<NoChainReturn, int, void>,
     "NoChainReturn::operator-= genuinely returns void");
-    static_assert(ReturnSubtractAssignment<BoolReturn, int, bool>,
+    static_assert(ReturnSubtractionAssignment<BoolReturn, int, bool>,
     "BoolReturn::operator-= genuinely returns bool");
-    static_assert(ReturnSubtractAssignment<ValueReturn, int, ValueReturn>,
+    static_assert(ReturnSubtractionAssignment<ValueReturn, int, ValueReturn>,
     "ValueReturn::operator-= genuinely returns Self by value");
-    static_assert(ReturnSubtractAssignment<ConstReturn, int, const ConstReturn&>,
+    static_assert(ReturnSubtractionAssignment<ConstReturn, int, const ConstReturn&>,
     "ConstReturn::operator-= genuinely returns const Self&");
 
     // -- a mismatched Return must fail even though SubtractAssignment holds ----
 
-    static_assert(not ReturnSubtractAssignment<NoChainReturn, int>,
+    static_assert(not ReturnSubtractionAssignment<NoChainReturn, int>,
     "the default Return is Self&, but this overload returns void");
-    static_assert(not ReturnSubtractAssignment<BoolReturn, int>,
+    static_assert(not ReturnSubtractionAssignment<BoolReturn, int>,
     "the default Return is Self&, but this overload returns bool");
-    static_assert(not ReturnSubtractAssignment<ValueReturn, int>,
+    static_assert(not ReturnSubtractionAssignment<ValueReturn, int>,
     "a by-value Self is not Trait::Same as Self&");
-    static_assert(not ReturnSubtractAssignment<ConstReturn, int>,
+    static_assert(not ReturnSubtractionAssignment<ConstReturn, int>,
     "a const Self& is not Trait::Same as a non-const Self&");
 
     // -- if SubtractAssignment cannot hold, neither can ReturnSubtractAssignment
     
-    static_assert(not ReturnSubtractAssignment<NotSubtractAssignable, int>,
+    static_assert(not ReturnSubtractionAssignment<NotSubtractAssignable, int>,
     "no operator-= exists at all, so no Return could ever match");
-    static_assert(not ReturnSubtractAssignment<NotSubtractAssignable, int, void>,
+    static_assert(not ReturnSubtractionAssignment<NotSubtractAssignable, int, void>,
     "no operator-= exists at all, so no Return could ever match");
 
     struct Incomplete;
-    return not SubtractAssignment<Incomplete, Incomplete> and not ReturnSubtractAssignment<
+    return not SubtractionAssignment<Incomplete, Incomplete> and not ReturnSubtractionAssignment<
     Incomplete, Incomplete>;
 }
 

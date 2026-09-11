@@ -3,10 +3,10 @@
 #ifdef alice_windows
 #include <Windows.h>
 #endif
-#include "Operator/AddAssignment.hpp"
+#include "Operator/AdditionAssignment.hpp"
 
-using Alice::Operator::AddAssignment;
-using Alice::Operator::ReturnAddAssignment;
+using Alice::Operator::AdditionAssignment;
+using Alice::Operator::ReturnAdditionAssignment;
 
 [[nodiscard]] auto alice_test() noexcept -> bool
 {
@@ -133,57 +133,57 @@ using Alice::Operator::ReturnAddAssignment;
     // AddAssignment
     // ----------------------------------------------------------------------
 
-    static_assert(AddAssignment<Canonical, int>,
+    static_assert(AdditionAssignment<Canonical, int>,
     "A type with a matching operator+= must satisfy AddAssignment");
-    static_assert(not AddAssignment<Missing, int>,
+    static_assert(not AdditionAssignment<Missing, int>,
     "A type with no operator+= at all must not satisfy AddAssignment");
-    static_assert(not AddAssignment<WrongRhs, int>,
+    static_assert(not AdditionAssignment<WrongRhs, int>,
     "AddAssignment must fail when Rhs cannot be converted to any accepted parameter");
-    static_assert(not AddAssignment<Canonical, Incompatible>,
+    static_assert(not AdditionAssignment<Canonical, Incompatible>,
     "AddAssignment must fail when Rhs has no relationship to the accepted parameter");
-    static_assert(AddAssignment<ConvertibleRhs, int>,
+    static_assert(AdditionAssignment<ConvertibleRhs, int>,
     "AddAssignment must succeed when Rhs converts implicitly to the accepted parameter");
-    static_assert(AddAssignment<ReturnsVoid, int>,
+    static_assert(AdditionAssignment<ReturnsVoid, int>,
     "AddAssignment must not care about the return type of operator+=");
-    static_assert(AddAssignment<ReturnsByValue, int>,
+    static_assert(AdditionAssignment<ReturnsByValue, int>,
     "AddAssignment must not care whether operator+= returns by value or by reference");
-    static_assert(AddAssignment<AcceptsRvalueRhs, MoveOnly>,
+    static_assert(AdditionAssignment<AcceptsRvalueRhs, MoveOnly>,
     "$forward must present rhs as an rvalue so an operator+=(MoveOnly&&) overload is viable");
-    static_assert(not AddAssignment<AcceptsLvalueRhs, MoveOnly>,
+    static_assert(not AdditionAssignment<AcceptsLvalueRhs, MoveOnly>,
     "$forward must present rhs as an rvalue, so an lvalue-only operator+= must be rejected");
-    static_assert(not AddAssignment<const NonConstMember, int>,
+    static_assert(not AdditionAssignment<const NonConstMember, int>,
     "A const-qualified Self must not satisfy AddAssignment when operator+= is a non-const member");
 
     // ----------------------------------------------------------------------
     // ReturnAddAssignment - default Return (Self&)
     // ----------------------------------------------------------------------
 
-    static_assert(ReturnAddAssignment<Canonical, int>,
+    static_assert(ReturnAdditionAssignment<Canonical, int>,
     "operator+= returning Self& must satisfy ReturnAddAssignment with the default Return");
-    static_assert(not ReturnAddAssignment<ReturnsVoid, int>,
+    static_assert(not ReturnAdditionAssignment<ReturnsVoid, int>,
     "operator+= returning void must not satisfy ReturnAddAssignment with the default Return");
-    static_assert(not ReturnAddAssignment<ReturnsByValue, int>,
+    static_assert(not ReturnAdditionAssignment<ReturnsByValue, int>,
     "operator+= returning by value must not satisfy ReturnAddAssignment with the default Return");
-    static_assert(not ReturnAddAssignment<Missing, int>,
+    static_assert(not ReturnAdditionAssignment<Missing, int>,
     "A missing operator+= must not satisfy ReturnAddAssignment either");
 
     // ----------------------------------------------------------------------
     // ReturnAddAssignment - explicit Return
     // ----------------------------------------------------------------------
 
-    static_assert(ReturnAddAssignment<ReturnsVoid, int, void>,
+    static_assert(ReturnAdditionAssignment<ReturnsVoid, int, void>,
     "operator+= returning void must satisfy ReturnAddAssignment<..., void>");
-    static_assert(ReturnAddAssignment<ReturnsByValue, int, ReturnsByValue>,
+    static_assert(ReturnAdditionAssignment<ReturnsByValue, int, ReturnsByValue>,
     "operator+= returning Self by value must satisfy ReturnAddAssignment<..., Self>");
-    static_assert(ReturnAddAssignment<ReturnsCustom, int, ReturnsCustom::Result>,
+    static_assert(ReturnAdditionAssignment<ReturnsCustom, int, ReturnsCustom::Result>,
     "operator+= returning an arbitrary type must satisfy ReturnAddAssignment<..., ThatType>");
-    static_assert(not ReturnAddAssignment<ReturnsCustom, int, int>,
+    static_assert(not ReturnAdditionAssignment<ReturnsCustom, int, int>,
     "ReturnAddAssignment must fail when Return does not exactly match operator+='s actual return "
     "type");
 
     struct Incomplete;
-    return not AddAssignment<Incomplete, Incomplete> and not ReturnAddAssignment<Incomplete,
-    Incomplete>;
+    return not AdditionAssignment<Incomplete, Incomplete> and not ReturnAdditionAssignment<
+    Incomplete, Incomplete>;
 }
 
 #ifdef alice_windows

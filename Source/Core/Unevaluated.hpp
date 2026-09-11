@@ -9,7 +9,7 @@ namespace Alice
      * @brief Meant only to be used in unevaluated contexts. It represent an unevaluated object of
      * type Self&&.
      */
-    template<class Self> [[nodiscard]] consteval auto Unevaluated() noexcept -> Self&&;
+    template<class Self> [[nodiscard]] consteval auto unevaluated() noexcept -> Self&&;
 }
 
 #endif

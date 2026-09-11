@@ -12,58 +12,58 @@ using Alice::Math::Logic::Proposition;
 {
     // Contradiction
     {
-        Proposition skibidi = Proposition::Contradiction();
+        Proposition skibidi = Proposition::contradiction();
         if(static_cast<bool>(skibidi))
             return false;
     }
     // Copy constructor
     {
-        Proposition skibidi = Proposition::Contradiction(), fanum(skibidi);
+        Proposition skibidi = Proposition::contradiction(), fanum(skibidi);
         if(static_cast<bool>(fanum))
             return false;
     }
     // Move constructor
     {
-        Proposition skibidi = Proposition::Contradiction(), fanum($move(skibidi));
+        Proposition skibidi = Proposition::contradiction(), fanum($move(skibidi));
         if(static_cast<bool>(fanum))
             return false;
     }
     // Tautology
     {
-        Proposition skibidi = Proposition::Tautology();
+        Proposition skibidi = Proposition::tautology();
         if(not static_cast<bool>(skibidi))
             return false;
     }
     // NOT
     {
-        Proposition skibidi = Proposition::Contradiction(), fanum = not skibidi;
+        Proposition skibidi = Proposition::contradiction(), fanum = not skibidi;
         if(not static_cast<bool>(fanum))
             return false;
     }
     // AND
     {
-        Proposition skibidi = Proposition::Contradiction(), meow = Proposition::Tautology(), fanum
+        Proposition skibidi = Proposition::contradiction(), meow = Proposition::tautology(), fanum
         = skibidi and meow;
         if(static_cast<bool>(fanum))
             return false;
     }
     // OR
     {
-        Proposition skibidi = Proposition::Contradiction(), meow = Proposition::Tautology(), fanum
+        Proposition skibidi = Proposition::contradiction(), meow = Proposition::tautology(), fanum
         = skibidi or meow;
         if(not static_cast<bool>(fanum))
             return false;
     }
     // Implies
     {
-        Proposition skibidi = Proposition::Contradiction(), meow = Proposition::Tautology(), fanum
-        = skibidi.Implies(meow);
+        Proposition skibidi = Proposition::contradiction(), meow = Proposition::tautology(), fanum
+        = skibidi.implies(meow);
         if(not static_cast<bool>(fanum))
             return false;
     }
     // Biconditional
     {
-        Proposition skibidi = Proposition::Contradiction(), meow = Proposition::Tautology(), fanum
+        Proposition skibidi = Proposition::contradiction(), meow = Proposition::tautology(), fanum
         = skibidi == meow;
         if(static_cast<bool>(fanum))
             return false;

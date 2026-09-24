@@ -6,7 +6,7 @@ on:
 
 jobs:
   macos_build:
-    runs-on: macos-27
+    runs-on: xcode-27
 
     steps:
       - name: Checkout source

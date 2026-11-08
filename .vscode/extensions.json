@@ -1,0 +1,9 @@
+{
+    "recommendations":
+    [
+        "ms-python.python",
+        "ms-vscode.cpptools",
+        "llvm-vs-code-extensions.lldb-dap",
+        "llvm-vs-code-extensions.vscode-clangd"
+    ]
+}

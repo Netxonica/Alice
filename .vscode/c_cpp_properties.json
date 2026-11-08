@@ -1,0 +1,13 @@
+{
+    "version": 4,
+    "configurations":
+    [
+        {
+            "name": "Configuration",
+            "compilerPath": "${env:ALICE_COMPILER_PATH}",
+            "cStandard": "c29",
+            "cppStandard": "c++29",
+            "compileCommands": "${workspaceFolder}/compile_commands.json"
+        }
+    ]
+}

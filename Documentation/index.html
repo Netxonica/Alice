@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11151d">
+  <meta name="description" content="A structured API reference for the Alice C++ platform.">
+  <title>Alice — API Reference</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Documentation navigation">
+      <div class="brand-row">
+        <a class="brand" href="#" id="homeLink" aria-label="Alice API reference home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="brand-copy"><strong>Alice</strong><small>API REFERENCE</small></span>
+        </a>
+        <button class="icon-button sidebar-close" id="closeSidebar" type="button" aria-label="Close navigation">×</button>
+      </div>
+
+      <div class="sidebar-project">
+        <span class="project-dot"></span>
+        <span>Engine documentation</span>
+        <span class="project-version" id="sidebarVersion">v0.0.1</span>
+      </div>
+
+      <div class="sidebar-search-wrap">
+        <label class="visually-hidden" for="docSearch">Search documentation</label>
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.2 4.2"></path></svg>
+        <input id="docSearch" class="sidebar-search" type="search" placeholder="Search features…" autocomplete="off">
+        <kbd class="search-shortcut">/</kbd>
+      </div>
+
+      <div class="nav-label-row">
+        <span class="nav-label">CONTENTS</span>
+        <span class="nav-count" id="featureCount">01</span>
+      </div>
+      <nav class="category-nav" id="categoryNav" aria-label="API categories"></nav>
+
+      <div class="sidebar-bottom">
+        <button class="sidebar-action primary-action" id="addCategoryButton" type="button">
+          <span class="plus-mark">+</span> New category
+        </button>
+        <div class="sidebar-tools">
+          <button class="sidebar-tool" id="importButton" type="button" title="Import documentation JSON">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"></path></svg>
+            Import
+          </button>
+          <button class="sidebar-tool" id="exportButton" type="button" title="Export documentation JSON">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v12m0 0 4.5-4.5M12 21l-4.5-4.5M4 9V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path></svg>
+            Export
+          </button>
+        </div>
+        <input id="importFile" type="file" accept="application/json,.json" hidden>
+        <div class="sidebar-footnote"><span class="status-dot"></span> Local documentation workspace</div>
+      </div>
+    </aside>
+
+    <div class="sidebar-scrim" id="sidebarScrim"></div>
+
+    <div class="main-column">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button menu-button" id="openSidebar" type="button" aria-label="Open navigation">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          </button>
+          <div class="breadcrumbs" aria-label="Breadcrumb">
+            <span>Alice</span><span class="crumb-separator">/</span><span>Documentation</span><span class="crumb-separator">/</span><strong id="breadcrumbCurrent">Overview</strong>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <span class="standard-chip"><span class="chip-dot"></span> C++26</span>
+          <button class="button button-small button-primary" id="addFeatureButton" type="button"><span>+</span> Add feature</button>
+        </div>
+      </header>
+
+      <main id="main-content" class="content-wrap" tabindex="-1">
+        <div id="documentationView" aria-live="polite"></div>
+        <footer class="doc-footer">
+          <span>© 2026 Netxonica</span>
+          <span class="footer-divider">·</span>
+          <span>Built for the Alice C++ platform</span>
+          <a href="https://github.com/Netxonica/Alice" target="_blank" rel="noreferrer">Source repository <span aria-hidden="true">↗</span></a>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="editor-dialog" id="categoryDialog" aria-labelledby="categoryDialogTitle">
+    <form id="categoryForm" class="dialog-form">
+      <div class="dialog-heading">
+        <div><span class="eyebrow">DOCUMENT STRUCTURE</span><h2 id="categoryDialogTitle">Create category</h2></div>
+        <button class="icon-button dialog-close" type="button" data-close-dialog="categoryDialog" aria-label="Close dialog">×</button>
+      </div>
+      <p class="dialog-intro">Group related API features into a category in the navigation sidebar.</p>
+      <label class="field-label" for="categoryName">Category name <span>*</span></label>
+      <input class="form-control" id="categoryName" name="name" required maxlength="60" placeholder="e.g. Memory">
+      <label class="field-label" for="categoryDescription">Description</label>
+      <textarea class="form-control textarea-small" id="categoryDescription" name="description" rows="3" placeholder="What belongs in this category?"></textarea>
+      <div class="dialog-actions">
+        <button class="button button-quiet" type="button" data-close-dialog="categoryDialog">Cancel</button>
+        <button class="button button-primary" type="submit">Create category</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="editor-dialog feature-dialog" id="featureDialog" aria-labelledby="featureDialogTitle">
+    <form id="featureForm" class="dialog-form">
+      <div class="dialog-heading">
+        <div><span class="eyebrow">API ENTRY</span><h2 id="featureDialogTitle">Add feature</h2></div>
+        <button class="icon-button dialog-close" type="button" data-close-dialog="featureDialog" aria-label="Close dialog">×</button>
+      </div>
+      <p class="dialog-intro">Describe the public API, its requirements, and representative usage.</p>
+      <input type="hidden" id="featureId" name="id">
+
+      <div class="form-grid two-columns">
+        <div class="field-group">
+          <label class="field-label" for="featureName">Feature name <span>*</span></label>
+          <input class="form-control" id="featureName" name="name" required maxlength="90" placeholder="e.g. NoUniqueAddress">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="featureCategory">Category <span>*</span></label>
+          <select class="form-control" id="featureCategory" name="categoryId" required></select>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="featureKind">Declaration kind <span>*</span></label>
+          <select class="form-control" id="featureKind" name="entityKind" required></select>
+        </div>
+      </div>
+      <label class="inline-checkbox" id="scopedEnumField" hidden><input type="checkbox" id="scopedEnum" name="scopedEnum"><span><strong>Scoped enumeration</strong><small>Render this declaration as <code>enum class</code> rather than an unscoped enum.</small></span></label>
+
+      <label class="field-label" for="featureSummary">Short summary <span>*</span></label>
+      <input class="form-control" id="featureSummary" name="summary" required maxlength="180" placeholder="A concise description used in navigation and cards.">
+      <label class="field-label" for="featureDescription">Overview description</label>
+      <textarea class="form-control" id="featureDescription" name="description" rows="4" placeholder="Explain what this feature does, when to use it, and its important behaviour."></textarea>
+
+      <div class="form-section-heading"><span>REFERENCE METADATA</span><i>Every value has its own description.</i></div>
+      <div class="metadata-editor-grid">
+        <fieldset class="metadata-fieldset">
+          <legend>Namespace</legend>
+          <label class="field-label" for="namespaceValue">Namespace value</label>
+          <input class="form-control" id="namespaceValue" name="namespaceValue" placeholder="Alice::Core">
+          <label class="field-label" for="namespaceDescription">Description</label>
+          <textarea class="form-control textarea-small" id="namespaceDescription" name="namespaceDescription" rows="2" placeholder="Namespace containing the declarations."></textarea>
+        </fieldset>
+        <fieldset class="metadata-fieldset">
+          <legend>Alice version</legend>
+          <label class="field-label" for="introducedValue">Introduced in</label>
+          <input class="form-control" id="introducedValue" name="introducedValue" placeholder="0.0.1">
+          <label class="field-label" for="introducedDescription">Description</label>
+          <textarea class="form-control textarea-small" id="introducedDescription" name="introducedDescription" rows="2" placeholder="Release in which the feature first appeared."></textarea>
+        </fieldset>
+        <fieldset class="metadata-fieldset">
+          <legend>Language requirement</legend>
+          <label class="field-label" for="standardValue">Minimum standard feature</label>
+          <input class="form-control" id="standardValue" name="standardValue" placeholder="C++20 — [[no_unique_address]]">
+          <label class="field-label" for="standardDescription">Description</label>
+          <textarea class="form-control textarea-small" id="standardDescription" name="standardDescription" rows="2" placeholder="Minimum C++ language or library requirement."></textarea>
+        </fieldset>
+      </div>
+
+      <section id="aliasEditorSection">
+        <div class="form-section-heading repeat-heading"><span>TYPE ALIAS TARGET</span><i>For using declarations and aliases.</i></div>
+        <div class="form-grid two-columns">
+          <div class="field-group"><label class="field-label" for="aliasedType">Aliased type</label><input class="form-control" id="aliasedType" name="aliasedType" placeholder="e.g. std::uint32_t"></div>
+          <div class="field-group"><label class="field-label" for="aliasedTypeRef">Link aliased type to API entry</label><select class="form-control" id="aliasedTypeRef" name="aliasedTypeRef"></select></div>
+        </div>
+      </section>
+
+      <section id="templateEditorSection">
+        <div class="form-section-heading repeat-heading"><span>TEMPLATE PARAMETERS</span><i>For class, function, variable, and other templates.</i></div>
+        <div id="templateParametersEditor" class="repeat-list"></div>
+        <button class="add-repeat-button" id="addTemplateParameterButton" type="button">+ Add template parameter</button>
+      </section>
+
+      <section id="functionEditorSection">
+        <div class="form-section-heading repeat-heading"><span>FUNCTION SIGNATURE</span><i>Parameters and return type for function declarations and function-like macros.</i></div>
+        <div class="form-grid two-columns">
+        <div class="field-group">
+          <label class="field-label" for="featureReturnType">Return type</label>
+          <input class="form-control" id="featureReturnType" name="returnType" placeholder="e.g. bool, T, void">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="featureReturnTypeRef">Link return type to API entry</label>
+          <select class="form-control" id="featureReturnTypeRef" name="returnTypeRef"></select>
+        </div>
+      </div>
+        <div id="parametersEditor" class="repeat-list"></div>
+        <button class="add-repeat-button" id="addParameterButton" type="button">+ Add function parameter</button>
+      </section>
+
+      <section id="membersEditorSection">
+        <div class="form-section-heading repeat-heading"><span>DECLARATION CONTENTS</span><i>Members of classes, structs and unions; enumerators of enums.</i></div>
+        <div id="membersEditor" class="repeat-list"></div>
+        <button class="add-repeat-button" id="addMemberButton" type="button">+ Add member / enumerator</button>
+      </section>
+
+      <div class="form-grid two-columns source-grid">
+        <div class="field-group">
+          <label class="field-label" for="sourceUrl">Source URL</label>
+          <input class="form-control" id="sourceUrl" name="sourceUrl" type="url" placeholder="https://github.com/…">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="testUrl">Test URL</label>
+          <input class="form-control" id="testUrl" name="testUrl" type="url" placeholder="https://github.com/…">
+        </div>
+      </div>
+      <label class="field-label" for="featureTags">Tags <span class="field-hint">comma separated</span></label>
+      <input class="form-control" id="featureTags" name="tags" placeholder="core, layout, portability">
+
+      <div class="form-section-heading repeat-heading"><span>ADDITIONAL DOCUMENTATION</span><i>Optional sections for detailed explanations.</i></div>
+      <div id="sectionsEditor" class="repeat-list"></div>
+      <button class="add-repeat-button" id="addSectionButton" type="button">+ Add description section</button>
+
+      <div class="form-section-heading repeat-heading"><span>USAGE EXAMPLES</span><i>Examples support C++ syntax highlighting.</i></div>
+      <div id="examplesEditor" class="repeat-list"></div>
+      <button class="add-repeat-button" id="addExampleButton" type="button">+ Add code example</button>
+
+      <div class="dialog-actions sticky-dialog-actions">
+        <button class="button button-quiet" type="button" data-close-dialog="featureDialog">Cancel</button>
+        <button class="button button-primary" type="submit" id="saveFeatureButton">Save feature</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

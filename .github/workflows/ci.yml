@@ -1,0 +1,219 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  macos_build:
+    runs-on: xcode-27
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7.0.1
+      
+      - name: Update homebrew
+        run: /bin/zsh -i -c "brew update && brew upgrade"
+        shell: bash
+      
+      - name: Install LLVM
+        run: /bin/zsh -i -c "brew install llvm"
+        shell: bash
+      
+      - name: Install LLD
+        run: /bin/zsh -i -c "brew install lld"
+        shell: bash
+
+      - name: Install LLDB
+        run: /bin/zsh -i -c "brew install lldb"
+        shell: bash
+
+      - name: CMake Clang debug configuration
+        run: /bin/zsh -i -c "cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -D CMAKE_LINKER=/opt/homebrew/opt/lld/bin/lld"
+        shell: bash
+
+      - name: CMake Clang debug clear
+        run: /bin/zsh -i -c "ninja clean_app -C Build/Debug"
+        shell: bash
+        
+      - name: CMake Clang debug compilation
+        run: /bin/zsh -i -c "ninja -C Build/Debug"
+        shell: bash
+
+      - name: CMake Clang development configuration
+        run: /bin/zsh -i -c "cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -D CMAKE_LINKER=/opt/homebrew/opt/lld/bin/lld -D ALICE_DEVELOPMENT=On"
+        shell: bash
+
+      - name: CMake Clang development clear
+        run: /bin/zsh -i -c "ninja clean_app -C Build/Release"
+        shell: bash
+        
+      - name: CMake Clang development compilation
+        run: /bin/zsh -i -c "ninja -C Build/Release"
+        shell: bash
+      
+      - name: CMake Clang release configuration
+        run: /bin/zsh -i -c "cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -D CMAKE_LINKER=/opt/homebrew/opt/lld/bin/lld"
+        shell: bash
+
+      - name: CMake Clang release clear
+        run: /bin/zsh -i -c "ninja clean_app -C Build/Release"
+        shell: bash
+        
+      - name: CMake Clang release compilation
+        run: /bin/zsh -i -c "ninja -C Build/Release"
+        shell: bash
+
+  windows_build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup MSVC environment
+        uses: TheMrMilchmann/setup-msvc-dev@v4.1.0
+        with:
+          arch: x64
+
+      - name: Install CMake
+        run: Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v4.4.5/cmake-4.4.5-windows-x86_64.zip" -OutFile cmake.zip
+        shell: powershell
+      
+      - name: Extract CMake
+        run: Expand-Archive cmake.zip -DestinationPath C:\CMake
+        shell: powershell
+      
+      - name: Add CMake to PATH
+        run: echo "C:\CMake\cmake-4.4.5-windows-x86_64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        shell: powershell
+
+      - name: CMake MSVC debug configuration
+        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_COMPILER=cl -D CMAKE_LINKER=link
+        shell: powershell
+
+      - name: CMake MSVC debug clear
+        run: ninja clean_app -C Build/Debug
+        shell: powershell
+
+      - name: Ninja MSVC debug compilation
+        run: ninja -C Build/Debug
+        shell: powershell
+
+      - name: CMake MSVC development configuration
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=cl -D CMAKE_LINKER=link -D ALICE_DEVELOPMENT=On
+        shell: powershell
+
+      - name: CMake MSVC development clear
+        run: ninja clean_app -C Build/Release
+        shell: powershell
+        
+      - name: CMake MSVC development compilation
+        run: ninja -C Build/Release
+        shell: powershell
+      
+      - name: CMake MSVC release configuration
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_COMPILER=cl -D CMAKE_LINKER=link
+        shell: powershell
+
+      - name: CMake MSVC release clear
+        run: ninja clean_app -C Build/Release
+        shell: powershell
+
+      - name: Ninja MSVC release compilation
+        run: ninja -C Build/Release
+        shell: powershell
+
+  linux_build:
+    runs-on: ubuntu-26.04
+
+    container:
+      image: archlinux:latest
+    
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7.0.1
+
+      - name: Initialize key
+        run: |
+          pacman-key --init
+          pacman-key --populate archlinux
+        shell: bash
+      
+      - name: Update system
+        run: pacman -Syu --noconfirm
+        shell: bash
+
+      - name: Install base
+        run: pacman -S --noconfirm base-devel
+        shell: bash
+      
+      - name: Install Vulkan
+        run: pacman -S --noconfirm vulkan-icd-loader
+        shell: bash
+
+      - name: Install Wayland
+        run: pacman -S --noconfirm wayland-protocols
+        shell: bash
+
+      - name: Install Weston
+        run: pacman -S --noconfirm weston
+        shell: bash
+
+      - name: Install CMake
+        run: pacman -S --noconfirm cmake
+        shell: bash
+
+      - name: Install Ninja
+        run: pacman -S --noconfirm ninja
+        shell: bash
+
+      - name: Run Wayland
+        run: |
+          export XDG_RUNTIME_DIR=/tmp/xdg-runtime
+          mkdir -p "$XDG_RUNTIME_DIR"
+          chmod 700 "$XDG_RUNTIME_DIR"
+          nohup weston --backend=headless-backend.so --idle-time=0 --socket=wayland-0 > /tmp/weston.log 2>&1 &
+          timeout 10 bash -c '
+            while [ ! -S "$XDG_RUNTIME_DIR/wayland-0" ]; do
+              sleep 0.1
+            done
+          '
+          echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" >> "$GITHUB_ENV"
+          echo "WAYLAND_DISPLAY=wayland-0" >> "$GITHUB_ENV"
+      
+      - name: CMake GCC debug configuration
+        run: cmake -B Build/Debug -S . -G Ninja -D CMAKE_BUILD_TYPE=Debug -D ALICE_CI=On
+        shell: bash
+
+      - name: CMake GCC debug clear
+        run: ninja clean_app -C Build/Debug
+        shell: bash
+
+      - name: Ninja GCC debug compilation
+        run: ninja -C Build/Debug
+        shell: bash
+      
+      - name: CMake GCC development configuration
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D ALICE_CI=On -D ALICE_DEVELOPMENT=On
+        shell: bash
+
+      - name: CMake GCC development clear
+        run: ninja clean_app -C Build/Release
+        shell: bash
+        
+      - name: CMake GCC development compilation
+        run: ninja -C Build/Release
+        shell: bash
+      
+      - name: CMake GCC release configuration
+        run: cmake -B Build/Release -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D ALICE_CI=On
+        shell: bash
+
+      - name: CMake GCC release clear
+        run: ninja clean_app -C Build/Release
+        shell: bash
+
+      - name: Ninja GCC release compilation
+        run: ninja -C Build/Release
+        shell: bash

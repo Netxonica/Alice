@@ -1,8 +1,11 @@
 'use strict';
 
 (() => {
-  const STORAGE_KEY = 'alice-api-reference-v2';
-  const LEGACY_STORAGE_KEY = 'alice-api-reference-v1';
+  const STORAGE_KEY = 'alice-api-reference-v3';
+  const DATABASE_NAME = 'alice-api-reference-v3';
+  const DATABASE_STORE = 'workspace';
+  const DATABASE_DOCUMENT_KEY = 'current';
+  const MAX_IMPORT_BYTES = 64 * 1024 * 1024;
   const ENTITY_KINDS = [
     ['macro', 'Macro'], ['function-like-macro', 'Function-like macro'],
     ['template-entity', 'Templated entity'], ['type-alias', 'Type alias'],
@@ -15,47 +18,24 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-  const starterData = {
-    schemaVersion: 1,
-    project: { name: 'Alice', version: '0.0.1', subtitle: 'C++26 game engine and development platform' },
-    categories: [
-      {
-        id: 'core', name: 'Core', description: 'Foundational language utilities, compiler abstractions, and low-level building blocks.',
-        features: [
-          {
-            id: 'no-unique-address', name: 'NoUniqueAddress',
-            summary: 'A portable utility related to the C++ no_unique_address attribute.',
-            description: 'This is a starter documentation entry for the NoUniqueAddress feature. Replace the namespace, detailed behaviour, and example with the exact public API exposed by the current Alice header before publishing the reference. The sample code below demonstrates the underlying standard C++ attribute, not an assumed Alice wrapper interface.',
-            namespace: { value: 'Fill in from source', description: 'The namespace in which Alice declares the feature. Confirm the exact qualified name in the header.' },
-            introduced: { value: '0.0.1', description: 'The Alice release in which this feature was introduced.' },
-            standard: { value: 'C++20 — [[no_unique_address]]', description: 'The standard language attribute used by the feature is part of C++20.' },
-            sourceUrl: 'https://github.com/Netxonica/Alice/Source/Core/NoUniqueAddress.hpp',
-            testUrl: 'https://github.com/Netxonica/Alice/Test/Core/NoUniqueAddress.cpp',
-            tags: ['core', 'layout', 'portability', 'C++20'],
-            sections: [
-              { title: 'Purpose', body: 'Use this section to explain the problem the utility solves, the guarantees it provides, and any implementation-specific behaviour that callers should understand.' },
-              { title: 'Portability notes', body: 'Document compiler support, fallback behaviour, ABI considerations, and any restrictions that are important for supported targets.' }
-            ],
-            examples: [
-              {
-                title: 'Underlying language feature',
-                description: 'A minimal illustration of [[no_unique_address]]. Adapt this example to the actual Alice declaration and include path.',
-                code: '#include <cstdint>\n\nstruct Empty {};\n\nstruct CompactValue {\n    [[no_unique_address]] Empty marker;\n    std::uint32_t value;\n};'
-              }
-            ]
-          }
-        ]
+  function createEmptyDocument() {
+    return {
+      schemaVersion: 4,
+      project: {
+        name: 'Alice',
+        version: '0.0.1',
+        subtitle: 'C++26 game engine and development platform'
       },
-      { id: 'memory', name: 'Memory', description: 'Ownership, allocation, lifetime, and memory-management facilities.', features: [] },
-      { id: 'diagnostics', name: 'Diagnostics', description: 'Assertions, diagnostic reporting, source locations, and debugging utilities.', features: [] },
-      { id: 'utilities', name: 'Utilities', description: 'General-purpose types and helpers used throughout the engine.', features: [] }
-    ]
-  };
+      categories: []
+    };
+  }
 
-  let data = loadData();
-  let activeCategoryId = data.categories[0]?.id ?? null;
-  let activeFeatureId = data.categories[0]?.features[0]?.id ?? null;
-  let expandedCategories = new Set(data.categories.map(category => category.id));
+  let data = createEmptyDocument();
+  let activeCategoryId = null;
+  let activeFeatureId = null;
+  let expandedCategories = new Set();
+  let databasePromise = null;
+  let persistenceQueue = Promise.resolve();
 
   const sidebar = $('#sidebar');
   const sidebarScrim = $('#sidebarScrim');
@@ -73,39 +53,121 @@
   const membersEditor = $('#membersEditor');
   const importFile = $('#importFile');
 
-  function loadData() {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (isValidDocument(parsed)) return normalizeDocument(parsed);
-      }
-    } catch (error) {
-      console.warn('Could not load the saved Alice documentation workspace:', error);
-    }
-    return structuredCloneSafe(starterData);
-  }
-
   function structuredCloneSafe(value) {
+    if (typeof structuredClone === 'function') return structuredClone(value);
     return JSON.parse(JSON.stringify(value));
   }
 
+  function openWorkspaceDatabase() {
+    if (!('indexedDB' in window)) return Promise.reject(new Error('IndexedDB is unavailable.'));
+    if (!databasePromise) {
+      databasePromise = new Promise((resolve, reject) => {
+        const request = window.indexedDB.open(DATABASE_NAME, 1);
+        request.onupgradeneeded = () => {
+          const db = request.result;
+          if (!db.objectStoreNames.contains(DATABASE_STORE)) db.createObjectStore(DATABASE_STORE);
+        };
+        request.onsuccess = () => {
+          const db = request.result;
+          db.onversionchange = () => db.close();
+          resolve(db);
+        };
+        request.onerror = () => reject(request.error || new Error('Could not open the documentation database.'));
+        request.onblocked = () => reject(new Error('The documentation database is blocked by another tab.'));
+      });
+    }
+    return databasePromise;
+  }
+
+  async function readIndexedRecord() {
+    const db = await openWorkspaceDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(DATABASE_STORE, 'readonly');
+      const request = transaction.objectStore(DATABASE_STORE).get(DATABASE_DOCUMENT_KEY);
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => reject(request.error || new Error('Could not read the documentation database.'));
+      transaction.onabort = () => reject(transaction.error || new Error('The documentation database read was aborted.'));
+    });
+  }
+
+  async function writeIndexedRecord(record) {
+    const db = await openWorkspaceDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(DATABASE_STORE, 'readwrite');
+      transaction.objectStore(DATABASE_STORE).put(record, DATABASE_DOCUMENT_KEY);
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error || new Error('Could not save the documentation database.'));
+      transaction.onabort = () => reject(transaction.error || new Error('The documentation database write was aborted.'));
+    });
+  }
+
+  function readLocalRecord() {
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      // The local fallback is stored as { savedAt, document }.
+      if (parsed && typeof parsed === 'object' && parsed.document) return parsed;
+      return null;
+    } catch (error) {
+      console.warn('Could not read the local documentation backup:', error);
+      return null;
+    }
+  }
+
+  async function loadData() {
+    const localRecord = readLocalRecord();
+    let indexedRecord = null;
+    try {
+      indexedRecord = await readIndexedRecord();
+    } catch (error) {
+      console.info('Using the local-storage fallback for Alice documentation:', error.message);
+    }
+
+    const candidates = [localRecord, indexedRecord]
+      .filter(record => record && record.document && isValidDocument(record.document))
+      .sort((left, right) => Number(right.savedAt || 0) - Number(left.savedAt || 0));
+    if (candidates.length) return normalizeDocument(candidates[0].document);
+    return createEmptyDocument();
+  }
+
   function isValidDocument(candidate) {
-    return Boolean(candidate && typeof candidate === 'object' && Array.isArray(candidate.categories)
-      && candidate.categories.every(category => category && typeof category.id === 'string'
-        && typeof category.name === 'string' && Array.isArray(category.features)));
+    if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate) || !Array.isArray(candidate.categories)) return false;
+    const version = Number(candidate.schemaVersion ?? 1);
+    if (![1, 2, 3, 4].includes(version)) return false;
+
+    const categoryIds = new Set();
+    const featureIds = new Set();
+    let featureCount = 0;
+    for (const category of candidate.categories) {
+      if (!category || typeof category !== 'object' || Array.isArray(category) || !Array.isArray(category.features)) return false;
+      if (category.id != null) {
+        if (typeof category.id !== 'string' || !category.id.trim() || categoryIds.has(category.id)) return false;
+        categoryIds.add(category.id);
+      }
+      for (const feature of category.features) {
+        if (!feature || typeof feature !== 'object' || Array.isArray(feature)) return false;
+        featureCount += 1;
+        if (featureCount > 100000) return false;
+        if (feature.id != null) {
+          if (typeof feature.id !== 'string' || !feature.id.trim() || featureIds.has(feature.id)) return false;
+          featureIds.add(feature.id);
+        }
+      }
+    }
+    return true;
   }
 
   function normalizeDocument(candidate) {
     const normalized = {
-      schemaVersion: 2,
+      schemaVersion: 4,
       project: {
         name: String(candidate.project?.name || 'Alice'),
         version: String(candidate.project?.version || '0.0.1'),
         subtitle: String(candidate.project?.subtitle || 'C++26 game engine and development platform')
       },
       categories: candidate.categories.map((category, categoryIndex) => ({
-        id: String(category.id || `category-${categoryIndex + 1}`),
+        id: String(category.id || makeId('category')),
         name: String(category.name || `Category ${categoryIndex + 1}`),
         description: String(category.description || ''),
         features: category.features.map((feature, featureIndex) => normalizeFeature(feature, categoryIndex, featureIndex))
@@ -120,7 +182,7 @@
       description: String(feature?.[key]?.description ?? '')
     });
     return {
-      id: String(feature?.id || `feature-${categoryIndex + 1}-${featureIndex + 1}`),
+      id: String(feature?.id || makeId('feature')),
       name: String(feature?.name || 'Untitled feature'),
       summary: String(feature?.summary || ''),
       description: String(feature?.description || ''),
@@ -128,6 +190,7 @@
       introduced: meta('introduced'),
       standard: meta('standard'),
       sourceUrl: String(feature?.sourceUrl || ''),
+      headerPath: normalizeHeaderPath(feature?.headerPath) || deriveHeaderPath(feature?.sourceUrl || ''),
       testUrl: String(feature?.testUrl || ''),
       entityKind: ENTITY_KINDS.some(([key]) => key === feature?.entityKind) ? feature.entityKind : 'other',
       scopedEnum: Boolean(feature?.scopedEnum),
@@ -145,6 +208,7 @@
   }
 
   function normalizeParameter(parameter = {}) {
+    if (!parameter || typeof parameter !== 'object' || Array.isArray(parameter)) parameter = {};
     return {
       id: String(parameter.id || makeId('parameter')),
       name: String(parameter.name || ''),
@@ -156,6 +220,7 @@
   }
 
   function normalizeTemplateParameter(parameter = {}) {
+    if (!parameter || typeof parameter !== 'object' || Array.isArray(parameter)) parameter = {};
     return {
       id: String(parameter.id || makeId('template-parameter')),
       name: String(parameter.name || ''),
@@ -168,6 +233,7 @@
   }
 
   function normalizeMember(member = {}) {
+    if (!member || typeof member !== 'object' || Array.isArray(member)) member = {};
     return {
       id: String(member.id || makeId('member')),
       kind: String(member.kind || 'data-member'),
@@ -187,12 +253,20 @@
   }
 
   function persist() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } catch (error) {
-      console.warn('Could not save the Alice documentation workspace:', error);
-      showToast('The browser could not save this change. Export your data to keep a backup.', true);
-    }
+    const record = { savedAt: Date.now(), document: structuredCloneSafe(data) };
+    persistenceQueue = persistenceQueue.catch(() => {}).then(async () => {
+      try {
+        await writeIndexedRecord(record);
+      } catch (databaseError) {
+        try {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
+        } catch (storageError) {
+          console.warn('Could not save the Alice documentation workspace:', databaseError, storageError);
+          showToast('Automatic saving is unavailable. Export your JSON to keep a backup.', true);
+        }
+      }
+    });
+    return persistenceQueue;
   }
 
   function escapeHTML(value) {
@@ -206,6 +280,32 @@
     try {
       const url = new URL(value);
       return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+    } catch {
+      return '';
+    }
+  }
+
+  // Store paths relative to Alice/Source, e.g. Core/NoUniqueAddress.hpp.
+  // The URL may be a GitHub blob link, a raw.githubusercontent.com URL, or
+  // another HTTP(S) link whose pathname contains a Source/ segment.
+  function normalizeHeaderPath(value) {
+    const raw = String(value || '').trim().replace(/\\/g, '/');
+    if (!raw) return '';
+    const segments = raw.split('/').filter(Boolean);
+    if (!segments.length || segments.some(segment => segment === '.' || segment === '..')) return '';
+    return segments.join('/');
+  }
+
+  function deriveHeaderPath(sourceUrl) {
+    const safe = safeURL(sourceUrl);
+    if (!safe) return '';
+    try {
+      const segments = new URL(safe).pathname.split('/').filter(Boolean).map(segment => {
+        try { return decodeURIComponent(segment); } catch { return segment; }
+      });
+      const sourceIndex = segments.lastIndexOf('Source');
+      if (sourceIndex < 0 || sourceIndex === segments.length - 1) return '';
+      return normalizeHeaderPath(segments.slice(sourceIndex + 1).join('/'));
     } catch {
       return '';
     }
@@ -341,7 +441,10 @@
     }).filter(item => item.visible);
 
     if (!categories.length) {
-      categoryNav.innerHTML = '<div class="nav-empty">No matching categories or features.</div>';
+      const message = data.categories.length
+        ? 'No matching categories or features.'
+        : 'No documentation loaded yet. Import a JSON file or create a category.';
+      categoryNav.innerHTML = `<div class="nav-empty nav-empty-onboarding">${escapeHTML(message)}</div>`;
       return;
     }
 
@@ -375,23 +478,47 @@
   function renderMainView() {
     const selected = currentFeature();
     if (selected) {
-      $('#breadcrumbCurrent').textContent = `${selected.category.name} / ${selected.feature.name}`;
+      $('#breadcrumbCurrent').innerHTML = `<button class="breadcrumb-link" type="button" data-action="open-category" data-category-id="${escapeHTML(selected.category.id)}">${escapeHTML(selected.category.name)}</button><span class="crumb-separator">/</span><strong>${escapeHTML(selected.feature.name)}</strong>`;
       view.innerHTML = renderFeaturePage(selected.category, selected.feature);
       return;
     }
     const category = currentCategory();
     if (category) {
-      $('#breadcrumbCurrent').textContent = category.name;
+      $('#breadcrumbCurrent').innerHTML = `<strong>${escapeHTML(category.name)}</strong>`;
       view.innerHTML = renderCategoryPage(category);
       return;
     }
-    $('#breadcrumbCurrent').textContent = 'Overview';
+    $('#breadcrumbCurrent').innerHTML = '<strong>Overview</strong>';
     view.innerHTML = renderHomePage();
   }
 
   function renderHomePage() {
     const categories = data.categories;
     const features = allFeatures();
+    if (!categories.length) {
+      return `
+        <section class="hero">
+          <span class="hero-kicker">NETXONICA / ENGINE DOCUMENTATION</span>
+          <h1>Alice API<br>Reference.</h1>
+          <p>A structured reference for Alice’s public C++ interface. Import the project documentation JSON to browse the API, or create a local workspace and export it when you are ready.</p>
+          <div class="hero-meta"><span class="hero-pill">ALICE v${escapeHTML(data.project.version)}</span><span class="hero-pill">C++26</span><span class="hero-pill">${features.length} DOCUMENTED FEATURES</span></div>
+        </section>
+        <div class="empty-state workspace-empty-state">
+          <span class="empty-state-mark" aria-hidden="true">↧</span>
+          <h2>Documentation workspace is empty</h2>
+          <p>No categories or API entries are bundled with this website. Import the JSON file distributed with Alice to load its reference. Your edits remain local to this browser until you export them.</p>
+          <div class="workspace-empty-actions">
+            <button class="button button-primary" type="button" data-action="import-docs">Import documentation JSON</button>
+            <button class="button button-quiet" type="button" data-action="add-category">Create a category</button>
+          </div>
+        </div>
+        <div class="section-heading-row"><div><h2>JSON workflow</h2><p>Portable documentation, with no server-side account or database.</p></div></div>
+        <div class="category-card-grid">
+          <div class="category-card workflow-card"><span class="card-topline"><span class="card-symbol">1</span><span class="card-count">DISTRIBUTE</span></span><h3>Import the project JSON</h3><p>Load the documentation JSON committed in the Alice repository.</p></div>
+        <div class="category-card workflow-card"><span class="card-topline"><span class="card-symbol">2</span><span class="card-count">CUSTOMISE</span></span><h3>Add your own notes</h3><p>Edit descriptions, examples, categories and API entries in this browser.</p></div>
+        <div class="category-card workflow-card"><span class="card-topline"><span class="card-symbol">3</span><span class="card-count">KEEP</span></span><h3>Export your workspace</h3><p>Save a personal JSON copy and import it again whenever you return.</p></div>
+        </div>`;
+    }
     const cards = categories.map(category => `
       <button class="category-card" type="button" data-action="open-category" data-category-id="${escapeHTML(category.id)}">
         <span class="card-topline"><span class="card-symbol">${escapeHTML((category.name[0] || '•').toUpperCase())}</span><span class="card-count">${category.features.length} ${category.features.length === 1 ? 'FEATURE' : 'FEATURES'}</span></span>
@@ -406,7 +533,7 @@
         <div class="hero-meta"><span class="hero-pill">ALICE v${escapeHTML(data.project.version)}</span><span class="hero-pill">C++26</span><span class="hero-pill">${features.length} DOCUMENTED ${features.length === 1 ? 'FEATURE' : 'FEATURES'}</span></div>
       </section>
       <div class="section-heading-row"><div><h2>Browse by category</h2><p>Explore the API by subsystem.</p></div><span class="subtle-count">${String(categories.length).padStart(2, '0')} CATEGORIES</span></div>
-      ${categories.length ? `<div class="category-card-grid">${cards}</div>` : emptyState('No categories yet', 'Create a category to start organising the Alice API.', 'add-category')}
+      <div class="category-card-grid">${cards}</div>
       <div class="section-heading-row"><div><h2>Feature index</h2><p>Direct access to documented API entries.</p></div><span class="subtle-count">${String(features.length).padStart(2, '0')} ENTRIES</span></div>
       ${recent ? `<div class="feature-list">${recent}</div>` : emptyState('No features documented', 'Add your first feature to begin building the reference.', 'add-feature')}`;
   }
@@ -522,6 +649,8 @@
       </article>`).join('');
     const source = safeURL(feature.sourceUrl);
     const tests = safeURL(feature.testUrl);
+    const headerPath = normalizeHeaderPath(feature.headerPath) || deriveHeaderPath(feature.sourceUrl);
+    const headerLocation = headerPath ? `<div class="header-location"><span class="header-location-label">HEADER</span>${source ? `<a class="header-location-path" href="${escapeHTML(source)}" target="_blank" rel="noopener noreferrer" title="Open source header">${escapeHTML(headerPath)}<span aria-hidden="true">↗</span></a>` : `<code class="header-location-path">${escapeHTML(headerPath)}</code>`}</div>` : '';
     const sourceSection = source || tests ? `
       <section class="content-section" id="sources"><h2><span class="section-index">07</span> Source &amp; tests</h2><div class="source-links">${source ? `<a class="source-link" href="${escapeHTML(source)}" target="_blank" rel="noreferrer">Source header <span>↗</span></a>` : ''}${tests ? `<a class="source-link" href="${escapeHTML(tests)}" target="_blank" rel="noreferrer">Test file <span>↗</span></a>` : ''}</div></section>` : '';
     const templateParameters = renderTemplateParameters(feature.templateParameters);
@@ -533,7 +662,7 @@
     return `
       <article class="feature-page">
         <header class="page-header">
-          <div class="page-header-copy"><span class="hero-kicker">${escapeHTML(category.name.toUpperCase())} / API REFERENCE</span><h1>${escapeHTML(feature.name)}</h1><p class="page-summary">${escapeHTML(feature.summary || '')}</p><div class="declaration-kind-row"><span class="declaration-kind-badge">${escapeHTML(entityKindLabel(feature.entityKind))}</span>${feature.scopedEnum && feature.entityKind === 'enum' ? '<span class="tag">enum class</span>' : ''}${isTemplate ? '<span class="tag">Templated</span>' : ''}</div>${tags ? `<div class="tag-row">${tags}</div>` : ''}</div>
+          <div class="page-header-copy"><span class="hero-kicker">${escapeHTML(category.name.toUpperCase())} / API REFERENCE</span><h1>${escapeHTML(feature.name)}</h1>${headerLocation}<p class="page-summary">${escapeHTML(feature.summary || '')}</p><div class="declaration-kind-row"><span class="declaration-kind-badge">${escapeHTML(entityKindLabel(feature.entityKind))}</span>${feature.scopedEnum && feature.entityKind === 'enum' ? '<span class="tag">enum class</span>' : ''}${isTemplate ? '<span class="tag">Templated</span>' : ''}</div>${tags ? `<div class="tag-row">${tags}</div>` : ''}</div>
           <div class="page-actions"><button class="button button-quiet" type="button" data-action="edit-feature" data-feature-id="${escapeHTML(feature.id)}">Edit</button><button class="button button-danger" type="button" data-action="delete-feature" data-feature-id="${escapeHTML(feature.id)}">Delete</button></div>
         </header>
         <div class="metadata-grid">
@@ -738,6 +867,10 @@
     $('#standardValue').value = feature?.standard?.value || '';
     $('#standardDescription').value = feature?.standard?.description || '';
     $('#sourceUrl').value = feature?.sourceUrl || '';
+    const detectedHeaderPath = deriveHeaderPath(feature?.sourceUrl || '');
+    const savedHeaderPath = normalizeHeaderPath(feature?.headerPath);
+    $('#headerPath').value = savedHeaderPath || detectedHeaderPath;
+    $('#headerPath').dataset.autoDerived = String(!savedHeaderPath || savedHeaderPath === detectedHeaderPath);
     $('#testUrl').value = feature?.testUrl || '';
     $('#featureTags').value = (feature?.tags || []).join(', ');
     $('#featureKind').innerHTML = entityKindOptions(feature?.entityKind || 'other');
@@ -781,22 +914,38 @@
     document.body.append(link);
     link.click();
     link.remove();
-    URL.revokeObjectURL(url);
+    // Defer revocation so browsers have time to begin the download.
+    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
     showToast('Documentation exported as JSON.');
+  }
+
+  function hasWorkspaceContent() {
+    return data.categories.length > 0 || featureTotal() > 0;
   }
 
   async function importDocument(file) {
     if (!file) return;
+    if (file.size > MAX_IMPORT_BYTES) {
+      showToast('This JSON file is larger than the 64 MiB import limit.', true);
+      importFile.value = '';
+      return;
+    }
+    if (hasWorkspaceContent() && !window.confirm('Importing replaces the documentation currently open in this browser. Export your workspace first if you want to keep those edits. Continue?')) {
+      importFile.value = '';
+      return;
+    }
     try {
       const parsed = JSON.parse(await file.text());
-      if (!isValidDocument(parsed)) throw new Error('The file does not contain a valid documentation structure.');
+      if (!isValidDocument(parsed)) {
+        throw new Error('Invalid documentation JSON. Check the schema version, categories, feature arrays, and duplicate IDs.');
+      }
       data = normalizeDocument(parsed);
-      activeCategoryId = data.categories[0]?.id ?? null;
-      activeFeatureId = data.categories[0]?.features[0]?.id ?? null;
+      activeCategoryId = null;
+      activeFeatureId = null;
       expandedCategories = new Set(data.categories.map(category => category.id));
-      persist();
+      await persist();
       render();
-      showToast('Documentation imported successfully.');
+      showToast(`Imported ${data.categories.length} categories and ${featureTotal()} API entries.`);
     } catch (error) {
       showToast(error.message || 'Could not import this JSON file.', true);
     } finally {
@@ -864,6 +1013,8 @@
       description: $('.repeat-description', item).value.trim(),
       code: $('.repeat-code', item).value
     })).filter(example => example.title || example.description || example.code);
+    const sourceUrl = String(form.get('sourceUrl') || '').trim();
+    const headerPath = normalizeHeaderPath(String(form.get('headerPath') || '')) || deriveHeaderPath(sourceUrl);
     return {
       id: String(form.get('id') || makeId('feature')),
       name: String(form.get('name') || '').trim(),
@@ -881,7 +1032,8 @@
       templateParameters: collectTemplateParameters(),
       parameters: collectParameterRows(parametersEditor),
       members: collectMembers(),
-      sourceUrl: String(form.get('sourceUrl') || '').trim(),
+      sourceUrl,
+      headerPath,
       testUrl: String(form.get('testUrl') || '').trim(),
       tags: String(form.get('tags') || '').split(',').map(tag => tag.trim()).filter(Boolean),
       sections,
@@ -964,7 +1116,11 @@
     const action = actionElement.dataset.action;
     const categoryId = actionElement.dataset.categoryId;
     const featureId = actionElement.dataset.featureId;
-    if (action === 'open-category') {
+    if (action === 'open-home') {
+      activeCategoryId = null;
+      activeFeatureId = null;
+      render();
+    } else if (action === 'open-category') {
       setCurrentCategory(categoryId);
     } else if (action === 'open-feature') {
       openFeature(categoryId, featureId);
@@ -979,6 +1135,8 @@
       openFeatureEditor(null, categoryId || activeCategoryId);
     } else if (action === 'add-category') {
       openCategoryDialog();
+    } else if (action === 'import-docs') {
+      importFile.click();
     } else if (action === 'edit-feature') {
       const found = findFeature(featureId);
       if (found) openFeatureEditor(found.feature, found.category.id);
@@ -1005,6 +1163,29 @@
   view.addEventListener('click', event => {
     const actionElement = event.target.closest('[data-action]');
     if (actionElement) handleAction(actionElement);
+  });
+  $('.breadcrumbs').addEventListener('click', event => {
+    const actionElement = event.target.closest('[data-action]');
+    if (actionElement) handleAction(actionElement);
+  });
+
+  $('#sourceUrl').addEventListener('input', () => {
+    const headerPathInput = $('#headerPath');
+    if (headerPathInput.dataset.autoDerived === 'true' || !headerPathInput.value.trim()) {
+      headerPathInput.value = deriveHeaderPath($('#sourceUrl').value);
+      headerPathInput.dataset.autoDerived = 'true';
+    }
+  });
+  $('#headerPath').addEventListener('input', () => { $('#headerPath').dataset.autoDerived = 'false'; });
+  $('#deriveHeaderPathButton').addEventListener('click', () => {
+    const path = deriveHeaderPath($('#sourceUrl').value);
+    if (!path) {
+      showToast('Could not find a /Source/ path in this URL. Enter the header path manually.', true);
+      return;
+    }
+    $('#headerPath').value = path;
+    $('#headerPath').dataset.autoDerived = 'true';
+    showToast(`Header path detected: ${path}`);
   });
 
   $('#addCategoryButton').addEventListener('click', openCategoryDialog);
@@ -1067,5 +1248,22 @@
     if (event.key === 'Escape') closeSidebar();
   });
 
-  render();
+  const brandLogo = $('#brandLogo');
+  brandLogo?.addEventListener('error', () => { brandLogo.hidden = true; });
+
+  async function initialize() {
+    view.innerHTML = '<div class="workspace-loading" role="status">Loading documentation workspace…</div>';
+    try {
+      data = await loadData();
+    } catch (error) {
+      console.warn('Starting with an empty Alice documentation workspace:', error);
+      data = createEmptyDocument();
+    }
+    activeCategoryId = null;
+    activeFeatureId = null;
+    expandedCategories = new Set(data.categories.map(category => category.id));
+    render();
+  }
+
+  initialize();
 })();

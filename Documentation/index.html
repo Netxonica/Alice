@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11151d">
   <meta name="description" content="A structured API reference for the Alice C++ platform.">
+  <link rel="icon" type="image/svg+xml" href="../Logo.svg">
   <title>Alice — API Reference</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
@@ -15,7 +16,7 @@
     <aside class="sidebar" id="sidebar" aria-label="Documentation navigation">
       <div class="brand-row">
         <a class="brand" href="#" id="homeLink" aria-label="Alice API reference home">
-          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <img class="brand-logo" id="brandLogo" src="../Logo.svg" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
           <span class="brand-copy"><strong>Alice</strong><small>API REFERENCE</small></span>
         </a>
         <button class="icon-button sidebar-close" id="closeSidebar" type="button" aria-label="Close navigation">×</button>
@@ -67,9 +68,9 @@
           <button class="icon-button menu-button" id="openSidebar" type="button" aria-label="Open navigation">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
           </button>
-          <div class="breadcrumbs" aria-label="Breadcrumb">
-            <span>Alice</span><span class="crumb-separator">/</span><span>Documentation</span><span class="crumb-separator">/</span><strong id="breadcrumbCurrent">Overview</strong>
-          </div>
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <button class="breadcrumb-link" type="button" data-action="open-home">Alice</button><span class="crumb-separator">/</span><span class="breadcrumb-static">Documentation</span><span class="crumb-separator">/</span><span id="breadcrumbCurrent"><strong>Overview</strong></span>
+          </nav>
         </div>
         <div class="topbar-right">
           <span class="standard-chip"><span class="chip-dot"></span> C++26</span>
@@ -201,12 +202,20 @@
       <div class="form-grid two-columns source-grid">
         <div class="field-group">
           <label class="field-label" for="sourceUrl">Source URL</label>
-          <input class="form-control" id="sourceUrl" name="sourceUrl" type="url" placeholder="https://github.com/…">
+          <input class="form-control" id="sourceUrl" name="sourceUrl" type="url" placeholder="https://github.com/Netxonica/Alice/blob/main/Source/Core/…">
         </div>
         <div class="field-group">
           <label class="field-label" for="testUrl">Test URL</label>
           <input class="form-control" id="testUrl" name="testUrl" type="url" placeholder="https://github.com/…">
         </div>
+      </div>
+      <div class="field-group header-path-editor">
+        <label class="field-label" for="headerPath">Header path <span class="field-hint">relative to Source/</span></label>
+        <div class="header-path-input-row">
+          <input class="form-control" id="headerPath" name="headerPath" placeholder="Core/NoUniqueAddress.hpp" autocomplete="off" spellcheck="false">
+          <button class="button button-quiet" id="deriveHeaderPathButton" type="button">Derive from URL</button>
+        </div>
+        <p class="field-help">Detected automatically from GitHub links containing <code>/Source/</code>. You can override the path manually; the source URL remains optional.</p>
       </div>
       <label class="field-label" for="featureTags">Tags <span class="field-hint">comma separated</span></label>
       <input class="form-control" id="featureTags" name="tags" placeholder="core, layout, portability">

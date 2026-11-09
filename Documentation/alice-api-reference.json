@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 4,
+  "project": {
+    "name": "Alice",
+    "version": "0.0.1",
+    "subtitle": "C++26 game engine and development platform"
+  },
+  "categories": [
+    {
+      "id": "core-0f41f8ed-f61f-4bc6-8066-1ce7bb497096",
+      "name": "Core",
+      "description": "The fundamental features that make Alice unique.",
+      "features": [
+        {
+          "id": "feature-01d8b37e-58c8-4fdc-a37f-98c9d73ac552",
+          "name": "$no_unique_address",
+          "summary": "A portable no_unique_address attribute.",
+          "description": "A correct and portable no_unique_address attribute that avoids being ignored on MSVC.",
+          "entityKind": "macro",
+          "scopedEnum": false,
+          "aliasedType": "",
+          "aliasedTypeRef": "",
+          "namespace": {
+            "value": "",
+            "description": ""
+          },
+          "introduced": {
+            "value": "0.0.1",
+            "description": ""
+          },
+          "standard": {
+            "value": "C++20 - [[no_unique_address]]",
+            "description": ""
+          },
+          "returnType": "",
+          "returnTypeRef": "",
+          "templateParameters": [],
+          "parameters": [],
+          "members": [],
+          "sourceUrl": "https://github.com/Netxonica/Alice/blob/main/Source/Core/NoUniqueAddress.hpp",
+          "headerPath": "Core/NoUniqueAddress.hpp",
+          "testUrl": "https://github.com/Netxonica/Alice/blob/main/Test/Core/NoUniqueAddress.cpp",
+          "tags": [
+            "core",
+            "layout",
+            "portability"
+          ],
+          "sections": [],
+          "examples": [
+            {
+              "title": "$no_unique_address",
+              "description": "A minimal example showcasing how $no_unique_address helps to optimize away the size of Empty.",
+              "code": "#include \"Core/NoUniqueAddress.hpp\"\n\nstruct Empty{};\n\nstruct Foo\n{\n    Empty e;\n\n    int x;\n};\n\nstruct Bar\n{\n    [[$no_unique_address]] Empty e;\n\n    int x;\n};\n\n[[nodiscard]] auto alice_test() noexcept -> bool\n{\n    // Empty is an EBO but it isn't optimized away because we don't use no_unique_address\n\n    static_assert(sizeof(Foo) == 8uz);\n\n    // Empty is an EBO and it is optimized away because we use no_unique_address\n    // All the three main compilers agree on the following\n\n    return sizeof(Bar) == 4uz;\n}\n\nint main()\n{\n    return not alice_test();\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
